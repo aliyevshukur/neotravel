@@ -1,8 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { RootNav } from "./navigation";
-export default function App() {
-  return <RootNav />;
+
+export function SecondScreen() {
+  return (
+    <View style={styles.container}>
+      <Text>SecondScreen!</Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
