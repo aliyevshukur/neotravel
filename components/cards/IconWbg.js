@@ -23,12 +23,12 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    width: 380,
-    height: 380,
-    borderRadius: 50,
+    width: 38,
+    height: 38,
+    borderRadius: 5,
   },
   icon: {
-    width: 150,
+    width: 15,
   }
     
 });
