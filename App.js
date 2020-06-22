@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { AppLoading } from "expo";
+import { RootNav } from "./navigation";
 
 import { loadFonts } from "./styles/fonts";
 
@@ -15,17 +15,5 @@ export default function App() {
       />
     );
   }
-  return (
-    <View style={styles.container}>
-      <Text>Hello Moon!</Text>
-    </View>
-  );
+  return <RootNav />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
