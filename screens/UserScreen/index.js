@@ -41,7 +41,9 @@ export const UserScreen = () => {
           profilePicture={profilePicture}
           fullName={"Jane Doe"}
         />
-        {menuItems.map(({ icon, label, i }) => {
+        {menuItems.map(({ icon, label }, i) => {
+          console.log("key", i);
+
           return <UserMenuItem icon={icon} label={label} key={i} />;
         })}
       </View>
@@ -51,9 +53,8 @@ export const UserScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    
-  }
+    width: "100%",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
 });
