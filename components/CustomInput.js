@@ -1,30 +1,63 @@
-import React from "react";
-import { StyleSheet, TextInput, Image, View } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  TextInput,
+  Image,
+  View,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 
-import search from "../assets/search.png";
-import cross from "../assets/times.png";
+import search from "../assets/images/search.png";
+import cross from "../assets/images/times.png";
+import rectangle from "../assets/images/rectangle.png";
+import longRectangle from "../assets/images/longRectangle.png";
 
 export const CustomInput = ({
-  width = "80%",
+  long = false,
   isSearch = true,
-  isCross = false,
+  isCross = true,
+  value,
+  setValue,
+  placeHolder = "Place",
 }) => {
   return (
-    <View style={[styles.input, { width: width }]}>
-      {isSearch ? <Image source={search} style={styles.search} /> : null}
-      <TextInput style={styles.textInput} placeholder="Place"></TextInput>
-      {isCross ? <Image source={cross} style={styles.cross} /> : null}
-    </View>
+    <ImageBackground
+      source={long ? longRectangle : rectangle}
+      style={{ width: long ? 338 : 220, height: 50, marginTop: 10 }}
+    >
+      <View style={styles.input}>
+        {isSearch && (
+          <TouchableOpacity>
+            <Image source={search} style={styles.search} />
+          </TouchableOpacity>
+        )}
+        <TextInput
+          value={value}
+          onChangeText={(item) => setValue(item)}
+          style={styles.textInput}
+          placeholder={placeHolder}
+        ></TextInput>
+        {isCross && (
+          <TouchableOpacity
+            style={styles.crossTouchArea}
+            onPress={() => {
+              setValue("");
+            }}
+          >
+            <Image source={cross} style={styles.cross} />
+          </TouchableOpacity>
+        )}
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   input: {
     height: 50,
-    marginTop: 10,
-    elevation: 5,
     borderRadius: 27,
-    backgroundColor: "#E6E9EF",
+    backgroundColor: "transparent",
     paddingLeft: 14,
     paddingRight: 14,
     flexDirection: "row",
@@ -38,10 +71,13 @@ const styles = StyleSheet.create({
   cross: {
     width: 11,
     height: 11,
-    right: 7,
+    right: 3,
   },
   textInput: {
-    width: "90%",
+    width: "85%",
     paddingHorizontal: 10,
+  },
+  crossTouchArea: {
+    paddingLeft: 5,
   },
 });
