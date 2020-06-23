@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, Animated } from "react-native";
-import { Picker } from "react-native-picker-dropdown";
+import { StyleSheet, ImageBackground, Picker, Image } from "react-native";
+
+import dropdown from "../assets/images/dropdown.png";
+import caretDown from "../assets/images/caret-down.png";
 
 export const CustomPicker = ({
   title = "Guests",
@@ -14,27 +16,43 @@ export const CustomPicker = ({
   ],
 }) => {
   return (
-    <Picker
-      mode="dropdown"
-      selectedValue={pickerValue}
-      onValueChange={(itemValue) => setPickerValue(itemValue)}
-      style={styles.picker}
+    <ImageBackground
+      source={dropdown}
+      style={{
+        width: 100,
+        height: 50,
+        marginTop: 10,
+        paddingLeft: 7,
+        flexDirection: "row",
+        alignItems: "center",
+        marginLeft: 10,
+      }}
     >
-      <Picker.Item label={title} itemStyle={{ color: "#999999" }} />
-      {pickerArray.map((item) => (
-        <Picker.Item key={item.label} label={item.label} value={item.value} />
-      ))}
-    </Picker>
+      <Picker
+        mode="dropdown"
+        selectedValue={pickerValue}
+        onValueChange={(itemValue) => setPickerValue(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label={title} itemStyle={{ color: "#999999" }} />
+        {pickerArray.map((item) => (
+          <Picker.Item key={item.label} label={item.label} value={item.value} />
+        ))}
+      </Picker>
+      <Image
+        source={caretDown}
+        style={{ width: 9.3, height: 5.28, right: 35 }}
+      />
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   picker: {
-    alignSelf: "center",
-    width: 120,
+    width: 100,
     height: 50,
-    backgroundColor: "#E3E6EC",
-    borderRadius: 30,
-    paddingRight: 0,
+    backgroundColor: "transparent",
+    color: "#999999",
+    borderRadius: 50,
   },
 });
