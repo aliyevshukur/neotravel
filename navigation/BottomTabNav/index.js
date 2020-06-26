@@ -1,9 +1,9 @@
 import React from "react";
-import { View } from 'react-native'
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FirstScreen, SecondScreen, UserScreen, SignIn, ReservationScreen } from "../../screens";
+import { FirstScreen, SecondScreen, UserScreen } from "../../screens";
 import { TabBarIcon } from "./TabBarIcon";
+import { HomePageStack } from "../HomeStack/HomeStack";
 
 import bell from "../../assets/images/bell.png";
 import bellActive from "../../assets/images/bell-active.png";
@@ -18,8 +18,14 @@ const { Navigator, Screen } = createBottomTabNavigator();
 
 const TabItems = [
   {
-    name: "SignIn",
-    component: SignIn,
+    name: "UserScreen",
+    component: UserScreen,
+    image: user,
+    activeImage: userActive,
+  },
+  {
+    name: "HomePageStack",
+    component: HomePageStack,
     image: home,
     activeImage: homeActive,
   },
@@ -35,12 +41,6 @@ const TabItems = [
     image: bell,
     activeImage: bellActive,
   },
-  {
-    name: "UserScreen",
-    component: UserScreen,
-    image: user,
-    activeImage: userActive,
-  },
 ];
 
 export const BottomTabNav = () => {
@@ -53,6 +53,7 @@ export const BottomTabNav = () => {
     >
       {TabItems.map(({ image, activeImage, name, component }) => (
         <Screen
+          key={name}
           name={name}
           component={component}
           options={{

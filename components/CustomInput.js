@@ -8,23 +8,25 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import search from "../assets/images/search.png";
-import cross from "../assets/images/times.png";
-import rectangle from "../assets/images/rectangle.png";
-import longRectangle from "../assets/images/longRectangle.png";
+import search from "../assets/images/inputComponents/search.png";
+import cross from "../assets/images/inputComponents/times.png";
+import rectangle from "../assets/images/inputComponents/rectangle.png";
+import longRectangle from "../assets/images/inputComponents/longRectangle.png";
+import darkRectangle from "../assets/images/inputComponents/darkRectangle.png";
 
 export const CustomInput = ({
   long = false,
   isSearch = true,
   isCross = true,
+  dark = false,
   value,
   setValue,
   placeHolder = "Place",
 }) => {
   return (
     <ImageBackground
-      source={long ? longRectangle : rectangle}
-      style={{ width: long ? 338 : 220, height: 50, marginTop: 10 }}
+      source={dark ? darkRectangle : long ? longRectangle : rectangle}
+      style={{ width: long ? 338 : 240, height: 54.5, marginTop: 10 }}
     >
       <View style={styles.input}>
         {isSearch && (
@@ -55,8 +57,9 @@ export const CustomInput = ({
 
 const styles = StyleSheet.create({
   input: {
-    height: 50,
-    borderRadius: 27,
+    width: 240,
+    height: 54.5,
+    borderRadius: 28,
     backgroundColor: "transparent",
     paddingLeft: 14,
     paddingRight: 14,
@@ -76,6 +79,8 @@ const styles = StyleSheet.create({
   textInput: {
     width: "85%",
     paddingHorizontal: 10,
+    fontFamily: "NunitoRegular",
+    fontSize: 16,
   },
   crossTouchArea: {
     paddingLeft: 5,
