@@ -2,9 +2,17 @@ import React from "react";
 import { StyleSheet, Button, TouchableOpacity, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-export const CustomButton = ({ title = "Search a room", width = "80%" }) => {
+export const CustomButton = ({
+  title = "Search a room",
+  width = "80%",
+  style,
+  onPress,
+}) => {
   return (
-    <TouchableOpacity style={[styles.btn, { width: width }]}>
+    <TouchableOpacity
+      style={[styles.btn, { width: width }, style]}
+      onPress={onPress}
+    >
       <LinearGradient
         colors={["#FF6161", "#FF61DC"]}
         style={{ flex: 1, borderRadius: 50 }}
