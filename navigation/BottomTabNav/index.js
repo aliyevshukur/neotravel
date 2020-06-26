@@ -1,7 +1,14 @@
 import React from "react";
+import { View } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FirstScreen, SecondScreen, UserScreen, SignIn } from "../../screens";
+import {
+  FirstScreen,
+  SecondScreen,
+  UserScreen,
+  SignIn,
+  ReservationScreen,
+} from "../../screens";
 import { TabBarIcon } from "./TabBarIcon";
 
 import bell from "../../assets/images/bell.png";
@@ -12,16 +19,11 @@ import search from "../../assets/images/search.png";
 import searchActive from "../../assets/images/search-active.png";
 import user from "../../assets/images/user.png";
 import userActive from "../../assets/images/user-active.png";
+import COLORS from "../../styles/colors";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
 const TabItems = [
-  {
-    name: "UserScreen",
-    component: UserScreen,
-    image: user,
-    activeImage: userActive,
-  },
   {
     name: "SignIn",
     component: SignIn,
@@ -40,6 +42,12 @@ const TabItems = [
     image: bell,
     activeImage: bellActive,
   },
+  {
+    name: "UserScreen",
+    component: UserScreen,
+    image: user,
+    activeImage: userActive,
+  },
 ];
 
 export const BottomTabNav = () => {
@@ -47,7 +55,13 @@ export const BottomTabNav = () => {
     <Navigator
       tabBarOptions={{
         showLabel: false,
-        style: { backgroundColor: "#E3E6EC", height: 80 },
+        style: {
+          marginTop: 5,
+          marginLeft: 5,
+          marginRight: 5,
+          backgroundColor: COLORS.bgcLight,
+          height: 78,
+        },
       }}
     >
       {TabItems.map(({ image, activeImage, name, component }) => (

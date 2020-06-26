@@ -18,16 +18,16 @@ const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    paddingHorizontal: 23,
+    paddingHorizontal: 28,
     paddingVertical: 11,
     alignItems: "center",
-    width: width + 5,
-    backgroundColor: 'rgba(0, 0, 0, 0)',
+    width: width + 10,
+    backgroundColor: '#0000',
     ...shadow,
   },
   profilePicture: {
     borderRadius: 50,
-    marginRight: 28,
+    marginRight: 33,
     width: 60,
     height: 60,
   },
