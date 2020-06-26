@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { StyleSheet, ImageBackground, Picker, Image } from "react-native";
 
-import dropdown from "../assets/images/dropdown.png";
-import caretDown from "../assets/images/caret-down.png";
+import dropdown from "../assets/images/inputComponents/dropdown.png";
+import darkDropdown from "../assets/images/inputComponents/darkDropdown.png";
+import caretDown from "../assets/images/inputComponents/caret-down.png";
 
 export const CustomPicker = ({
   title = "Guests",
+  dark = false,
   pickerValue,
   setPickerValue,
   pickerArray = [
@@ -17,10 +19,10 @@ export const CustomPicker = ({
 }) => {
   return (
     <ImageBackground
-      source={dropdown}
+      source={dark ? darkDropdown : dropdown}
       style={{
-        width: 100,
-        height: 50,
+        width: 130,
+        height: 65,
         marginTop: 10,
         paddingLeft: 7,
         flexDirection: "row",
@@ -41,7 +43,7 @@ export const CustomPicker = ({
       </Picker>
       <Image
         source={caretDown}
-        style={{ width: 9.3, height: 5.28, right: 35 }}
+        style={{ width: 9.3, height: 5.28, right: 50 }}
       />
     </ImageBackground>
   );
@@ -49,8 +51,9 @@ export const CustomPicker = ({
 
 const styles = StyleSheet.create({
   picker: {
-    width: 100,
-    height: 50,
+    width: 120,
+    height: 60,
+    marginLeft: 15,
     backgroundColor: "transparent",
     color: "#999999",
     borderRadius: 50,
