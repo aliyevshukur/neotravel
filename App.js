@@ -4,6 +4,7 @@ import { RootNav } from "./navigation";
 
 import { loadFonts } from "./styles/fonts";
 
+
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   if (!loaded) {

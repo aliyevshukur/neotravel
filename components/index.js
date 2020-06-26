@@ -5,4 +5,4 @@ export {HotelMedium} from './cards/HotelMedium';
 export {HotelLarge} from './cards/HotelLarge';
 export {RoomLarge} from './cards/RoomLarge';
 export {IconWbg} from './cards/IconWbg';
-import { CustomSvg } from './cards/CustomSvg';
+export { CustomSvg } from './cards/CustomSvg';
