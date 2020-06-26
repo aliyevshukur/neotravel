@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { CustomText } from "./CustomText";
-
 export const CustomButton = ({
   title = "Search a room",
   width = "80%",
@@ -25,6 +24,7 @@ export const CustomButton = ({
           <CustomText style={[styles.btnText, { fontSize: style.fontSize }]}>
             {title}
           </CustomText>
+
         </View>
       </LinearGradient>
     </TouchableOpacity>
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   btnText: {
+    fontSize: 22,
     color: "white",
     fontWeight: "bold",
   },
