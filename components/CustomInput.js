@@ -15,18 +15,24 @@ import longRectangle from "../assets/images/inputComponents/longRectangle.png";
 import darkRectangle from "../assets/images/inputComponents/darkRectangle.png";
 
 export const CustomInput = ({
+  style,
   long = false,
   isSearch = true,
   isCross = true,
   dark = false,
   value,
-  setValue,
-  placeHolder = "Place",
+  onChangeText,
+  placeholder = "",
+  keyboardType = "default",
+  maxLength,
 }) => {
   return (
     <ImageBackground
       source={dark ? darkRectangle : long ? longRectangle : rectangle}
-      style={{ width: long ? 338 : 240, height: 54.5, marginTop: 10 }}
+      style={[
+        { width: long ? 338 : 240, height: 54.5, marginTop: 10 },
+        { style },
+      ]}
     >
       <View style={styles.input}>
         {isSearch && (
@@ -36,9 +42,12 @@ export const CustomInput = ({
         )}
         <TextInput
           value={value}
-          onChangeText={(item) => setValue(item)}
+          onChangeText={onChangeText}
           style={styles.textInput}
-          placeholder={placeHolder}
+          placeholder={placeholder}
+          placeholderTextColor="#616167"
+          keyboardType={keyboardType}
+          maxLength={maxLength}
         ></TextInput>
         {isCross && (
           <TouchableOpacity
