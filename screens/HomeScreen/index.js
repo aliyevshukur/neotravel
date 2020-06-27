@@ -43,7 +43,7 @@ export const HomePage = ({ navigation }) => {
                 long={false}
                 isSearch={false}
                 isCross={false}
-                placeHolder="Place"
+                placeholder="Place"
                 dark={true}
               />
               <CustomPicker dark={true} title="Guests" />
@@ -53,7 +53,7 @@ export const HomePage = ({ navigation }) => {
                 long={false}
                 isSearch={false}
                 isCross={false}
-                placeHolder="Date"
+                placeholder="Date"
                 dark={true}
               />
               <CustomPicker dark={true} title="Nights" />

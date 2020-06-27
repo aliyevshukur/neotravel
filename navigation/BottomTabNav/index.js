@@ -32,12 +32,6 @@ const TabItems = [
     activeImage: homeActive,
   },
   {
-    name: "UserScreen",
-    component: UserScreen,
-    image: user,
-    activeImage: userActive,
-  },
-  {
     name: "FirstScreen",
     component: FirstScreen,
     image: search,

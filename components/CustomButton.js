@@ -21,10 +21,9 @@ export const CustomButton = ({
         location={[0.25, 0.4, 1]}
       >
         <View style={styles.btnContainer}>
-          <CustomText style={[styles.btnText, { fontSize: style.fontSize }]}>
+          <CustomText style={{ ...styles.btnText, fontSize: style?.fontSize }}>
             {title}
           </CustomText>
-
         </View>
       </LinearGradient>
     </TouchableOpacity>
@@ -45,6 +44,6 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 22,
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
   },
 });

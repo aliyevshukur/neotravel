@@ -42,8 +42,6 @@ export const UserScreen = () => {
           fullName={"Jane Doe"}
         />
         {menuItems.map(({ icon, label }, i) => {
-          console.log("key", i);
-
           return <UserMenuItem icon={icon} label={label} key={i} />;
         })}
       </View>

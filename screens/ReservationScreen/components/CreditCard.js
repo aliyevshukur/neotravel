@@ -6,8 +6,6 @@ import visaLogo from "../../../assets/images/ReservationScreen/visa-logo.png";
 import cardLogo from "../../../assets/images/ReservationScreen/card-logo.png";
 
 export const CreditCard = ({ cardNumber, name, CVV }) => {
-  console.log(cardNumber);
-
   const renderCardNumbers = () => {
     const segments = cardNumber.match(/.{1,4}/g) || [];
     const result = segments.map((text, ind) => (
