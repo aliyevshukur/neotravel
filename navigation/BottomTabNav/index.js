@@ -49,6 +49,12 @@ const TabItems = [
     image: bell,
     activeImage: bellActive,
   },
+  {
+    name: "UserScreen",
+    component: UserScreen,
+    image: user,
+    activeImage: userActive,
+  },
 ];
 
 export const BottomTabNav = () => {
