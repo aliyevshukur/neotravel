@@ -5,3 +5,4 @@ export { ReservationScreen } from "./ReservationScreen";
 export { SignIn } from "./SignIn";
 
 export {FilterScreen} from './FilterScreen';
+export {RoomScreen} from './RoomScreen';

@@ -6,44 +6,50 @@ import COLORS from '../../styles/colors';
 import { CustomText } from '../CustomText';
 import { CustomSvg } from './CustomSvg';
 
-export const RoomLarge = ({cardInfo, onSelectPress, onInfoPress}) => {
+export const RoomLarge = ({ style, cardInfo, onSelectPress, onInfoPress}) => {
     const item = cardInfo || {};
     const makeItShort = (value, length, end = " ...") => {
         return value ? (value = value.toString(), value.length <= length ? value : value.substring(0, length) + end) : null;
     }
+    // const cardInfo = {
+    //     name: "Standard King room",
+    //     imgUrl: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80",
+    //     price: "200",
+    //     currency: "EU",
+    //     time: "3",
+    //     details: [
+    //         {
+    //             id: 1,
+    //             title: "Refundable",
+    //             icon: "coins",
+    //         },
+    //         {
+    //             id: 2,
+    //             title: "Breakfast included",
+    //             icon: "coffee",
+    //         },
+    //         {
+    //             id: 3,
+    //             title: "Wi-Fi",
+    //             icon: "wifi",
+    //         },
+    //         {
+    //             id: 4,
+    //             title: "Air Conditioner",
+    //             icon: "thermometer",
+    //         },
+    //         {
+    //             id: 5,
+    //             title: "Bath",
+    //             icon: "bath",
+    //         },
+    //     ]
 
-    // const details = [
-    //     {
-    //         id: 1,
-    //         title: "Refundable",
-    //         icon: "coins",
-    //     },
-    //     {
-    //         id: 2,
-    //         title: "Breakfast included",
-    //         icon: "coffee",
-    //     },
-    //     {
-    //         id: 3,
-    //         title: "Wi-Fi",
-    //         icon: "wifi",
-    //     },
-    //     {
-    //         id: 4,
-    //         title: "Air Conditioner",
-    //         icon: "thermometer",
-    //     },
-    //     {
-    //         id: 5,
-    //         title: "Bath",
-    //         icon: "bath",
-    //     },
-        
-    // ]
+    // }
     
 
     return (
-        <View style={styles.container}>
+        <View style={[style, styles.container]}>
             <LinearGradient
             colors={["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0.7)"]}
             style={styles.gradient}
@@ -134,7 +140,6 @@ const styles = StyleSheet.create({
     detailText: {
         color: COLORS.grayDark,
         fontSize: 14,
-        fontWeight: "normal",
         fontStyle: "normal",
         marginLeft: 15,
     },
