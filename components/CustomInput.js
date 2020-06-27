@@ -29,14 +29,7 @@ export const CustomInput = ({
   return (
     <ImageBackground
       source={dark ? darkRectangle : long ? longRectangle : rectangle}
-<<<<<<< HEAD
-      style={[
-        { width: long ? 338 : 240, height: 54.5, marginTop: 10 },
-        { style },
-      ]}
-=======
       style={{ width: long ? 338 : 240, height: 54.5, marginTop: 10 }}
->>>>>>> fcf6ddcc50bcbcb6c078f3b205a2b541ed15ca09
     >
       <View style={styles.input}>
         {isSearch && (

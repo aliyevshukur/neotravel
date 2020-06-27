@@ -26,16 +26,16 @@ const { Navigator, Screen } = createBottomTabNavigator();
 
 const TabItems = [
   {
-    name: "UserScreen",
-    component: UserScreen,
-    image: user,
-    activeImage: userActive,
-  },
-  {
     name: "HomePageStack",
     component: HomePageStack,
     image: home,
     activeImage: homeActive,
+  },
+  {
+    name: "UserScreen",
+    component: UserScreen,
+    image: user,
+    activeImage: userActive,
   },
   {
     name: "FirstScreen",
