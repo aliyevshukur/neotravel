@@ -5,71 +5,74 @@ import { LinearGradient } from "expo-linear-gradient";
 import COLORS from '../../styles/colors';
 import { CustomText } from '../CustomText';
 import { CustomSvg } from './CustomSvg';
+import { CustomButton } from '../CustomButton';
 
-export const RoomLarge = ({cardInfo, onSelectPress, onInfoPress}) => {
-    const item = cardInfo || {};
+
+export const RoomLarge = ({ style, cardInfo, onSelectPress, onInfoPress}) => {
+    
+    // const cardItem = {
+    //     name: "Standard King room",
+    //     imgUrl: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80",
+    //     price: "200",
+    //     currency: "EU",
+    //     time: "3",
+    //     features: ["bath", "thermometer", "wifi", "coffee", "coins"],
+    // }
+
+    const cardItem = cardInfo || {};
     const makeItShort = (value, length, end = " ...") => {
         return value ? (value = value.toString(), value.length <= length ? value : value.substring(0, length) + end) : null;
     }
 
-    // const details = [
-    //     {
-    //         id: 1,
-    //         title: "Refundable",
-    //         icon: "coins",
-    //     },
-    //     {
-    //         id: 2,
-    //         title: "Breakfast included",
-    //         icon: "coffee",
-    //     },
-    //     {
-    //         id: 3,
-    //         title: "Wi-Fi",
-    //         icon: "wifi",
-    //     },
-    //     {
-    //         id: 4,
-    //         title: "Air Conditioner",
-    //         icon: "thermometer",
-    //     },
-    //     {
-    //         id: 5,
-    //         title: "Bath",
-    //         icon: "bath",
-    //     },
-        
-    // ]
+    const DETAILS = Object.freeze({
+        coins: {
+            id: 1,
+            title: "Refundable",
+        },
+        coffee: {
+            id: 2,
+            title: "Breakfast included",
+        },
+        wifi: {
+            id: 3,
+            title: "Wi-Fi",
+        },
+        thermometer: {
+            id: 4,
+            title: "Air Conditioner",
+        },
+        bath: {
+            id: 5,
+            title: "Bath",
+        },
+    });
     
-
     return (
-        <View style={styles.container}>
+        <View style={[style, styles.container]}>
             <LinearGradient
             colors={["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0.7)"]}
             style={styles.gradient}
             >
-                <Image resizeMode={'cover'} style={styles.bgImg} source={{uri: item.imgUrl}}/>
+                <Image resizeMode={'cover'} style={styles.bgImg} source={{uri: cardItem.imgUrl}}/>
             </LinearGradient>
             <View style={styles.cardInfo}>
-                <CustomText style={styles.name}>{makeItShort(item.name, 40) || "~"}</CustomText>
+                <CustomText style={styles.name}>{makeItShort(cardItem.name, 40) || "~"}</CustomText>
                 <View style={styles.details}>
-                    <FlatList
-                    data={item.details}
-                    renderItem={({ item }) =>  <View style={styles.detailItem}> 
-                                                    <CustomSvg name={item.icon} style={styles.svg}/>
-                                                    <CustomText style={styles.detailText}>{item.title}</CustomText>
-                                                </View>}
-                    keyExtractor={item => item.id}
-            
-                    />
-                    
+                    {
+                        cardItem.features?.map((item, index) => 
+                            <View style={styles.detailItem} key={index}> 
+                                <CustomSvg name={item} style={styles.svg}/>
+                                <CustomText style={styles.detailText}>{DETAILS[item].title}</CustomText>
+                            </View>
+                        )
+                    }
                 </View>
             </View>
-            <CustomText style={styles.price}>{item.currency || "$"} {makeItShort(item.price, 7, "...") || "~"}</CustomText>
-            <CustomText style={styles.nights}>{makeItShort(item.time, 3) || "~"} nights</CustomText>
+            <CustomText style={styles.price}>{cardItem.currency || "$"} {makeItShort(cardItem.price, 7, "...") || "~"}</CustomText>
+            <CustomText style={styles.nights}>{makeItShort(cardItem.time, 3) || "~"} nights</CustomText>
             <View style={styles.selectHolder}>
-                {/* button will be here */}
-                <CustomText>SELECT</CustomText> 
+                <CustomButton title={'Select'} style={styles.selectBtn}/>
+                {/* <CustomText>SELECT</CustomText>  */}
             </View>
             <View style={styles.infoHolder}>
                 {/* info button will be here */}
@@ -134,7 +137,6 @@ const styles = StyleSheet.create({
     detailText: {
         color: COLORS.grayDark,
         fontSize: 14,
-        fontWeight: "normal",
         fontStyle: "normal",
         marginLeft: 15,
     },
@@ -161,14 +163,15 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 20,
         bottom: 20,
-        width: 185,
-        height: 60,
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 50,
-        overflow: "hidden",
-        backgroundColor: "tomato",//will be deleted
     },
+    selectBtn: {
+        width: 185,
+        height: 60,
+        fontSize: 22,
+    },
+
     infoHolder: {
         position: "absolute",
         right: 15,

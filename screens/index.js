@@ -6,3 +6,4 @@ export { SignIn } from "./SignIn";
 export { HomeSearchScreen } from "./HomeScreen/SearchScreen";
 export { HomePage } from "./HomeScreen";
 export {FilterScreen} from './FilterScreen';
+export {RoomScreen} from './RoomScreen';
