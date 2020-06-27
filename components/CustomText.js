@@ -6,7 +6,7 @@ import {Text} from 'react-native';
 //         fontFamily: "NunitoBold"
 export const CustomText = ({children, style}) => {
     
-    const font = style && style.fontFamily ? style.fontFamily : "NunitoRegular";
+    const font = style?.fontFamily || "NunitoRegular";
     return (
         <Text style={[style, {fontFamily: font}]}>
             {children}

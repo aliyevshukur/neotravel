@@ -16,33 +16,7 @@ export const RoomScreen = () => {
                 price: "200",
                 currency: "EU",
                 time: "3",
-                details: [
-                    {
-                        id: 1,
-                        title: "Refundable",
-                        icon: "coins",
-                    },
-                    {
-                        id: 2,
-                        title: "Breakfast included",
-                        icon: "coffee",
-                    },
-                    {
-                        id: 3,
-                        title: "Wi-Fi",
-                        icon: "wifi",
-                    },
-                    {
-                        id: 4,
-                        title: "Air Conditioner",
-                        icon: "thermometer",
-                    },
-                    {
-                        id: 5,
-                        title: "Bath",
-                        icon: "bath",
-                    },
-                ]
+                features: [ "coffee", "coins"],
         
             }
         },
@@ -54,33 +28,7 @@ export const RoomScreen = () => {
                 price: "200",
                 currency: "EU",
                 time: "3",
-                details: [
-                    {
-                        id: 1,
-                        title: "Refundable",
-                        icon: "coins",
-                    },
-                    {
-                        id: 2,
-                        title: "Breakfast included",
-                        icon: "coffee",
-                    },
-                    {
-                        id: 3,
-                        title: "Wi-Fi",
-                        icon: "wifi",
-                    },
-                    {
-                        id: 4,
-                        title: "Air Conditioner",
-                        icon: "thermometer",
-                    },
-                    {
-                        id: 5,
-                        title: "Bath",
-                        icon: "bath",
-                    },
-                ]
+                features: ["bath", "thermometer", "wifi", "coffee", "coins"],
         
             }
         },
@@ -92,43 +40,7 @@ export const RoomScreen = () => {
                 price: "200",
                 currency: "EU",
                 time: "3",
-                details: [
-                    {
-                        id: 1,
-                        title: "Refundable",
-                        icon: "coins",
-                    },
-                    {
-                        id: 2,
-                        title: "Breakfast included",
-                        icon: "coffee",
-                    },
-                    {
-                        id: 3,
-                        title: "Wi-Fi",
-                        icon: "wifi",
-                    },
-                    {
-                        id: 4,
-                        title: "Air Conditioner",
-                        icon: "thermometer",
-                    },
-                    {
-                        id: 5,
-                        title: "Bath",
-                        icon: "bath",
-                    },
-                    {
-                        id: 6,
-                        title: "Bath",
-                        icon: "bath",
-                    },
-                    {
-                        id: 7,
-                        title: "Bath",
-                        icon: "bath",
-                    },
-                ]
+                features: ["bath", "thermometer", "wifi", "coffee"],
         
             }
         },
@@ -147,7 +59,6 @@ export const RoomScreen = () => {
                 <CustomText style={styles.titleText}>Mountain Resort</CustomText>
             </View>
             <View style={styles.main}>
-            <RoomLarge style={styles.roomItem} cardInfo={DATA[0].cardInfo}/>
                 <FlatList
                     data={DATA}
                     renderItem={({ item }) => (
