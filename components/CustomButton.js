@@ -1,10 +1,18 @@
 import React from "react";
-import { StyleSheet, Button, TouchableOpacity, Text, View } from "react-native";
+import { StyleSheet, TouchableOpacity, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-
-export const CustomButton = ({ title = "Search a room", width = "80%" }) => {
+import { CustomText } from "./CustomText";
+export const CustomButton = ({
+  title = "Search a room",
+  width = "80%",
+  style,
+  onPress,
+}) => {
   return (
-    <TouchableOpacity style={[styles.btn, { width: width }]}>
+    <TouchableOpacity
+      style={[styles.btn, { width: width }, style]}
+      onPress={onPress}
+    >
       <LinearGradient
         colors={["#FF6161", "#FF61DC"]}
         style={{ flex: 1, borderRadius: 50 }}
@@ -13,7 +21,10 @@ export const CustomButton = ({ title = "Search a room", width = "80%" }) => {
         location={[0.25, 0.4, 1]}
       >
         <View style={styles.btnContainer}>
-          <Text style={styles.btnText}>{title}</Text>
+          <CustomText style={[styles.btnText, { fontSize: style.fontSize }]}>
+            {title}
+          </CustomText>
+
         </View>
       </LinearGradient>
     </TouchableOpacity>
