@@ -16,6 +16,9 @@ export default function App() {
       />
     );
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
   return <RootNav />;
 }
