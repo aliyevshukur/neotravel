@@ -3,7 +3,6 @@ import { AppLoading } from "expo";
 import { RootNav } from "./navigation";
 
 import { loadFonts } from "./styles/fonts";
-import { RoomScreen } from './screens';
 
 
 export default function App() {
@@ -17,6 +16,6 @@ export default function App() {
       />
     );
   }
-  return <RoomScreen />;
-  // return <RootNav />;
+
+  return <RootNav />;
 }
