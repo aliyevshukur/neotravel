@@ -2,26 +2,27 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { CustomText } from "./CustomText";
+import COLORS from "../styles/colors";
+
 export const CustomButton = ({
   title = "Search a room",
-  width = "80%",
   style,
   onPress,
 }) => {
   return (
     <TouchableOpacity
-      style={[styles.btn, { width: width }, style]}
+      style={[styles.btn, style]}
       onPress={onPress}
     >
       <LinearGradient
-        colors={["#FF6161", "#FF61DC"]}
+        colors={[COLORS.gradientOrange, COLORS.gradientPink]}
         style={{ flex: 1, borderRadius: 50 }}
         start={[0, 0]}
         end={[1, 1]}
         location={[0.25, 0.4, 1]}
       >
         <View style={styles.btnContainer}>
-          <CustomText style={[styles.btnText, { fontSize: style.fontSize }]}>
+          <CustomText style={{...styles.btnText, fontSize: style?.fontSize }}>
             {title}
           </CustomText>
 
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: 22,
-    color: "white",
-    fontWeight: "bold",
+    color: COLORS.white,
+    fontFamily: "NunitoBold",
   },
 });

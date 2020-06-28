@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { StyleSheet, View, TouchableOpacity, FlatList } from "react-native";
 
-import { CustomSvg, CustomText, CustomButton } from "../../components";
-import COLORS from "../../styles/colors";
-import { ToggleButton } from "../../components/ToggleButton";
-import { SelectAlert } from "./SelectAlert";
+import {CustomSvg, CustomText} from '../../components';
+import {CustomButton} from '../../components/CustomButton';
+import COLORS from '../../styles/colors';
+import { ToggleButton } from '../../components/ToggleButton';
+import { SelectAlert } from './SelectAlert';
 
 export const FilterScreen = () => {
   const DATA = {

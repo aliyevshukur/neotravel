@@ -118,8 +118,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
-    // position: "absolute",
-    // bottom: 0,
+    width: "80%",
     fontSize: 24,
     marginTop: 20,
   },
