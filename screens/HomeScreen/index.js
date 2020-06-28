@@ -59,9 +59,8 @@ export const HomePage = ({ navigation }) => {
               <CustomPicker dark={true} title="Nights" />
             </View>
             <CustomButton
-              style={{ marginTop: 20, fontSize: 24 }}
+              style={{ marginTop: 20, fontSize: 24, width: "90%" }}
               title="Search a room"
-              width="90%"
               onPress={() => navigation.navigate("HomeSearchScreen")}
             />
           </View>

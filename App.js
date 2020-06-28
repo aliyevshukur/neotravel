@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { AppLoading } from "expo";
 import { RootNav } from "./navigation";
 
 import { loadFonts } from "./styles/fonts";
-import { RoomScreen } from './screens';
-
+import { RoomScreen } from "./screens";
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
@@ -17,6 +16,5 @@ export default function App() {
       />
     );
   }
-  return <RoomScreen />;
-  // return <RootNav />;
+  return <RootNav />;
 }

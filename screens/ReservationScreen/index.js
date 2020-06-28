@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 25,
-    paddingBottom: 25
+    paddingBottom: 25,
   },
   form: {
     marginTop: 15,
@@ -56,5 +56,6 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 25,
+    width: "80%",
   },
 });
