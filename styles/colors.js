@@ -16,6 +16,7 @@ const COLORS = {
   darkPriceInCards: "#434343", //dark price color in cards
   imgLoad: "#C4C4C4", //background for not loaded images
   homeScreenCatalogueBackground: "#FAFAFB",
+  pink: "#FF61A8", // Pink text color
 };
 
 export default COLORS;

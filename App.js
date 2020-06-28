@@ -3,7 +3,6 @@ import { AppLoading } from "expo";
 import { RootNav } from "./navigation";
 
 import { loadFonts } from "./styles/fonts";
-import { RoomScreen } from "./screens";
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
