@@ -7,13 +7,15 @@ import { BottomTabNav } from "./BottomTabNav/";
 import { SignIn, ReservationScreen } from "../screens";
 import bgcLight from "../styles/colors";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { LoginScreen } from "../screens/LoginScreen";
+import { RegisterScreen } from "../screens/RegisterScreen";
 const { Navigator, Screen } = createStackNavigator();
 
 export const RootNav = () => {
   return (
     <NavigationContainer>
       <Navigator
-        screenOptions={({navigation}) => ({
+        screenOptions={({ navigation }) => ({
           headerStyle: { backgroundColor: bgcLight, elevation: 0 },
           headerTitleStyle: {
             marginLeft: -20,
@@ -28,7 +30,8 @@ export const RootNav = () => {
           ),
         })}
       >
-        <Screen name="SignIn" component={SignIn} />
+        <Screen name="Login" component={LoginScreen} />
+        {/* <Screen name="Register" component={RegisterScreen} /> */}
         <Screen name="BottomTabNav" component={BottomTabNav} />
         <Screen
           name="ReservationScreen"
