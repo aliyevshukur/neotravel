@@ -8,4 +8,4 @@ export { HotelLarge } from "./cards/HotelLarge";
 export { RoomLarge } from "./cards/RoomLarge";
 export { IconWbg } from "./cards/IconWbg";
 export { CustomSvg } from "./cards/CustomSvg";
-
+export { CardSlider } from "./CardSlider";

@@ -14,7 +14,7 @@ const { Navigator, Screen } = createStackNavigator();
 export const RootNav = () => {
   return (
     <NavigationContainer>
-      <Navigator>
+      <Navigator headerMode="none">
         <Screen
           name="Login"
           component={LoginScreen}

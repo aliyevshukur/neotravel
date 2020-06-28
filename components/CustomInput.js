@@ -18,7 +18,7 @@ export const CustomInput = ({
   style,
   long = false,
   isSearch = true,
-  isCross = true,
+  isCross = false,
   dark = false,
   value,
   onChangeText,
@@ -26,6 +26,7 @@ export const CustomInput = ({
   placeholder = "",
   keyboardType = "default",
   maxLength,
+  ...rest
 }) => {
   return (
     // <ImageBackground
@@ -35,7 +36,7 @@ export const CustomInput = ({
     <View
       style={[
         styles.input,
-        { width: long ? 338 : 240, height: 50, marginTop: 10 },
+        { width: long ? "90%" : "45%", height: 50, marginTop: 20 },
         style,
       ]}
     >
@@ -45,6 +46,7 @@ export const CustomInput = ({
         </TouchableOpacity>
       )}
       <TextInput
+        {...rest}
         value={value}
         onChangeText={onChangeText}
         onTouchStart={onTouchStart}
@@ -54,11 +56,11 @@ export const CustomInput = ({
         keyboardType={keyboardType}
         maxLength={maxLength}
       ></TextInput>
-      {isCross && (
+      {(isCross || value !== "") && (
         <TouchableOpacity
           style={styles.crossTouchArea}
           onPress={() => {
-            setValue("");
+            onChangeText("");
           }}
         >
           <Image source={cross} style={styles.cross} />

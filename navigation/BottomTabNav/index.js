@@ -11,6 +11,7 @@ import {
 } from "../../screens";
 import { TabBarIcon } from "./TabBarIcon";
 import { HomePageStack } from "../HomeStack/HomeStack";
+import { SearchStack } from "../SearchStack";
 
 import bell from "../../assets/images/bell.png";
 import bellActive from "../../assets/images/bell-active.png";
@@ -32,8 +33,8 @@ const TabItems = [
     activeImage: homeActive,
   },
   {
-    name: "FirstScreen",
-    component: FirstScreen,
+    name: "SearchStack",
+    component: SearchStack,
     image: search,
     activeImage: searchActive,
   },
