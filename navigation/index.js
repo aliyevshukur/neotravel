@@ -15,8 +15,16 @@ export const RootNav = () => {
   return (
     <NavigationContainer>
       <Navigator>
-        <Screen name="Login" component={LoginScreen} />
-        {/* <Screen name="Register" component={RegisterScreen} /> */}
+        <Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ headerShown: false }}
+        />
         <Screen name="BottomTabNav" component={BottomTabNav} />
         <Screen
           name="ReservationScreen"
