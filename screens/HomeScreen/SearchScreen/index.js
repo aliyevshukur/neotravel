@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   listContainer: {
-    marginTop: 21,
+    // marginTop: 21,
   },
   filterTxt: {
     fontFamily: "NunitoRegular",
