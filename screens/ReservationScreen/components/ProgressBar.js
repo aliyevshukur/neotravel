@@ -1,11 +1,9 @@
 import React from "react";
-import { StyleSheet, View, Text, ImageBackground, Image } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 
-import circleBG from "../../../assets/images/ReservationScreen/progress-circle.png";
-import circleActiveBG from "../../../assets/images/ReservationScreen/progress-circle-active.png";
 import COLORS from "../../../styles/colors";
 
-export const ProgressBar = ({ activeNumber }) => {
+export const ProgressBar = ({ activeNumber, style }) => {
   // Returns n number of circles with corresponding labels from 1 to n
   const renderCircles = (n = 3) => {
     // Array of JSX elements
@@ -31,7 +29,7 @@ export const ProgressBar = ({ activeNumber }) => {
       };
 
       circles.push(
-        <View style={[styles.circle, { ...activeCircleStyle }]}>
+        <View style={[styles.circle, { ...activeCircleStyle }]} key={i}>
           <Text style={[styles.label, { ...activeLineStyle }]}>{i}</Text>
           {i != n && <View style={[styles.line, { ...activeLabelStyle }]} />}
         </View>
@@ -41,7 +39,7 @@ export const ProgressBar = ({ activeNumber }) => {
     return circles;
   };
 
-  return <View style={styles.container}>{renderCircles(3)}</View>;
+  return <View style={[styles.container, style]}>{renderCircles(3)}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -50,7 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 15,
+    zIndex: -1
   },
   circle: {
     width: 36,

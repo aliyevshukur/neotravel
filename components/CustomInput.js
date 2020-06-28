@@ -22,42 +22,50 @@ export const CustomInput = ({
   dark = false,
   value,
   onChangeText,
+  onTouchStart,
   placeholder = "",
   keyboardType = "default",
   maxLength,
 }) => {
   return (
-    <ImageBackground
-      source={dark ? darkRectangle : long ? longRectangle : rectangle}
-      style={{ width: long ? 338 : 240, height: 54.5, marginTop: 10 }}
+    // <ImageBackground
+    //   source={dark ? darkRectangle : long ? longRectangle : rectangle}
+    //   style={{ width: long ? 338 : 240, height: 54.5, marginTop: 10 }}
+    // >
+    <View
+      style={[
+        styles.input,
+        { width: long ? 338 : 240, height: 50, marginTop: 10 },
+        style,
+      ]}
     >
-      <View style={styles.input}>
-        {isSearch && (
-          <TouchableOpacity>
-            <Image source={search} style={styles.search} />
-          </TouchableOpacity>
-        )}
-        <TextInput
-          value={value}
-          onChangeText={onChangeText}
-          style={styles.textInput}
-          placeholder={placeholder}
-          placeholderTextColor="#616167"
-          keyboardType={keyboardType}
-          maxLength={maxLength}
-        ></TextInput>
-        {isCross && (
-          <TouchableOpacity
-            style={styles.crossTouchArea}
-            onPress={() => {
-              setValue("");
-            }}
-          >
-            <Image source={cross} style={styles.cross} />
-          </TouchableOpacity>
-        )}
-      </View>
-    </ImageBackground>
+      {isSearch && (
+        <TouchableOpacity>
+          <Image source={search} style={styles.search} />
+        </TouchableOpacity>
+      )}
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        onTouchStart={onTouchStart}
+        style={styles.textInput}
+        placeholder={placeholder}
+        placeholderTextColor="#616167"
+        keyboardType={keyboardType}
+        maxLength={maxLength}
+      ></TextInput>
+      {isCross && (
+        <TouchableOpacity
+          style={styles.crossTouchArea}
+          onPress={() => {
+            setValue("");
+          }}
+        >
+          <Image source={cross} style={styles.cross} />
+        </TouchableOpacity>
+      )}
+    </View>
+    // </ImageBackground>
   );
 };
 
@@ -71,6 +79,7 @@ const styles = StyleSheet.create({
     paddingRight: 14,
     flexDirection: "row",
     alignItems: "center",
+    elevation: 2,
   },
   search: {
     width: 16,
