@@ -24,6 +24,7 @@ export const HomePage = ({ navigation }) => {
     description: "Find place that gives you ultimate calm",
     catalogueName: "Recommended",
   };
+
   return (
     <ImageBackground
       resizeMode="stretch"
@@ -43,8 +44,9 @@ export const HomePage = ({ navigation }) => {
                 long={false}
                 isSearch={false}
                 isCross={false}
-                placeHolder="Place"
+                placeholder="Place"
                 dark={true}
+                textStyle={{ color: COLORS.white }}
               />
               <CustomPicker dark={true} title="Guests" />
             </View>
@@ -53,15 +55,19 @@ export const HomePage = ({ navigation }) => {
                 long={false}
                 isSearch={false}
                 isCross={false}
-                placeHolder="Date"
+                placeholder="Date"
                 dark={true}
               />
               <CustomPicker dark={true} title="Nights" />
             </View>
             <CustomButton
-              style={{ marginTop: 20, fontSize: 24 }}
+              style={{
+                marginTop: 20,
+                fontSize: 24,
+                width: "90%",
+                marginTop: 30,
+              }}
               title="Search a room"
-              width="90%"
               onPress={() => navigation.navigate("HomeSearchScreen")}
             />
           </View>
@@ -103,17 +109,16 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
     alignItems: "center",
-    marginTop: 130,
-    // justifyContent: "center",
+    marginTop: 30,
   },
   headerText: {
     width: 345,
-    height: 94,
+    height: Dimensions.get("window").height / 7,
     marginBottom: 13,
   },
   searchArea: {
     width: Dimensions.get("window").width,
-    height: 322,
+    height: Dimensions.get("window").height / 2.12,
     backgroundColor: COLORS.bgcDark,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -122,9 +127,14 @@ const styles = StyleSheet.create({
   },
   placeRow: {
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 15,
   },
   dateRow: {
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   catalogue: {
     backgroundColor: COLORS.homeScreenCatalogueBackground,

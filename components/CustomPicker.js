@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, ImageBackground, Picker, Image } from "react-native";
+import { StyleSheet, ImageBackground, Picker, Image, View } from "react-native";
 
-import dropdown from "../assets/images/inputComponents/dropdown.png";
-import darkDropdown from "../assets/images/inputComponents/darkDropdown.png";
 import caretDown from "../assets/images/inputComponents/caret-down.png";
+import COLORS from "../styles/colors";
 
 export const CustomPicker = ({
   title = "Guests",
-  dark = false,
   pickerValue,
   setPickerValue,
   pickerArray = [
@@ -18,44 +16,46 @@ export const CustomPicker = ({
   ],
 }) => {
   return (
-    <ImageBackground
-      source={dark ? darkDropdown : dropdown}
-      style={{
-        width: 130,
-        height: 65,
-        marginTop: 10,
-        paddingLeft: 7,
-        flexDirection: "row",
-        alignItems: "center",
-        marginLeft: 10,
-      }}
-    >
+    <View style={styles.pickerContainer}>
       <Picker
         mode="dropdown"
         selectedValue={pickerValue}
         onValueChange={(itemValue) => setPickerValue(itemValue)}
         style={styles.picker}
+        itemStyle={{ color: "green" }}
       >
-        <Picker.Item label={title} itemStyle={{ color: "#999999" }} />
+        <Picker.Item label={title} itemStyle={{ color: COLORS.grayDark }} />
         {pickerArray.map((item) => (
           <Picker.Item key={item.label} label={item.label} value={item.value} />
         ))}
       </Picker>
-      <Image
-        source={caretDown}
-        style={{ width: 9.3, height: 5.28, right: 50 }}
-      />
-    </ImageBackground>
+      <Image source={caretDown} style={styles.pickerPng} />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   picker: {
     width: 120,
-    height: 60,
+    height: 50,
     marginLeft: 15,
-    backgroundColor: "transparent",
-    color: "#999999",
+    color: COLORS.grayDark,
     borderRadius: 50,
+    padding: 0,
+  },
+  pickerContainer: {
+    width: 120,
+    height: 50,
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 10,
+    borderRadius: 50,
+    elevation: 2,
+    marginTop: 10,
+  },
+  pickerPng: {
+    width: 9.3,
+    height: 5.28,
+    right: 40,
   },
 });
