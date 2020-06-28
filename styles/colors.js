@@ -7,7 +7,7 @@ const COLORS = {
   grayDark: "#616167", //will be used in RoomLarge card detail text ...
   grayLight: "#DFDEDE", //switch button background ...
   gray: "#999999", //will be used in gray texts ...
-  white: "#FFFFFF", 
+  white: "#FFFFFF",
   offWhite: "#F5F5F5",
   peach: "#FFB489",
   opaqueFirst: "#FFC7A7", //will be used in notifications gradient ...
@@ -15,6 +15,8 @@ const COLORS = {
   tabNavIcon: "#BDBDBD", //will be used in tab-navigation icons background (Home, Search ...)
   darkPriceInCards: "#434343", //dark price color in cards
   imgLoad: "#C4C4C4", //background for not loaded images
-  };
-  
-  export default COLORS;
+  homeScreenCatalogueBackground: "#FAFAFB",
+  pink: "#FF61A8", // Pink text color
+};
+
+export default COLORS;

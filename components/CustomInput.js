@@ -8,60 +8,78 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import search from "../assets/images/search.png";
-import cross from "../assets/images/times.png";
-import rectangle from "../assets/images/rectangle.png";
-import longRectangle from "../assets/images/longRectangle.png";
+import search from "../assets/images/inputComponents/search.png";
+import cross from "../assets/images/inputComponents/times.png";
+import rectangle from "../assets/images/inputComponents/rectangle.png";
+import longRectangle from "../assets/images/inputComponents/longRectangle.png";
+import darkRectangle from "../assets/images/inputComponents/darkRectangle.png";
 
 export const CustomInput = ({
+  style,
   long = false,
   isSearch = true,
   isCross = true,
+  dark = false,
   value,
-  setValue,
-  placeHolder = "Place",
+  onChangeText,
+  onTouchStart,
+  placeholder = "",
+  keyboardType = "default",
+  maxLength,
 }) => {
   return (
-    <ImageBackground
-      source={long ? longRectangle : rectangle}
-      style={{ width: long ? 338 : 220, height: 50, marginTop: 10 }}
+    // <ImageBackground
+    //   source={dark ? darkRectangle : long ? longRectangle : rectangle}
+    //   style={{ width: long ? 338 : 240, height: 54.5, marginTop: 10 }}
+    // >
+    <View
+      style={[
+        styles.input,
+        { width: long ? 338 : 240, height: 50, marginTop: 10 },
+        style,
+      ]}
     >
-      <View style={styles.input}>
-        {isSearch && (
-          <TouchableOpacity>
-            <Image source={search} style={styles.search} />
-          </TouchableOpacity>
-        )}
-        <TextInput
-          value={value}
-          onChangeText={(item) => setValue(item)}
-          style={styles.textInput}
-          placeholder={placeHolder}
-        ></TextInput>
-        {isCross && (
-          <TouchableOpacity
-            style={styles.crossTouchArea}
-            onPress={() => {
-              setValue("");
-            }}
-          >
-            <Image source={cross} style={styles.cross} />
-          </TouchableOpacity>
-        )}
-      </View>
-    </ImageBackground>
+      {isSearch && (
+        <TouchableOpacity>
+          <Image source={search} style={styles.search} />
+        </TouchableOpacity>
+      )}
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        onTouchStart={onTouchStart}
+        style={styles.textInput}
+        placeholder={placeholder}
+        placeholderTextColor="#616167"
+        keyboardType={keyboardType}
+        maxLength={maxLength}
+      ></TextInput>
+      {isCross && (
+        <TouchableOpacity
+          style={styles.crossTouchArea}
+          onPress={() => {
+            setValue("");
+          }}
+        >
+          <Image source={cross} style={styles.cross} />
+        </TouchableOpacity>
+      )}
+    </View>
+    // </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   input: {
-    height: 50,
-    borderRadius: 27,
+    width: 240,
+    height: 54.5,
+    borderRadius: 28,
     backgroundColor: "transparent",
     paddingLeft: 14,
     paddingRight: 14,
     flexDirection: "row",
     alignItems: "center",
+    elevation: 2,
   },
   search: {
     width: 16,
@@ -76,6 +94,8 @@ const styles = StyleSheet.create({
   textInput: {
     width: "85%",
     paddingHorizontal: 10,
+    fontFamily: "NunitoRegular",
+    fontSize: 16,
   },
   crossTouchArea: {
     paddingLeft: 5,
