@@ -6,23 +6,23 @@ import { sign, logOut } from "../../store/auth";
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
 
-
-export const RegisterScreen = ({ navigation }) => {
-  const [formValues, setFormValues] = useState({
-    name: "",
-    surname: "",
-    email: "",
-    password: "",
-  });
-
-  const fromFields = ["name", "surname", "email", "password"];
-
-  const handleFieldChange = (name, value) => {
-    setFormValues({
-      ...formValues,
-      [name]: value,
+export const RegisterScreen = connect(null, { sign })(
+  ({ navigation, sign }) => {
+    const [formValues, setFormValues] = useState({
+      name: "",
+      surname: "",
+      email: "",
+      password: "",
     });
 
+    const fromFields = ["name", "surname", "email", "password"];
+
+    const handleFieldChange = (name, value) => {
+      setFormValues({
+        ...formValues,
+        [name]: value,
+      });
+    };
     const handleFormSubmit = () => {
       for (let field in formValues) {
         if (formValues[field].trim() === "") {
@@ -37,31 +37,41 @@ export const RegisterScreen = ({ navigation }) => {
         formValues.name.concat(" ", formValues.surname)
       );
     };
-        <View style={styles.loginForm}>
-          {fromFields.map((key, index) => {
-            console.log("key", key);
+    return (
+      <View style={styles.container}>
+        <View style={styles.wrapper}>
+          <CustomText style={styles.header}>Register</CustomText>
 
-            return (
-              <CustomInput
-                key={index}
-                isCross={false}
-                isSearch={false}
-                placeholder={
-                  key.charAt(0).toUpperCase() + key.slice(1, key.length)
-                }
-                value={formValues[key]}
-                onChangeText={(value) => handleFieldChange(key, value)}
-                long={true}
-              />
-            );
-          })}
-        </View>
-        <View style={styles.textWrapper}>
-          <CustomText style={styles.text}>Already registered?</CustomText>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <CustomText style={styles.link}> Login.</CustomText>
-          </TouchableOpacity>
+          <View style={styles.loginForm}>
+            {fromFields.map((key, index) => {
+              console.log("key", key);
 
+              return (
+                <CustomInput
+                  key={index}
+                  isCross={false}
+                  isSearch={false}
+                  placeholder={
+                    key.charAt(0).toUpperCase() + key.slice(1, key.length)
+                  }
+                  value={formValues[key]}
+                  onChangeText={(value) => handleFieldChange(key, value)}
+                  long={true}
+                />
+              );
+            })}
+          </View>
+          <View style={styles.textWrapper}>
+            <CustomText style={styles.text}>Already registered?</CustomText>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <CustomText style={styles.link}> Login.</CustomText>
+            </TouchableOpacity>
+          </View>
+          <CustomButton
+            style={styles.btn}
+            onPress={handleFormSubmit}
+            title={"Register"}
+          />
         </View>
       </View>
     );
