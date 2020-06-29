@@ -12,6 +12,8 @@ export const RegisterScreen = ({ navigation }) => {
     password: "",
   });
 
+  const fromFields = ["name", "surname", "email", "password"];
+
   const handleFieldChange = (name, value) => {
     setFormValues({
       ...formValues,
@@ -20,7 +22,7 @@ export const RegisterScreen = ({ navigation }) => {
   };
 
   const handleFormSubmit = () => {
-    console.log("submti");
+    console.log("formValues:", formValues);
   };
 
   return (
@@ -29,18 +31,23 @@ export const RegisterScreen = ({ navigation }) => {
         <CustomText style={styles.header}>Register</CustomText>
 
         <View style={styles.loginForm}>
-          {Object.keys(formValues).map((key) => (
-            <CustomInput
-              isCross={false}
-              isSearch={false}
-              placeholder={
-                key.charAt(0).toUpperCase() + key.slice(1, key.length)
-              }
-              value={formValues[key]}
-              onChangeText={() => handleFieldChange(key, value)}
-              long={true}
-            />
-          ))}
+          {fromFields.map((key, index) => {
+            console.log("key", key);
+
+            return (
+              <CustomInput
+                key={index}
+                isCross={false}
+                isSearch={false}
+                placeholder={
+                  key.charAt(0).toUpperCase() + key.slice(1, key.length)
+                }
+                value={formValues[key]}
+                onChangeText={(value) => handleFieldChange(key, value)}
+                long={true}
+              />
+            );
+          })}
         </View>
         <View style={styles.textWrapper}>
           <CustomText style={styles.text}>Already registered?</CustomText>

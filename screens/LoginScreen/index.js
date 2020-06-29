@@ -32,7 +32,7 @@ export const LoginScreen = ({ navigation }) => {
             isSearch={false}
             isCross={false}
             value={formValues.email}
-            onChangeText={() => handleFieldChange("email", value)}
+            onChangeText={(value) => handleFieldChange("email", value)}
             long={true}
           />
           <CustomInput
@@ -40,7 +40,7 @@ export const LoginScreen = ({ navigation }) => {
             isSearch={false}
             isCross={false}
             value={formValues.password}
-            onChangeText={() => handleFieldChange("password", value)}
+            onChangeText={(value) => handleFieldChange("password", value)}
             long={true}
           />
         </View>
