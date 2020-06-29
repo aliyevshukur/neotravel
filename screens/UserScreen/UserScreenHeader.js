@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
     alignItems: "center",
     width: width + 10,
-    backgroundColor: "#0000",
+    backgroundColor: "rgba(0,0,0,0)",
     ...shadow,
   },
   profilePicture: {

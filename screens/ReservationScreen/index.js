@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  View,
   ScrollView,
   KeyboardAvoidingView,
   StyleSheet,
@@ -106,13 +107,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    justifyContent: "space-between",
     overflow: "hidden",
     paddingTop: 5,
     paddingBottom: 25,
     position: "relative",
   },
   formWrapper: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "flex-end",
     width: "100%",

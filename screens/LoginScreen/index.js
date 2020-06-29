@@ -32,55 +32,22 @@ export const LoginScreen = connect(myStateToProps, { sign })(
         [name]: value,
       });
     };
-
-    const handleFormSubmit = async () => {
-      for (let field in formValues) {
-        if (formValues[field].trim() === "") {
-          Alert.alert(`${field} required to fill`);
-          return;
-        }
-      }
-      await sign(formValues.email, formValues.password, false);
-    };
-
-    return (
-      <View style={styles.container}>
-        <View style={styles.wrapper}>
-          <CustomText style={styles.header}>Login</CustomText>
-
-          <View style={styles.loginForm}>
-            <CustomInput
-              placeholder="Email"
-              isSearch={false}
-              isCross={false}
-              value={formValues.email}
-              onChangeText={(value) => handleFieldChange("email", value)}
-              long={true}
-            />
-            <CustomInput
-              placeholder="Password"
-              isSearch={false}
-              isCross={false}
-              value={formValues.password}
-              onChangeText={(value) => handleFieldChange("password", value)}
-              long={true}
-            />
-          </View>
-          <View style={styles.textWrapper}>
-            <CustomText style={styles.text}>Don't have an account?</CustomText>
-            <TouchableOpacity
-              onPress={() => {
-                console.log("inside onPress");
-                navigation.navigate("Register");
-              }}
-            >
-              <CustomText style={styles.link}> Register.</CustomText>
-            </TouchableOpacity>
-          </View>
-          <CustomButton
-            style={styles.btn}
-            onPress={handleFormSubmit}
-            title={"Login"}
+        <View style={styles.loginForm}>
+          <CustomInput
+            placeholder="Email"
+            isSearch={false}
+            isCross={false}
+            value={formValues.email}
+            onChangeText={(value) => handleFieldChange("email", value)}
+            long={true}
+          />
+          <CustomInput
+            placeholder="Password"
+            isSearch={false}
+            isCross={false}
+            value={formValues.password}
+            onChangeText={(value) => handleFieldChange("password", value)}
+            long={true}
           />
         </View>
       </View>
