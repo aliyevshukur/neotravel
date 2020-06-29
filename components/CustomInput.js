@@ -47,7 +47,7 @@ export const CustomInput = ({
       )}
       <TextInput
         value={value}
-        onChangeText={onChangeText}
+        onChangeText={(value) => onChangeText(value)}
         onTouchStart={onTouchStart}
         style={[styles.textInput, { ...textStyle }]}
         placeholder={placeholder}
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     width: 240,
     height: 54.5,
     borderRadius: 28,
-    backgroundColor: "transparent",
+    backgroundColor: "#0000",
     paddingLeft: 14,
     paddingRight: 14,
     flexDirection: "row",
