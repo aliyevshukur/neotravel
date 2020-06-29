@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { connect } from "react-redux";
+import { sign, logOut } from "../../store/auth";
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
+
 
 export const RegisterScreen = ({ navigation }) => {
   const [formValues, setFormValues] = useState({
@@ -19,17 +22,21 @@ export const RegisterScreen = ({ navigation }) => {
       ...formValues,
       [name]: value,
     });
-  };
 
-  const handleFormSubmit = () => {
-    console.log("formValues:", formValues);
-  };
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <CustomText style={styles.header}>Register</CustomText>
-
+    const handleFormSubmit = () => {
+      for (let field in formValues) {
+        if (formValues[field].trim() === "") {
+          Alert.alert(`${field} required to fill`);
+          return;
+        }
+      }
+      sign(
+        formValues.email,
+        formValues.password,
+        true,
+        formValues.name.concat(" ", formValues.surname)
+      );
+    };
         <View style={styles.loginForm}>
           {fromFields.map((key, index) => {
             console.log("key", key);
@@ -54,16 +61,12 @@ export const RegisterScreen = ({ navigation }) => {
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <CustomText style={styles.link}> Login.</CustomText>
           </TouchableOpacity>
+
         </View>
-        <CustomButton
-          style={styles.btn}
-          onPress={handleFormSubmit}
-          title={"Register"}
-        />
       </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

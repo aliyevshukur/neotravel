@@ -47,7 +47,7 @@ export const CustomInput = ({
       )}
       <TextInput
         value={value}
-        onChangeText={onChangeText}
+        onChangeText={(value) => onChangeText(value)}
         onTouchStart={onTouchStart}
         style={[styles.textInput, { ...textStyle }]}
         placeholder={placeholder}

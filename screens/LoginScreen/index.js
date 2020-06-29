@@ -1,31 +1,37 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import { connect } from "react-redux";
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
+import { sign, selectAuthStatus } from "../../store/auth";
 
-export const LoginScreen = ({ navigation }) => {
-  const [formValues, setFormValues] = useState({
-    email: "",
-    password: "",
-  });
+const myStateToProps = (state) => ({
+  status: selectAuthStatus(state),
+});
 
-  const handleFieldChange = (name, value) => {
-    setFormValues({
-      ...formValues,
-      [name]: value,
+export const LoginScreen = connect(myStateToProps, { sign })(
+  ({ navigation, sign, status }) => {
+    const [formValues, setFormValues] = useState({
+      email: "",
+      password: "",
     });
-  };
 
-  const handleFormSubmit = () => {
-    navigation.navigate("BottomTabNav");
-  };
+    useEffect(() => {
+      if (status) navigation.navigate("BottomTabNav");
+    }, [status]);
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <CustomText style={styles.header}>Login</CustomText>
-
+    const handleFieldChange = (name, value) => {
+      setFormValues({
+        ...formValues,
+        [name]: value,
+      });
+    };
         <View style={styles.loginForm}>
           <CustomInput
             placeholder="Email"
@@ -44,26 +50,10 @@ export const LoginScreen = ({ navigation }) => {
             long={true}
           />
         </View>
-        <View style={styles.textWrapper}>
-          <CustomText style={styles.text}>Don't have an account?</CustomText>
-          <TouchableOpacity
-            onPress={() => {
-              console.log("inside onPress");
-              navigation.navigate("Register");
-            }}
-          >
-            <CustomText style={styles.link}> Register.</CustomText>
-          </TouchableOpacity>
-        </View>
-        <CustomButton
-          style={styles.btn}
-          onPress={handleFormSubmit}
-          title={"Login"}
-        />
       </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

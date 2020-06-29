@@ -2,6 +2,9 @@ import React from "react";
 import { Image, View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { connect } from "react-redux";
+
+const { Navigator, Screen } = createStackNavigator();
 
 import { BottomTabNav } from "./BottomTabNav/";
 import { SignIn, ReservationScreen } from "../screens";
@@ -9,9 +12,13 @@ import bgcLight from "../styles/colors";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { LoginScreen } from "../screens/LoginScreen";
 import { RegisterScreen } from "../screens/RegisterScreen";
-const { Navigator, Screen } = createStackNavigator();
+import { selectAuthStatus } from "../store/auth";
 
-export const RootNav = () => {
+const myStateToProps = (state) => ({
+  status: selectAuthStatus(state),
+});
+
+export const RootNav = connect(myStateToProps)(({ status }) => {
   return (
     <NavigationContainer>
       <Navigator>
@@ -25,11 +32,13 @@ export const RootNav = () => {
           component={RegisterScreen}
           options={{ headerShown: false }}
         />
-        <Screen
-          options={{ headerShown: false }}
-          name="BottomTabNav"
-          component={BottomTabNav}
-        />
+        {status ? (
+          <Screen
+            options={{ headerShown: false }}
+            name="BottomTabNav"
+            component={BottomTabNav}
+          />
+        ) : null}
         <Screen
           name="ReservationScreen"
           component={ReservationScreen}
@@ -55,4 +64,4 @@ export const RootNav = () => {
       </Navigator>
     </NavigationContainer>
   );
-};
+});

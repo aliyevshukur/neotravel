@@ -2,12 +2,13 @@ import React from "react";
 import { StyleSheet, Text, Image, View, Dimensions } from "react-native";
 
 import { shadow } from "../../styles/commonStyles";
+import { CustomText } from "../../components";
 
 export const UserScreenHeader = ({ profilePicture, fullName }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.profilePicture} source={profilePicture} />
-      <Text>{fullName}</Text>
+      <CustomText style={styles.userName}>{fullName}</CustomText>
     </View>
   );
 };
@@ -30,5 +31,9 @@ const styles = StyleSheet.create({
     marginRight: 33,
     width: 60,
     height: 60,
+  },
+  userName: {
+    fontSize: 22,
+    fontFamily: "NunitoBold",
   },
 });
