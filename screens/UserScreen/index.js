@@ -10,24 +10,28 @@ export const UserScreen = () => {
 
   const menuItems = [
     {
-      icon: require(`${imagePath}/heart.png`),
+      icon: "heartFull", //dont edit icon names
       label: "Your Favorites",
     },
     {
-      icon: require(`${imagePath}/card.png`),
+      icon: "creditCard",
       label: "Payment",
     },
     {
-      icon: require(`${imagePath}/help.png`),
+      icon: "lifeRing",
       label: "Help",
     },
     {
-      icon: require(`${imagePath}/promotions.png`),
+      icon: "piggyBank",
       label: "Promotions",
     },
     {
-      icon: require(`${imagePath}/settings.png`),
+      icon: "setting",
       label: "Settings",
+    },
+    {
+      icon: "signOut",
+      label: "Sign out",
     },
   ];
 
