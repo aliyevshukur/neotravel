@@ -1,62 +1,96 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { connect } from "react-redux";
+import { sign, logOut } from "../../store/auth";
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
 
-export const RegisterScreen = ({ navigation }) => {
-  const [formValues, setFormValues] = useState({
-    name: "",
-    surname: "",
-    email: "",
-    password: "",
-  });
-
-  const handleFieldChange = (name, value) => {
-    setFormValues({
-      ...formValues,
-      [name]: value,
+export const RegisterScreen = connect(null, { sign, logOut })(
+  ({ navigation, sign, logOut }) => {
+    const [formValues, setFormValues] = useState({
+      name: "",
+      surname: "",
+      email: "",
+      password: "",
     });
-  };
 
-  const handleFormSubmit = () => {
-    console.log("submti");
-  };
+    const handleFieldChange = (name, value) => {
+      setFormValues((formValues) => ({
+        ...formValues,
+        [name]: value,
+      }));
+    };
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <CustomText style={styles.header}>Register</CustomText>
+    const handleFormSubmit = () => {
+      for (let field in formValues) {
+        if (formValues[field].trim() === "") {
+          Alert.alert(`${field} required to fill`);
+          return;
+        }
+      }
+      sign(
+        formValues.email,
+        formValues.password,
+        true,
+        formValues.name.concat(" ", formValues.surname)
+      );
+    };
 
-        <View style={styles.loginForm}>
-          {Object.keys(formValues).map((key) => (
+    return (
+      <View style={styles.container}>
+        <View style={styles.wrapper}>
+          <CustomText style={styles.header}>Register</CustomText>
+          <View style={styles.loginForm}>
             <CustomInput
               isCross={false}
               isSearch={false}
-              placeholder={
-                key.charAt(0).toUpperCase() + key.slice(1, key.length)
-              }
-              value={formValues[key]}
-              onChangeText={() => handleFieldChange(key, value)}
+              placeholder="Name"
+              value={formValues.name}
+              onChangeText={(value) => handleFieldChange("name", value)}
               long={true}
             />
-          ))}
+            <CustomInput
+              isCross={false}
+              isSearch={false}
+              placeholder="Surname"
+              value={formValues.surname}
+              onChangeText={(value) => handleFieldChange("surname", value)}
+              long={true}
+            />
+            <CustomInput
+              isCross={false}
+              isSearch={false}
+              placeholder="Email"
+              value={formValues.email}
+              onChangeText={(value) => handleFieldChange("email", value)}
+              long={true}
+            />
+            <CustomInput
+              isCross={false}
+              isSearch={false}
+              placeholder="Password"
+              value={formValues.password}
+              onChangeText={(value) => handleFieldChange("password", value)}
+              long={true}
+            />
+          </View>
+          <View style={styles.textWrapper}>
+            <CustomText style={styles.text}>Already registered?</CustomText>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <CustomText style={styles.link}> Login.</CustomText>
+            </TouchableOpacity>
+          </View>
+          <CustomButton
+            style={styles.btn}
+            onPress={handleFormSubmit}
+            title={"Register"}
+          />
         </View>
-        <View style={styles.textWrapper}>
-          <CustomText style={styles.text}>Already registered?</CustomText>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <CustomText style={styles.link}> Login.</CustomText>
-          </TouchableOpacity>
-        </View>
-        <CustomButton
-          style={styles.btn}
-          onPress={handleFormSubmit}
-          title={"Register"}
-        />
       </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
