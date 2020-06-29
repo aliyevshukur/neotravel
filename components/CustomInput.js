@@ -26,6 +26,7 @@ export const CustomInput = ({
   placeholder = "",
   keyboardType = "default",
   maxLength,
+  textStyle,
 }) => {
   return (
     // <ImageBackground
@@ -48,7 +49,7 @@ export const CustomInput = ({
         value={value}
         onChangeText={onChangeText}
         onTouchStart={onTouchStart}
-        style={styles.textInput}
+        style={[styles.textInput, { ...textStyle }]}
         placeholder={placeholder}
         placeholderTextColor="#616167"
         keyboardType={keyboardType}

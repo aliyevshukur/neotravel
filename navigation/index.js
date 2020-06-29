@@ -25,7 +25,11 @@ export const RootNav = () => {
           component={RegisterScreen}
           options={{ headerShown: false }}
         />
-        <Screen name="BottomTabNav" component={BottomTabNav} />
+        <Screen
+          options={{ headerShown: false }}
+          name="BottomTabNav"
+          component={BottomTabNav}
+        />
         <Screen
           name="ReservationScreen"
           component={ReservationScreen}

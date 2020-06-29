@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Image, FlatList} from 'react-native';
+import {StyleSheet, View, Image, FlatList, TouchableOpacity} from 'react-native';
 
 import { LinearGradient } from "expo-linear-gradient";
 import COLORS from '../../styles/colors';
@@ -71,11 +71,12 @@ export const RoomLarge = ({ style, cardInfo, onSelectPress, onInfoPress}) => {
             <CustomText style={styles.price}>{cardItem.currency || "$"} {makeItShort(cardItem.price, 7, "...") || "~"}</CustomText>
             <CustomText style={styles.nights}>{makeItShort(cardItem.time, 3) || "~"} nights</CustomText>
             <View style={styles.selectHolder}>
-                <CustomButton title={'Select'} style={styles.selectBtn}/>
-                {/* <CustomText>SELECT</CustomText>  */}
+                <CustomButton title={'Select'} style={styles.selectBtn} onPress={onSelectPress}/>
             </View>
             <View style={styles.infoHolder}>
-                {/* info button will be here */}
+                <TouchableOpacity style={styles.infoBtn} onPress={onInfoPress}>
+                    <CustomSvg name={'infoCircle'} style={styles.infoSvg} gradient={true}/>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -84,7 +85,6 @@ export const RoomLarge = ({ style, cardInfo, onSelectPress, onInfoPress}) => {
 const styles = StyleSheet.create({
     container: {
         width: "100%",
-        // width: 338,
         backgroundColor: "transparent",
         borderRadius: 10,
         overflow: "hidden",
@@ -119,9 +119,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         left: 20,
         top: 73,
-        width: 209.25,
-        height: 130,
-        // backgroundColor: "red",
+        // width: 209.25
     },
     detailItem: {
         flex: 1,
@@ -176,11 +174,19 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 15,
         bottom: 260,
-        width: 20,
-        height: 20,
         justifyContent: "center",
         alignItems: "center",
+        
+    },
+    infoBtn: {
+        width: 20,
+        height: 20,
         borderRadius: 20,
-        backgroundColor: "tomato",//will be deleted
-    }
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    infoSvg: {
+        width: "100%",
+        height: "100%",
+    },
 })
