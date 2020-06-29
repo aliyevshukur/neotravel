@@ -6,11 +6,6 @@ import { AsyncStorage } from "react-native";
 import { persistStore, persistReducer } from "redux-persist";
 AsyncStorage;
 
-// import {
-//   MODULE_NAME as chatsModuleName,
-//   reducer as chatsReducer,
-// } from "./chats";
-
 import { reducer as authReducer } from "./auth";
 
 const rootReducer = combineReducers({ auth: authReducer });
