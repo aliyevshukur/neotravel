@@ -45,7 +45,7 @@ export const UserScreen = connect(mapStateToProps, { getUserName })(
     ];
 
     const profilePicture = require("../../assets/images/UserScreen/profile-picture.png");
-    console.log(getUserName());
+
     return (
       <AppLayout style={styles.container}>
         <View>
