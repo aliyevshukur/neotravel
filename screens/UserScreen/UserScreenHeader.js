@@ -12,8 +12,8 @@ export const UserScreenHeader = ({ profilePicture, fullName }) => {
   );
 };
 
-const width = Dimensions.get('window').width; 
-const height = Dimensions.get('window').height; 
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
   container: {
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
     alignItems: "center",
     width: width + 10,
-    backgroundColor: '#0000',
+    backgroundColor: "rgba(0,0,0,0)",
     ...shadow,
   },
   profilePicture: {

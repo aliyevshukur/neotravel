@@ -6,9 +6,9 @@ export function FirstScreen({ navigation }) {
     <View style={styles.container}>
       <Button
         onPress={() => {
-          navigation.navigate("Login");
+          navigation.navigate("ReservationScreen");
         }}
-        title={'Go Reserv'}
+        title={"Go Reserv"}
       />
     </View>
   );
