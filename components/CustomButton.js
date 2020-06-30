@@ -4,16 +4,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { CustomText } from "./CustomText";
 import COLORS from "../styles/colors";
 
-export const CustomButton = ({
-  title = "Search a room",
-  style,
-  onPress,
-}) => {
+export const CustomButton = ({ title = "Search a room", style, onPress }) => {
   return (
-    <TouchableOpacity
-      style={[styles.btn, style]}
-      onPress={onPress}
-    >
+    <TouchableOpacity style={[styles.btn, style]} onPress={onPress}>
       <LinearGradient
         colors={[COLORS.gradientOrange, COLORS.gradientPink]}
         style={{ flex: 1, borderRadius: 50 }}
@@ -22,10 +15,9 @@ export const CustomButton = ({
         location={[0.25, 0.4, 1]}
       >
         <View style={styles.btnContainer}>
-          <CustomText style={{...styles.btnText, fontSize: style?.fontSize }}>
+          <CustomText style={{ ...styles.btnText, fontSize: style?.fontSize }}>
             {title}
           </CustomText>
-
         </View>
       </LinearGradient>
     </TouchableOpacity>

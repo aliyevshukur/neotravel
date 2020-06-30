@@ -8,3 +8,6 @@ export { HomePage } from "./HomeScreen";
 export { FilterScreen } from "./FilterScreen";
 export { RoomScreen } from "./RoomScreen";
 export { SearchInitial } from "./SearchScreen";
+export {FilterScreen} from './FilterScreen';
+export {RoomScreen} from './RoomScreen';
+export {HotelScreen} from './HotelScreen';

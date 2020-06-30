@@ -1,62 +1,82 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { connect } from "react-redux";
+import { sign, logOut } from "../../store/auth";
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
 
-export const RegisterScreen = ({ navigation }) => {
-  const [formValues, setFormValues] = useState({
-    name: "",
-    surname: "",
-    email: "",
-    password: "",
-  });
-
-  const handleFieldChange = (name, value) => {
-    setFormValues({
-      ...formValues,
-      [name]: value,
+export const RegisterScreen = connect(null, { sign })(
+  ({ navigation, sign }) => {
+    const [formValues, setFormValues] = useState({
+      name: "",
+      surname: "",
+      email: "",
+      password: "",
     });
-  };
 
-  const handleFormSubmit = () => {
-    console.log("submti");
-  };
+    const fromFields = ["name", "surname", "email", "password"];
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <CustomText style={styles.header}>Register</CustomText>
+    const handleFieldChange = (name, value) => {
+      setFormValues({
+        ...formValues,
+        [name]: value,
+      });
+    };
+    const handleFormSubmit = () => {
+      for (let field in formValues) {
+        if (formValues[field].trim() === "") {
+          Alert.alert(`${field} required to fill`);
+          return;
+        }
+      }
+      sign(
+        formValues.email,
+        formValues.password,
+        true,
+        formValues.name.concat(" ", formValues.surname)
+      );
+    };
+    return (
+      <View style={styles.container}>
+        <View style={styles.wrapper}>
+          <CustomText style={styles.header}>Register</CustomText>
 
-        <View style={styles.loginForm}>
-          {Object.keys(formValues).map((key) => (
-            <CustomInput
-              isCross={false}
-              isSearch={false}
-              placeholder={
-                key.charAt(0).toUpperCase() + key.slice(1, key.length)
-              }
-              value={formValues[key]}
-              onChangeText={() => handleFieldChange(key, value)}
-              long={true}
-            />
-          ))}
+          <View style={styles.loginForm}>
+            {fromFields.map((key, index) => {
+              console.log("key", key);
+
+              return (
+                <CustomInput
+                  key={index}
+                  isCross={false}
+                  isSearch={false}
+                  placeholder={
+                    key.charAt(0).toUpperCase() + key.slice(1, key.length)
+                  }
+                  value={formValues[key]}
+                  onChangeText={(value) => handleFieldChange(key, value)}
+                  long={true}
+                />
+              );
+            })}
+          </View>
+          <View style={styles.textWrapper}>
+            <CustomText style={styles.text}>Already registered?</CustomText>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <CustomText style={styles.link}> Login.</CustomText>
+            </TouchableOpacity>
+          </View>
+          <CustomButton
+            style={styles.btn}
+            onPress={handleFormSubmit}
+            title={"Register"}
+          />
         </View>
-        <View style={styles.textWrapper}>
-          <CustomText style={styles.text}>Already registered?</CustomText>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <CustomText style={styles.link}> Login.</CustomText>
-          </TouchableOpacity>
-        </View>
-        <CustomButton
-          style={styles.btn}
-          onPress={handleFormSubmit}
-          title={"Register"}
-        />
       </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

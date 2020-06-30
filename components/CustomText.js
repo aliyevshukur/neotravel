@@ -17,4 +17,5 @@ export const CustomText = ({ children, style, weight }) => {
       {children}
     </Text>
   );
+
 };

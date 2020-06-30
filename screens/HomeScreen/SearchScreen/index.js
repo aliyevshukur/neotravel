@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   listContainer: {},
+
   filterTxt: {
     fontFamily: "NunitoRegular",
     fontSize: 16,

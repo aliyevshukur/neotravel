@@ -2,18 +2,19 @@ import React from "react";
 import { StyleSheet, Text, Image, View, Dimensions } from "react-native";
 
 import { shadow } from "../../styles/commonStyles";
+import { CustomText } from "../../components";
 
 export const UserScreenHeader = ({ profilePicture, fullName }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.profilePicture} source={profilePicture} />
-      <Text>{fullName}</Text>
+      <CustomText style={styles.userName}>{fullName}</CustomText>
     </View>
   );
 };
 
-const width = Dimensions.get('window').width; 
-const height = Dimensions.get('window').height; 
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
   container: {
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
     alignItems: "center",
     width: width + 10,
-    backgroundColor: '#0000',
+    backgroundColor: "rgba(0,0,0,0)",
     ...shadow,
   },
   profilePicture: {
@@ -30,5 +31,9 @@ const styles = StyleSheet.create({
     marginRight: 33,
     width: 60,
     height: 60,
+  },
+  userName: {
+    fontSize: 22,
+    fontFamily: "NunitoBold",
   },
 });

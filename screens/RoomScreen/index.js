@@ -1,53 +1,65 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity, FlatList} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, FlatList, Alert} from 'react-native';
 import { CustomSvg, CustomText, RoomLarge } from '../../components';
 import COLORS from '../../styles/colors';
 
 
-
 export const RoomScreen = () => {
+
 
     const DATA = [
         {
-            id: 0,
-            cardInfo: {
-                name: "Standard King room",
-                imgUrl: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80",
-                price: "200",
-                currency: "EU",
-                time: "3",
-                features: [ "coffee", "coins"],
-        
-            }
+            id: "4399593499594004392995",
+            name: "Standard King room",
+            imgUrl: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80",
+            price: "200",
+            currency: "EU",
+            time: "3",
+            features: ["coffee", "coins"],
         },
         {
-            id: 1,
-            cardInfo: {
-                name: "Standard King room",
-                imgUrl: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80",
-                price: "200",
-                currency: "EU",
-                time: "3",
-                features: ["bath", "thermometer", "wifi", "coffee", "coins"],
-        
-            }
+            id: "13454545534",
+            name: "Standard King room",
+            imgUrl: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80",
+            price: "200",
+            currency: "EU",
+            time: "3",
+            features: ["bath", "thermometer", "wifi", "coffee", "coins"],
+            extraInfo: "Bu orta babat bir otaqdi. Guman ki xoshunuza gelecek",
         },
         {
-            id: 2,
-            cardInfo: {
-                name: "Standard King room",
-                imgUrl: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80",
-                price: "200",
-                currency: "EU",
-                time: "3",
-                features: ["bath", "thermometer", "wifi", "coffee"],
-        
-            }
-        },
+            id: "845838828382885848584",
+            name: "Standard King room",
+            imgUrl: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80",
+            price: "200",
+            currency: "EU",
+            time: "3",
+            features: ["bath", "thermometer", "wifi", "coffee"],
+            extraInfo: "Bu mohtehsem bir otaqdi. Shibhesiz sizin xoshunuza gelecek bundan hech narahat olamayin",
+        }
     ]
 
     const goBackHandler = () => {
+        console.log("GO BACK");
+        
+    }
 
+    const infoHandler = (id) => {
+        const index = DATA.findIndex((item) => item.id == id);
+
+        Alert.alert(
+            `${DATA[index].name}`,
+            `${DATA[index].extraInfo}`,
+            [
+              { text: 'OK', }
+            ],
+            { cancelable: true }
+          );
+    }
+    const selectHandler = (id) => {
+        const index = DATA.findIndex((item) => item.id == id);
+        console.log(`${index}`);
+        
     }
 
     return (
@@ -62,7 +74,11 @@ export const RoomScreen = () => {
                 <FlatList
                     data={DATA}
                     renderItem={({ item }) => (
-                        <RoomLarge style={styles.roomItem} cardInfo={item.cardInfo}/>
+                        <RoomLarge style={styles.roomItem}
+                        cardInfo={item}
+                        onInfoPress={() => infoHandler(item.id)}
+                        onSelectPress={() => selectHandler(item.id)}
+                        />
                     )}
                     keyExtractor={item => item.id}
                 /> 
