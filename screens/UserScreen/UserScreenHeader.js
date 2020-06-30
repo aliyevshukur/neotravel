@@ -4,7 +4,7 @@ import { StyleSheet, Text, Image, View, Dimensions } from "react-native";
 import { shadow } from "../../styles/commonStyles";
 import { CustomText } from "../../components";
 
-export const UserScreenHeader = ({ profilePicture, fullName }) => {
+export const UserScreenHeader = ({ profilePicture, fullName, userName }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.profilePicture} source={profilePicture} />

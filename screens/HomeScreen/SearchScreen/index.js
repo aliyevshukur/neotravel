@@ -63,11 +63,12 @@ export const HomeSearchScreen = ({ navigation }) => {
           setListType((v) => (v === "map" ? (v = "list") : (v = "map")))
         }
       />
+
       <View style={styles.listContainer}>
         {listType === "list" ? (
-          <ListViewSearch hotels={hotels} />
+          <ListViewSearch navigation={navigation} hotels={hotels} />
         ) : (
-          <MapViewSearch hotels={hotels} />
+          <MapViewSearch navigation={navigation} hotels={hotels} />
         )}
       </View>
     </View>
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.bgcLight,
     alignItems: "center",
-    paddingTop: 25,
+    paddingTop: 35,
   },
   picker: {
     width: Dimensions.get("window").width,

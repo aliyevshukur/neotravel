@@ -8,11 +8,12 @@ import COLORS from "../../../styles/colors";
 import { ScrollView } from "react-native-gesture-handler";
 import { SmallCardSlider, LargeHotelSlider } from "../../../components";
 
-export const ListViewSearch = ({ hotels }) => {
+export const ListViewSearch = ({ hotels, navigation }) => {
   return (
     <ScrollView>
       <SmallCardSlider hotels={hotels} title="Near the beaches" />
       <LargeHotelSlider hotels={hotels} bgColor={"bgcDark"} />
     </ScrollView>
+
   );
 };

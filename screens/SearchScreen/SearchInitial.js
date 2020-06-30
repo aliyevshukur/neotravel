@@ -14,6 +14,7 @@ import { hotels } from "../HomeScreen/SearchScreen";
 
 export const SearchInitial = ({ navigation }) => {
   const [searchValue, setSearchValue] = useState("");
+
   const [isOnSearch, setIsOnSearch] = useState(false);
   const [listType, setListType] = useState("list");
 
