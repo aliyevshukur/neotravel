@@ -9,8 +9,8 @@ const layoutStyles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
     backgroundColor: "#DFDEDE",
     paddingTop: StatusBar.currentHeight,
   },
