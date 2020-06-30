@@ -1,5 +1,4 @@
 import React from "react";
-import { View, TouchableOpacity } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
@@ -12,14 +11,6 @@ import {
 import { TabBarIcon } from "./TabBarIcon";
 import { HomePageStack } from "../HomeStack/HomeStack";
 
-import bell from "../../assets/images/bell.png";
-import bellActive from "../../assets/images/bell-active.png";
-import home from "../../assets/images/home.png";
-import homeActive from "../../assets/images/home-active.png";
-import search from "../../assets/images/search.png";
-import searchActive from "../../assets/images/search-active.png";
-import user from "../../assets/images/user.png";
-import userActive from "../../assets/images/user-active.png";
 import COLORS from "../../styles/colors";
 import { SearchInitial } from "../../screens/SearchScreen/SearchInitial";
 
@@ -29,26 +20,22 @@ const TabItems = [
   {
     name: "HomePageStack",
     component: HomePageStack,
-    image: home,
-    activeImage: homeActive,
+    icon: "home",
   },
   {
-    name: "SearchScreen",
-    component: SecondScreen,
-    image: search,
-    activeImage: searchActive,
+    name: "FirstScreen",
+    component: FirstScreen,
+    icon: "search",
   },
   {
     name: "SecondScreen",
     component: SecondScreen,
-    image: bell,
-    activeImage: bellActive,
+    icon: "bell",
   },
   {
     name: "UserScreen",
     component: UserScreen,
-    image: user,
-    activeImage: userActive,
+    icon: "user",
   },
 ];
 
@@ -65,8 +52,9 @@ export const BottomTabNav = () => {
           height: 78,
         },
       }}
+      initialRouteName={TabItems[0].name}
     >
-      {TabItems.map(({ image, activeImage, name, component }) => (
+      {TabItems.map(({ name, component, icon }) => (
         <Screen
           key={name}
           name={name}
@@ -74,10 +62,7 @@ export const BottomTabNav = () => {
           options={{
             tabBarIcon: ({ focused }) => {
               return (
-                <TabBarIcon
-                  image={focused ? activeImage : image}
-                  isActive={focused ? true : false}
-                />
+                <TabBarIcon icon={icon} isActive={focused ? true : false} />
               );
             },
           }}

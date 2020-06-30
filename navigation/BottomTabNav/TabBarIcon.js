@@ -1,25 +1,28 @@
 import React from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { shadow } from "../../styles/commonStyles";
-import COLORS from "../../styles/colors";
+import { IconWbg } from "../../components";
 
-export const TabBarIcon = ({ isActive, image }) => (
-  <View style={isActive ? styles.activeContainer : styles.container}>
-    <Image source={image} />
-  </View>
-);
+export const TabBarIcon = ({ isActive, icon, onPress }) => {
+
+
+  return (
+    <IconWbg 
+    style={{...styles.container, elevation: isActive ? 5 : 0 }}
+    iconName={icon}
+    gradient={isActive}
+    iconWidth={25}
+    iconHeight={25}
+    onPress={onPress}
+    />
+  );
+
+}
 
 const styles = StyleSheet.create({
-  activeContainer: {
-    ...shadow,
+
+  container: {
     width: 50,
     height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    backgroundColor: COLORS.bgcLight,
-    elevation: 20,
   },
-  container: {},
 });
