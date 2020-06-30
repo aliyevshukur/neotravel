@@ -5,78 +5,15 @@ import { CustomText } from "../../../components/CustomText";
 import { HotelSmall } from "../../../components/cards/HotelSmall";
 import { HotelLarge } from "../../../components/cards/HotelLarge";
 import COLORS from "../../../styles/colors";
+import { ScrollView } from "react-native-gesture-handler";
+import { SmallCardSlider, LargeHotelSlider } from "../../../components";
 
 export const ListViewSearch = ({ hotels, navigation }) => {
   return (
-    <>
-      <View style={styles.catalogueHorizontal}>
-        <CustomText style={styles.catalogueHeader}>Near the beaches</CustomText>
-        <FlatList
-          data={hotels}
-          horizontal={true}
-          renderItem={({ item }) => (
-            <HotelSmall
-              cardInfo={{
-                imgUrl:
-                  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-                price: "2500",
-                name: "River Side",
-                rating: "4.5",
-              }}
-              style={styles.smallHotelCard}
-              key={item.id}
-              onPress={() => navigation.navigate({ name: "HotelScreen" })}
-            />
-          )}
-        />
-      </View>
-      <View style={styles.catalogueVertical}>
-        <FlatList
-          data={hotels}
-          renderItem={({ item }) => (
-            <HotelLarge
-              key={item.id}
-              cardInfo={{
-                imgUrl:
-                  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-                price: "2500",
-                name: "River Side",
-                rating: "4.5",
-              }}
-              style={{
-                marginLeft: 20,
-                marginRight: 18,
-                marginTop: 43,
-                width: "90%",
-              }}
-              onPress={() => navigation.navigate({ name: "HotelScreen" })}
-            />
-          )}
-        />
-      </View>
-    </>
+    <ScrollView>
+      <SmallCardSlider hotels={hotels} title="Near the beaches" />
+      <LargeHotelSlider hotels={hotels} bgColor={"bgcDark"} />
+    </ScrollView>
+
   );
 };
-
-const styles = StyleSheet.create({
-  catalogueHorizontal: {
-    height: 180,
-  },
-  catalogueVertical: {
-    width: Dimensions.get("window").width,
-    backgroundColor: COLORS.bgcDark,
-    marginTop: 39,
-    paddingBottom: 150,
-  },
-  catalogueHeader: {
-    fontFamily: "NunitoBold",
-    fontSize: 22,
-    color: COLORS.blackText,
-    marginLeft: 21,
-    marginBottom: 12,
-    marginTop: 17,
-  },
-  smallHotelCard: {
-    marginLeft: 18,
-  },
-});

@@ -7,7 +7,7 @@ import COLORS from "../../styles/colors";
 import { ToggleButton } from "../../components/ToggleButton";
 import { SelectAlert } from "./SelectAlert";
 
-export const FilterScreen = () => {
+export const FilterScreen = ({ navigation, route }) => {
   const DATA = {
     budget: {
       fieldId: "budget", //must be same as object name
@@ -72,9 +72,7 @@ export const FilterScreen = () => {
     // Take filter values from userChoices state
   };
 
-  const goBackHandler = () => {
-    // navigation go back
-  };
+  console.log("route ---- ", route);
 
   return (
     <View style={styles.container}>
@@ -92,7 +90,10 @@ export const FilterScreen = () => {
       ) : null}
       <View style={styles.header}>
         <View style={styles.titleHolder}>
-          <TouchableOpacity style={styles.backBtn} onPress={goBackHandler}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => navigation.navigate(route.params.backScreen)}
+          >
             <CustomSvg name={"chevronLeft"} style={styles.chevronLeft} />
           </TouchableOpacity>
           <CustomText style={styles.titleText}>Filter</CustomText>

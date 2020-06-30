@@ -15,10 +15,11 @@ import longRectangle from "../assets/images/inputComponents/longRectangle.png";
 import darkRectangle from "../assets/images/inputComponents/darkRectangle.png";
 
 export const CustomInput = ({
+  crossButtonHandler,
   style,
   long = false,
   isSearch = true,
-  isCross = true,
+  isCross = false,
   dark = false,
   value,
   onChangeText,
@@ -26,7 +27,7 @@ export const CustomInput = ({
   placeholder = "",
   keyboardType = "default",
   maxLength,
-  textStyle,
+  ...rest
 }) => {
   return (
     // <ImageBackground
@@ -36,7 +37,7 @@ export const CustomInput = ({
     <View
       style={[
         styles.input,
-        { width: long ? 338 : 240, height: 50, marginTop: 10 },
+        { width: long ? "90%" : "45%", height: 50, marginTop: 20 },
         style,
       ]}
     >
@@ -46,6 +47,7 @@ export const CustomInput = ({
         </TouchableOpacity>
       )}
       <TextInput
+        {...rest}
         value={value}
         onChangeText={(value) => onChangeText(value)}
         onTouchStart={onTouchStart}
@@ -55,12 +57,10 @@ export const CustomInput = ({
         keyboardType={keyboardType}
         maxLength={maxLength}
       ></TextInput>
-      {isCross && (
+      {(isCross || value !== "") && (
         <TouchableOpacity
           style={styles.crossTouchArea}
-          onPress={() => {
-            setValue("");
-          }}
+          onPress={crossButtonHandler}
         >
           <Image source={cross} style={styles.cross} />
         </TouchableOpacity>

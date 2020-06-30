@@ -10,6 +10,7 @@ import {
 } from "../../screens";
 import { TabBarIcon } from "./TabBarIcon";
 import { HomePageStack } from "../HomeStack/HomeStack";
+import { SearchStack } from "../SearchStack";
 
 import COLORS from "../../styles/colors";
 import { SearchInitial } from "../../screens/SearchScreen/SearchInitial";
@@ -23,9 +24,11 @@ const TabItems = [
     icon: "home",
   },
   {
-    name: "FirstScreen",
-    component: FirstScreen,
-    icon: "search",
+    name: "SearchStack",
+    component: SearchStack,
+    image: search,
+    activeImage: searchActive,
+
   },
   {
     name: "SecondScreen",
@@ -46,8 +49,8 @@ export const BottomTabNav = () => {
         showLabel: false,
         style: {
           marginTop: 5,
-          marginLeft: 5,
-          marginRight: 5,
+          // marginLeft: 5,
+          // marginRight: 5,
           backgroundColor: COLORS.bgcLight,
           height: 78,
         },
