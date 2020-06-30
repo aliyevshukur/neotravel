@@ -7,8 +7,15 @@ import { persistStore, persistReducer } from "redux-persist";
 AsyncStorage;
 
 import { reducer as authReducer } from "./auth";
+import {
+  reducer as hotelsReducer,
+  MODULE_NAME as hotelsModuleName,
+} from "./hotels";
 
-const rootReducer = combineReducers({ auth: authReducer });
+const rootReducer = combineReducers({
+  auth: authReducer,
+  [hotelsModuleName]: hotelsReducer,
+});
 
 const persistConfig = {
   key: "root",
