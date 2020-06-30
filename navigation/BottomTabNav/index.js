@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
@@ -21,6 +21,7 @@ import searchActive from "../../assets/images/search-active.png";
 import user from "../../assets/images/user.png";
 import userActive from "../../assets/images/user-active.png";
 import COLORS from "../../styles/colors";
+import { SearchInitial } from "../../screens/SearchScreen/SearchInitial";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -32,8 +33,8 @@ const TabItems = [
     activeImage: homeActive,
   },
   {
-    name: "FirstScreen",
-    component: FirstScreen,
+    name: "SearchScreen",
+    component: SecondScreen,
     image: search,
     activeImage: searchActive,
   },

@@ -70,7 +70,6 @@ export const LoginScreen = connect(myStateToProps, { sign })(
             <CustomText style={styles.text}>Don't have an account?</CustomText>
             <TouchableOpacity
               onPress={() => {
-                console.log("inside onPress");
                 navigation.navigate("Register");
               }}
             >

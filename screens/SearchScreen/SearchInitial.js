@@ -6,7 +6,7 @@ import { CustomInput } from "../../components/CustomInput";
 import { AppLayout } from "../../commons/AppLayout";
 import { CardSlider } from "../../components";
 
-export function SearchInitial() {
+export const SearchInitial = () => {
   const [isOnSearch, setIsOnSearch] = useState(false);
   return (
     <AppLayout style={styles.container}>
@@ -18,7 +18,7 @@ export function SearchInitial() {
       <CardSlider />
     </AppLayout>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
