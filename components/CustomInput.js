@@ -15,6 +15,7 @@ import longRectangle from "../assets/images/inputComponents/longRectangle.png";
 import darkRectangle from "../assets/images/inputComponents/darkRectangle.png";
 
 export const CustomInput = ({
+  crossButtonHandler,
   style,
   long = false,
   isSearch = true,
@@ -59,9 +60,7 @@ export const CustomInput = ({
       {(isCross || value !== "") && (
         <TouchableOpacity
           style={styles.crossTouchArea}
-          onPress={() => {
-            onChangeText("");
-          }}
+          onPress={crossButtonHandler}
         >
           <Image source={cross} style={styles.cross} />
         </TouchableOpacity>

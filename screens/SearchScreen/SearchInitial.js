@@ -1,56 +1,48 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Picker,
-  Dimensions,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  Text,
-} from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 
 import COLORS from "../../styles/colors";
-import { CustomInput, CustomText } from "../../components";
+import { CustomInput, LargeHotelSlider } from "../../components";
 import { AppLayout } from "../../commons/AppLayout";
 import { CardSlider } from "../../components";
 
-import filterPng from "../../assets/images/homeScreen/Filter.png";
 import { ScrollView } from "react-native-gesture-handler";
+import { FilterRow } from "./components";
+import { MapViewSearch } from "../HomeScreen/SearchScreen/MapViewSearch";
+import { ListViewSearch } from "../HomeScreen/SearchScreen/ListViewSearch";
+import { hotels } from "../HomeScreen/SearchScreen";
 
-export const SearchInitial = () => {
+export const SearchInitial = ({ navigation }) => {
   const [searchValue, setSearchValue] = useState("");
   const [isOnSearch, setIsOnSearch] = useState(false);
-  const [listType, setListType] = useState("map");
-  const texts = {
-    navRight: "Filter",
-    navLeft: {
-      map: "Map",
-      list: "List",
-    },
-  };
+  const [listType, setListType] = useState("list");
 
-  const submitSearchHandler = (val) => {
+  const submitSearchHandler = () => {
     if (searchValue.trim() !== "") {
-      setIsOnSearch(false);
-    } else {
       setIsOnSearch(true);
+    } else {
+      setIsOnSearch(false);
       console.log("submitSearchHandler ---- worked ");
     }
   };
 
+  const crossButtonHandler = () => {
+    setIsOnSearch(false);
+    setSearchValue("");
+  };
   return (
-    <ScrollView>
-      <AppLayout style={styles.container}>
-        <CustomInput
-          returnKeyType="go"
-          onSubmitEditing={() => submitSearchHandler()}
-          onChangeText={setSearchValue}
-          value={searchValue}
-          style={{ marginTop: 30, marginBottom: 33 }}
-          long={true}
-          placeHolder="Search for a city, area, or a hotel"
-        />
+    <AppLayout style={styles.container}>
+      <CustomInput
+        returnKeyType="go"
+        onSubmitEditing={() => submitSearchHandler()}
+        onChangeText={setSearchValue}
+        value={searchValue}
+        style={{ marginTop: 30, marginBottom: 33 }}
+        long={true}
+        placeHolder="Search for a city, area, or a hotel"
+        crossButtonHandler={() => crossButtonHandler()}
+      />
+      <ScrollView>
         {!isOnSearch ? (
           <>
             <CardSlider
@@ -65,53 +57,42 @@ export const SearchInitial = () => {
             />
           </>
         ) : (
-          <View style={styles.container}>
-            <View style={styles.pickerContainer}>
-              <Picker style={styles.picker} mode="dropdown">
-                <Picker.Item
-                  label={"SF, USA - 2 guests - Jan 18 to Jan 23"}
-                  value={"1"}
-                />
-                <Picker.Item
-                  label={"SF, USA - 3 guests - Jan 20 to Jan 25"}
-                  value={"2"}
-                />
-              </Picker>
-            </View>
-            <View style={styles.headNav}>
-              <View style={styles.headNavFilter}>
-                <TouchableOpacity
-                  style={{ flexDirection: "row", alignItems: "center" }}
-                >
-                  <Image source={filterPng} style={styles.filterPng} />
-                  <CustomText style={styles.filterTxt}>
-                    {texts.navRight}
-                  </CustomText>
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity
-                onPress={() =>
-                  setListType((v) => (v === "map" ? (v = "list") : (v = "map")))
-                }
-              >
-                <CustomText style={styles.listTypeName}>
-                  {listType === "map" ? texts.navLeft.map : texts.navLeft.list}
-                </CustomText>
-              </TouchableOpacity>
-            </View>
+          <>
+            <FilterRow
+              backScreen="initial"
+              navigation={navigation}
+              onDirectToFilter={() =>
+                navigation.navigate("Filter", { backScreen: "initial" })
+              }
+              listType={listType}
+              onViewTypeChange={() =>
+                setListType((v) => (v === "map" ? (v = "list") : (v = "map")))
+              }
+            />
             <View style={styles.listContainer}>
-              {listType === "list" ? <View /> : <View />}
+              {listType === "list" ? (
+                isOnSearch ? (
+                  <LargeHotelSlider hotels={hotels} />
+                ) : (
+                  <ListViewSearch hotels={hotels} />
+                )
+              ) : (
+                <MapViewSearch hotels={hotels} />
+              )}
             </View>
-          </View>
+          </>
         )}
-      </AppLayout>
-    </ScrollView>
+      </ScrollView>
+    </AppLayout>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: COLORS.bgcLight,
     alignItems: "center",
+    paddingTop: 25,
   },
   recommendedContainerStyle: {
     backgroundColor: COLORS.bgcDark,
@@ -119,6 +100,11 @@ const styles = StyleSheet.create({
   recommendedTitleStyle: {
     color: COLORS.bgcLight,
     marginTop: 30,
+  },
+  listContainer: {
+    height: "100%",
+    flex: 1,
+    // alignItems: "flex-end",
   },
 
   dealsTitleStyle: {

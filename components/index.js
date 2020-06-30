@@ -9,3 +9,5 @@ export { RoomLarge } from "./cards/RoomLarge";
 export { IconWbg } from "./cards/IconWbg";
 export { CustomSvg } from "./cards/CustomSvg";
 export { CardSlider } from "./CardSlider";
+export { SmallCardSlider } from "./SmallCardSlider";
+export { LargeHotelSlider } from "./LargeHotelSlider";

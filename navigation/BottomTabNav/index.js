@@ -59,8 +59,8 @@ export const BottomTabNav = () => {
         showLabel: false,
         style: {
           marginTop: 5,
-          marginLeft: 5,
-          marginRight: 5,
+          // marginLeft: 5,
+          // marginRight: 5,
           backgroundColor: COLORS.bgcLight,
           height: 78,
         },
