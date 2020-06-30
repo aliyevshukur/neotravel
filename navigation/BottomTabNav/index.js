@@ -2,7 +2,7 @@ import React from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
-  FirstScreen,
+  Favorites,
   SecondScreen,
   UserScreen,
   SignIn,
@@ -28,11 +28,10 @@ const TabItems = [
     component: SearchStack,
     image: search,
     activeImage: searchActive,
-
   },
   {
-    name: "SecondScreen",
-    component: SecondScreen,
+    name: "Favorites",
+    component: Favorites,
     icon: "bell",
   },
   {
