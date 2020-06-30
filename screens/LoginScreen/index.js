@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { connect } from "react-redux";
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
@@ -36,10 +31,15 @@ export const LoginScreen = connect(myStateToProps, { sign })(
     const handleFormSubmit = async () => {
       for (let field in formValues) {
         if (formValues[field].trim() === "") {
-          Alert.alert(`${field} required to fill`);
+          Alert.alert(
+            `${
+              field.charAt(0).toUpperCase() + field.slice(1, field.length)
+            } field is required to fill` 
+          );
           return;
         }
       }
+
       await sign(formValues.email, formValues.password, false);
     };
 
@@ -70,7 +70,6 @@ export const LoginScreen = connect(myStateToProps, { sign })(
             <CustomText style={styles.text}>Don't have an account?</CustomText>
             <TouchableOpacity
               onPress={() => {
-                console.log("inside onPress");
                 navigation.navigate("Register");
               }}
             >

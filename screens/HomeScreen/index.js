@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
+import { connect } from "react-redux";
 
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
@@ -16,87 +17,98 @@ import { CustomButton } from "../../components/CustomButton";
 import { CustomInput } from "../../components/CustomInput";
 import { CustomPicker } from "../../components/CustomPicker";
 import { HotelMedium } from "../../components/cards/HotelMedium";
+import { getHotelListFB, getHotelList } from "../../store/hotels";
 
 const hotels = [{ id: "1" }, { id: "2" }, { id: "3" }];
 
-export const HomePage = ({ navigation }) => {
-  const texts = {
-    description: "Find place that gives you ultimate calm",
-    catalogueName: "Recommended",
-  };
+const mapStateToProps = (state) => ({
+  hotelList: getHotelList(state),
+});
 
-  return (
-    <ImageBackground
-      resizeMode="stretch"
-      source={bgcImage}
-      style={{ width: 463, height: "100%" }}
-    >
-      <ScrollView>
-        <View style={styles.homeSearchContainer}>
-          <View style={styles.headerText}>
-            <CustomText style={styles.appDescription}>
-              {texts.description}
-            </CustomText>
-          </View>
-          <View style={styles.searchArea}>
-            <View style={styles.placeRow}>
-              <CustomInput
-                long={false}
-                isSearch={false}
-                isCross={false}
-                placeholder="Place"
-                dark={true}
-                textStyle={{ color: COLORS.white }}
-              />
-              <CustomPicker dark={true} title="Guests" />
+export const HomePage = connect(mapStateToProps, { getHotelListFB })(
+  ({ navigation, getHotelListFB, hotelList }) => {
+    useEffect(() => {
+      getHotelListFB();
+      console.log("Hotel List: ", hotelList);
+    }, []);
+
+    const texts = {
+      description: "Find place that gives you ultimate calm",
+      catalogueName: "Recommended",
+    };
+
+    return (
+      <ImageBackground
+        resizeMode="stretch"
+        source={bgcImage}
+        style={{ width: 463, height: "100%" }}
+      >
+        <ScrollView>
+          <View style={styles.homeSearchContainer}>
+            <View style={styles.headerText}>
+              <CustomText style={styles.appDescription}>
+                {texts.description}
+              </CustomText>
             </View>
-            <View style={styles.dateRow}>
-              <CustomInput
-                long={false}
-                isSearch={false}
-                isCross={false}
-                placeholder="Date"
-                dark={true}
-              />
-              <CustomPicker dark={true} title="Nights" />
-            </View>
-            <CustomButton
-              style={{
-                marginTop: 20,
-                fontSize: 24,
-                width: "90%",
-                marginTop: 30,
-              }}
-              title="Search a room"
-              onPress={() => navigation.navigate("HomeSearchScreen")}
-            />
-          </View>
-          <View style={styles.catalogue}>
-            <CustomText style={styles.catalogueName}>
-              {texts.catalogueName}
-            </CustomText>
-            <FlatList
-              data={hotels}
-              horizontal={true}
-              renderItem={({ item }) => (
-                <HotelMedium
-                  cardInfo={{
-                    imgUrl:
-                      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-                    price: "2500",
-                    name: "River Side",
-                  }}
-                  style={styles.mediumHotelCard}
-                  key={item.id}
+            <View style={styles.searchArea}>
+              <View style={styles.placeRow}>
+                <CustomInput
+                  long={false}
+                  isSearch={false}
+                  isCross={false}
+                  placeholder="Place"
+                  dark={true}
+                  textStyle={{ color: COLORS.white }}
                 />
-              )}
-            />
+                <CustomPicker dark={true} title="Guests" />
+              </View>
+              <View style={styles.dateRow}>
+                <CustomInput
+                  long={false}
+                  isSearch={false}
+                  isCross={false}
+                  placeholder="Date"
+                  dark={true}
+                />
+                <CustomPicker dark={true} title="Nights" />
+              </View>
+              <CustomButton
+                style={{
+                  marginTop: 20,
+                  fontSize: 24,
+                  width: "90%",
+                  marginTop: 30,
+                }}
+                title="Search a room"
+                onPress={() => navigation.navigate("HomeSearchScreen")}
+              />
+            </View>
+            <View style={styles.catalogue}>
+              <CustomText style={styles.catalogueName}> 
+                {texts.catalogueName}
+              </CustomText>
+              <FlatList
+                data={hotelList}
+                horizontal={true}
+                renderItem={({ item }) => (
+                  <HotelMedium
+                    cardInfo={{
+                      imgUrl: item.images[0],
+                      price: item.price,
+                      name: item.name,
+                    }}
+                    style={styles.mediumHotelCard}
+                    key={item.id}
+                  />
+                )}
+              />
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </ImageBackground>
-  );
-};
+        </ScrollView>
+      </ImageBackground>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

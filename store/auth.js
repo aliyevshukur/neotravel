@@ -9,7 +9,7 @@ export const selectAuthStatus = (state) => state[MODULE_NAME].status;
 export const selectUserName = (state) => state[MODULE_NAME].userName;
 
 const initalState = {
-  status: false,
+  status: true,
   userName: "",
 };
 
