@@ -26,9 +26,7 @@ const TabItems = [
   {
     name: "SearchStack",
     component: SearchStack,
-    image: search,
-    activeImage: searchActive,
-
+    icon: "search",
   },
   {
     name: "SecondScreen",
