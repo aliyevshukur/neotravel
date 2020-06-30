@@ -4,9 +4,9 @@ import {
   HomePage,
   HomeSearchScreen,
   RoomScreen,
-  HotelScreen,
-  FilterScreen
+  FilterScreen,
 } from "../../screens";
+import { HotelScreen } from "../../screens/HotelScreen";
 
 const { Navigator, Screen } = createStackNavigator();
 

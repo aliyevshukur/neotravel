@@ -1,5 +1,3 @@
-import { SearchInitial } from "./SearchScreen/SearchInitial";
-
 export { Favorites } from "./Favorites";
 export { SecondScreen } from "./SecondScreen";
 export { UserScreen } from "./UserScreen";
@@ -9,4 +7,4 @@ export { HomeSearchScreen } from "./HomeScreen/SearchScreen";
 export { HomePage } from "./HomeScreen";
 export { FilterScreen } from "./FilterScreen";
 export { RoomScreen } from "./RoomScreen";
-export { HotelScreen } from "./HotelScreen";
+export { SearchInitial } from "./SearchScreen/SearchInitial";
