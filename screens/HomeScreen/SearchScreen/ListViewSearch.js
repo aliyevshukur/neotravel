@@ -6,7 +6,7 @@ import { HotelSmall } from "../../../components/cards/HotelSmall";
 import { HotelLarge } from "../../../components/cards/HotelLarge";
 import COLORS from "../../../styles/colors";
 
-export const ListViewSearch = ({ hotels }) => {
+export const ListViewSearch = ({ hotels, navigation }) => {
   return (
     <>
       <View style={styles.catalogueHorizontal}>
@@ -25,6 +25,7 @@ export const ListViewSearch = ({ hotels }) => {
               }}
               style={styles.smallHotelCard}
               key={item.id}
+              onPress={() => navigation.navigate({ name: "HotelScreen" })}
             />
           )}
         />
@@ -34,6 +35,7 @@ export const ListViewSearch = ({ hotels }) => {
           data={hotels}
           renderItem={({ item }) => (
             <HotelLarge
+              key={item.id}
               cardInfo={{
                 imgUrl:
                   "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
@@ -47,7 +49,7 @@ export const ListViewSearch = ({ hotels }) => {
                 marginTop: 43,
                 width: "90%",
               }}
-              key={item.id}
+              onPress={() => navigation.navigate({ name: "HotelScreen" })}
             />
           )}
         />

@@ -1,13 +1,17 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert, Modal } from "react-native";
 import { connect } from "react-redux";
-import { sign, logOut } from "../../store/auth";
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
+import { sign, logOut, selectAuthStatus } from "../../store/auth";
+
+const mapStateToProps = (state) => ({
+  status: selectAuthStatus(state),
+});
 
 export const RegisterScreen = connect(null, { sign })(
-  ({ navigation, sign }) => {
+  ({ navigation, sign, status }) => {
     const [formValues, setFormValues] = useState({
       name: "",
       surname: "",
@@ -38,42 +42,53 @@ export const RegisterScreen = connect(null, { sign })(
       );
     };
     return (
-      <View style={styles.container}>
-        <View style={styles.wrapper}>
-          <CustomText style={styles.header}>Register</CustomText>
+      <>
+        <View style={styles.container}>
+          <View style={styles.wrapper}>
+            <CustomText style={styles.header}>Register</CustomText>
 
-          <View style={styles.loginForm}>
-            {fromFields.map((key, index) => {
-              console.log("key", key);
-
-              return (
-                <CustomInput
-                  key={index}
-                  isCross={false}
-                  isSearch={false}
-                  placeholder={
-                    key.charAt(0).toUpperCase() + key.slice(1, key.length)
-                  }
-                  value={formValues[key]}
-                  onChangeText={(value) => handleFieldChange(key, value)}
-                  long={true}
-                />
-              );
-            })}
+            <View style={styles.loginForm}>
+              {fromFields.map((key, index) => {
+                return (
+                  <CustomInput
+                    key={index}
+                    isCross={false}
+                    isSearch={false}
+                    placeholder={
+                      key.charAt(0).toUpperCase() + key.slice(1, key.length)
+                    }
+                    value={formValues[key]}
+                    onChangeText={(value) => handleFieldChange(key, value)}
+                    long={true}
+                  />
+                );
+              })}
+            </View>
+            <View style={styles.textWrapper}>
+              <CustomText style={styles.text}>Already registered?</CustomText>
+              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                <CustomText style={styles.link}> Login.</CustomText>
+              </TouchableOpacity>
+            </View>
+            <CustomButton
+              style={styles.btn}
+              onPress={handleFormSubmit}
+              title={"Register"}
+            />
           </View>
-          <View style={styles.textWrapper}>
-            <CustomText style={styles.text}>Already registered?</CustomText>
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-              <CustomText style={styles.link}> Login.</CustomText>
-            </TouchableOpacity>
-          </View>
-          <CustomButton
-            style={styles.btn}
-            onPress={handleFormSubmit}
-            title={"Register"}
-          />
         </View>
-      </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={false}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+          }}
+        >
+          <CustomText>Registiration has been completed</CustomText>
+        </Modal>
+      </>
     );
   }
 );

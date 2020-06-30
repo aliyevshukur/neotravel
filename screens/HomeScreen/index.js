@@ -29,7 +29,7 @@ export const HomePage = ({ navigation }) => {
     <ImageBackground
       resizeMode="stretch"
       source={bgcImage}
-      style={{ width: 463, height: "100%" }}
+      style={styles.bgcImage}
     >
       <ScrollView>
         <View style={styles.homeSearchContainer}>
@@ -88,6 +88,7 @@ export const HomePage = ({ navigation }) => {
                   }}
                   style={styles.mediumHotelCard}
                   key={item.id}
+                  onPress={() => navigation.navigate({ name: "HotelScreen" })}
                 />
               )}
             />
@@ -104,6 +105,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  bgcImage: {
+    width: 463,
+    height: "100%",
   },
   homeSearchContainer: {
     width: Dimensions.get("window").width,

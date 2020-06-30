@@ -49,7 +49,7 @@ const hotels = [
   },
 ];
 
-export const HomeSearchScreen = () => {
+export const HomeSearchScreen = ({ navigation }) => {
   const [listType, setListType] = useState("map");
   const texts = {
     navRight: "Filter",
@@ -87,15 +87,15 @@ export const HomeSearchScreen = () => {
           }
         >
           <CustomText style={styles.listTypeName}>
-            {listType === "map" ? texts.navLeft.map : texts.navLeft.list}
+            {listType === "map" ? texts.navLeft.list : texts.navLeft.map}
           </CustomText>
         </TouchableOpacity>
       </View>
       <View style={styles.listContainer}>
         {listType === "list" ? (
-          <ListViewSearch hotels={hotels} />
+          <ListViewSearch navigation={navigation} hotels={hotels} />
         ) : (
-          <MapViewSearch hotels={hotels} />
+          <MapViewSearch navigation={navigation} hotels={hotels} />
         )}
       </View>
     </View>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.bgcLight,
     alignItems: "center",
-    paddingTop: 25,
+    paddingTop: 35,
   },
   picker: {
     width: Dimensions.get("window").width,

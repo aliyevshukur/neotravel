@@ -12,6 +12,7 @@ import { TabBarIcon } from "./TabBarIcon";
 import { HomePageStack } from "../HomeStack/HomeStack";
 
 import COLORS from "../../styles/colors";
+import { SearchInitial } from "../../screens/SearchScreen/SearchInitial";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -61,10 +62,7 @@ export const BottomTabNav = () => {
           options={{
             tabBarIcon: ({ focused }) => {
               return (
-                <TabBarIcon
-                  icon={icon}
-                  isActive={focused ? true : false}
-                />
+                <TabBarIcon icon={icon} isActive={focused ? true : false} />
               );
             },
           }}

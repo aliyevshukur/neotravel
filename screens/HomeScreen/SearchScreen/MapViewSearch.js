@@ -8,7 +8,7 @@ import { CustomButton } from "../../../components/CustomButton";
 import { HotelSmall } from "../../../components/cards/HotelSmall";
 import COLORS from "../../../styles/colors";
 
-export const MapViewSearch = ({ hotels }) => {
+export const MapViewSearch = ({ hotels, navigation }) => {
   const texts = {
     markerCalloutName: "go to hotel",
   };
@@ -34,7 +34,9 @@ export const MapViewSearch = ({ hotels }) => {
               style={styles.markerBtn}
               title={`$${marker.price}+`}
             />
-            <Callout onPress={() => alert("yes")}>
+            <Callout
+              onPress={() => navigation.navigate({ name: "HotelScreen" })}
+            >
               <View style={styles.markerCallView}>
                 <CustomText style={{ color: COLORS.gradientOrange }}>
                   {texts.markerCalloutName}
@@ -59,6 +61,7 @@ export const MapViewSearch = ({ hotels }) => {
               }}
               style={styles.smallHotelCard}
               key={item.id}
+              onPress={() => navigation.navigate({ name: "HotelScreen" })}
             />
           )}
         />
