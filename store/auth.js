@@ -45,8 +45,8 @@ export const sign = (email, password, isSignIn, userName = "John") => async (
 ) => {
   try {
     if (!isSignIn) {
-      const signUp = await fb.auth.signInWithEmailAndPassword(email, password);
-      if (signUp) {
+      const signIn = await fb.auth.signInWithEmailAndPassword(email, password);
+      if (signIn) {
         dispatch(setStatus(true));
       }
     } else {
@@ -54,6 +54,7 @@ export const sign = (email, password, isSignIn, userName = "John") => async (
         fb.auth.currentUser.updateProfile({
           displayName: userName,
         });
+        dispatch(setStatus(true));
       });
     }
   } catch (error) {

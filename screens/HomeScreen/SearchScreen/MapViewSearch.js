@@ -1,28 +1,27 @@
 import React from "react";
-import { FlatList, View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import { Marker, Callout } from "react-native-maps";
 import MapView from "react-native-maps";
 
 import { CustomText } from "../../../components/CustomText";
 import { CustomButton } from "../../../components/CustomButton";
-import { HotelSmall } from "../../../components/cards/HotelSmall";
 import COLORS from "../../../styles/colors";
+import { SmallCardSlider } from "../../../components";
 
-export const MapViewSearch = ({ hotels }) => {
+export const MapViewSearch = ({ hotels, navigation }) => {
   const texts = {
     markerCalloutName: "go to hotel",
   };
+  const initialRegion = {
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  };
+
   return (
     <>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      >
+      <MapView style={styles.map} initialRegion={initialRegion}>
         {hotels.map((marker) => (
           <Marker
             key={marker.id}
@@ -34,7 +33,9 @@ export const MapViewSearch = ({ hotels }) => {
               style={styles.markerBtn}
               title={`$${marker.price}+`}
             />
-            <Callout onPress={() => alert("yes")}>
+            <Callout
+              onPress={() => navigation.navigate({ name: "HotelScreen" })}
+            >
               <View style={styles.markerCallView}>
                 <CustomText style={{ color: COLORS.gradientOrange }}>
                   {texts.markerCalloutName}
@@ -44,25 +45,8 @@ export const MapViewSearch = ({ hotels }) => {
           </Marker>
         ))}
       </MapView>
-      <View style={styles.catalogueHorizontalMap}>
-        <FlatList
-          data={hotels}
-          horizontal={true}
-          renderItem={({ item }) => (
-            <HotelSmall
-              cardInfo={{
-                imgUrl:
-                  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-                price: "2500",
-                name: "River Side",
-                rating: "4.5",
-              }}
-              style={styles.smallHotelCard}
-              key={item.id}
-            />
-          )}
-        />
-      </View>
+      <SmallCardSlider hotels={hotels} style={styles.catalogueHorizontalMap} />
+
     </>
   );
 };
@@ -81,7 +65,8 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
     width: Dimensions.get("window").width,
-    height: "100%",
+    height: 450,
+    alignItems: "flex-end",
   },
   markerBtn: {
     width: 84,

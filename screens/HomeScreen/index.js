@@ -117,6 +117,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  bgcImage: {
+    width: 463,
+    height: "100%",
+  },
   homeSearchContainer: {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,

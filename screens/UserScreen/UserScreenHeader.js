@@ -5,7 +5,7 @@ import { shadow } from "../../styles/commonStyles";
 import { CustomText } from "../../components";
 import COLORS from "../../styles/colors";
 
-export const UserScreenHeader = ({ profilePicture, fullName }) => {
+export const UserScreenHeader = ({ profilePicture, fullName, userName }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.profilePicture} source={profilePicture} />

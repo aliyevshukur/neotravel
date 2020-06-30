@@ -21,24 +21,27 @@ const myStateToProps = (state) => ({
 export const RootNav = connect(myStateToProps)(({ status }) => {
   return (
     <NavigationContainer>
-      <Navigator>
-        <Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Screen
-          name="Register"
-          component={RegisterScreen}
-          options={{ headerShown: false }}
-        />
+      <Navigator headerMode="none">
         {status ? (
           <Screen
             options={{ headerShown: false }}
             name="BottomTabNav"
             component={BottomTabNav}
           />
-        ) : null}
+        ) : (
+          <>
+            <Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Screen
+              name="Register"
+              component={RegisterScreen}
+              options={{ headerShown: false }}
+            />
+          </>
+        )}
         <Screen
           name="ReservationScreen"
           component={ReservationScreen}

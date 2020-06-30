@@ -3,16 +3,16 @@ import {StyleSheet, View, TouchableNativeFeedback} from 'react-native';
 import COLORS from '../../styles/colors';
 import { CustomSvg } from './CustomSvg';
 
-export const IconWbg = ({style, iconName="location", theme="light", onPress}) => {
+export const IconWbg = ({style, iconName="location", iconColor, iconWidth, iconHeight, theme="light", gradient=true, onPress}) => {
 
     return (
-      <TouchableNativeFeedback style={styles.touchable} onPress={onPress}>
+      <View style={styles.touchable} onPress={onPress}>
         <View style={[styles.container, style, {backgroundColor: theme=="dark" ? COLORS.bgcDark : COLORS.bgcLight}]}>
-          <View style={styles.svgHolder}>
-            <CustomSvg style={styles.icon} name={iconName} gradient={true}/>
+          <View style={{...styles.svgHolder, width: iconWidth || 15, height: iconHeight || 21}}>
+            <CustomSvg style={{...styles.icon, color: iconColor || COLORS.tabNavIcon}} name={iconName} gradient={gradient}/>
           </View>
         </View>
-      </TouchableNativeFeedback>
+      </View>
         
         
     );
@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
   svgHolder: {
     justifyContent: "center",
     alignItems: "center",
-    width: 15,
-    height: 21,
+    // width: 15,
+    // height: 21,
   },
   icon: {
     width: "100%",

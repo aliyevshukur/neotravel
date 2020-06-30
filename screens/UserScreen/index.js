@@ -1,52 +1,61 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
 
 import { AppLayout } from "../../commons/AppLayout";
 import { UserMenuItem } from "./UserMenuItem";
 import { UserScreenHeader } from "./UserScreenHeader";
 import { getUserName, selectUserName } from "../../store/auth";
+import fb from "../../firebaseConfig";
+import COLORS from "../../styles/colors";
 
 const mapStateToProps = (state) => ({
   userName: selectUserName(state),
 });
 
+  
 export const UserScreen = connect(mapStateToProps, { getUserName })(
   ({ getUserName, userName }) => {
     const imagePath = "../../assets/images/UserScreen";
     useEffect(() => {
-      getUserName;
-    }, []);
+      getUserName();
+    }, [userName]);
     const menuItems = [
       {
-        icon: require(`${imagePath}/heart.png`),
+        icon: "heartFull", //dont edit icon names
         label: "Your Favorites",
       },
       {
-        icon: require(`${imagePath}/card.png`),
+        icon: "creditCard",
         label: "Payment",
       },
       {
-        icon: require(`${imagePath}/help.png`),
+        icon: "lifeRing",
         label: "Help",
       },
       {
-        icon: require(`${imagePath}/promotions.png`),
+        icon: "piggyBank",
         label: "Promotions",
       },
       {
-        icon: require(`${imagePath}/settings.png`),
+        icon: "setting",
         label: "Settings",
       },
       {
-        icon: require(`${imagePath}/logOut.png`),
-        label: "Log out",
+        icon: "signOut",
+        label: "Sign out",
       },
     ];
 
     const profilePicture = require("../../assets/images/UserScreen/profile-picture.png");
 
-    return (
+    return userName !== fb.auth.currentUser.displayName ? (
+      <ActivityIndicator
+        size="large"
+        color={COLORS.pink}
+        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+      />
+    ) : (
       <AppLayout style={styles.container}>
         <View>
           {/* User profile picture and name */}
