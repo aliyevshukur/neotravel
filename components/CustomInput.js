@@ -27,6 +27,7 @@ export const CustomInput = ({
   placeholder = "",
   keyboardType = "default",
   maxLength,
+  textStyle,
   ...rest
 }) => {
   return (

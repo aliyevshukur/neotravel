@@ -36,7 +36,7 @@ const TabItems = [
   },
   {
     name: "UserScreen",
-    component: UserScreen,
+    component: HomePageStack,
     icon: "user",
   },
 ];

@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { CustomText } from "../components";
-import COLORS from "../styles/colors";
 
 export const Favorites = ({ navigation }) => {
   return (
@@ -28,8 +27,6 @@ const styles = StyleSheet.create({
   },
   headerTxt: {
     fontSize: 28,
-    fontFamily: "NunitoBold",
-    color: COLORS.pink,
   },
   favoriteCards: {
     height: "90%",

@@ -13,7 +13,6 @@ const mapStateToProps = (state) => ({
   userName: selectUserName(state),
 });
 
-  
 export const UserScreen = connect(mapStateToProps, { getUserName })(
   ({ getUserName, userName }) => {
     const imagePath = "../../assets/images/UserScreen";
