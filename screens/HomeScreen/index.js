@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -20,6 +20,9 @@ import { HotelMedium } from "../../components/cards/HotelMedium";
 const hotels = [{ id: "1" }, { id: "2" }, { id: "3" }];
 
 export const HomePage = ({ navigation }) => {
+  const [placeValue, setPlaceValue] = useState("");
+  const [dateValue, setDateValue] = useState("");
+
   const texts = {
     description: "Find place that gives you ultimate calm",
     catalogueName: "Recommended",
@@ -41,9 +44,11 @@ export const HomePage = ({ navigation }) => {
           <View style={styles.searchArea}>
             <View style={styles.placeRow}>
               <CustomInput
+                value={placeValue}
+                onChangeText={setPlaceValue}
                 long={false}
                 isSearch={false}
-                isCross={false}
+                isCross={true}
                 placeholder="Place"
                 dark={true}
                 textStyle={{ color: COLORS.white }}
@@ -52,9 +57,11 @@ export const HomePage = ({ navigation }) => {
             </View>
             <View style={styles.dateRow}>
               <CustomInput
+                value={dateValue}
+                onChangeText={setDateValue}
                 long={false}
                 isSearch={false}
-                isCross={false}
+                isCross={true}
                 placeholder="Date"
                 dark={true}
               />
@@ -123,7 +130,7 @@ const styles = StyleSheet.create({
   },
   searchArea: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height / 2.12,
+    height: "44%",
     backgroundColor: COLORS.bgcDark,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,

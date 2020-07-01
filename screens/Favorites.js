@@ -1,7 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { CustomText } from "../components";
+import { CustomText, LargeHotelSlider } from "../components";
+import COLORS from "../styles/colors";
+import { hotels } from "./HomeScreen/SearchScreen";
 
 export const Favorites = ({ navigation }) => {
   return (
@@ -9,7 +11,13 @@ export const Favorites = ({ navigation }) => {
       <View style={styles.header}>
         <CustomText style={styles.headerTxt}>Favorites</CustomText>
       </View>
-      <View style={styles.favoriteCards}></View>
+      <View style={styles.favoriteCards}>
+        <LargeHotelSlider
+          hotels={hotels}
+          bgColor={"transparent"}
+          style={{ marginTop: 0 }}
+        />
+      </View>
     </View>
   );
 };
@@ -22,13 +30,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   header: {
-    justifyContent: "flex-start",
+    // justifyContent: "flex-start",
     elevation: 2,
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerTxt: {
     fontSize: 28,
+    color: COLORS.gradientPink,
+    // top: "10%",
+    // marginBottom: "5%",
   },
   favoriteCards: {
-    height: "90%",
+    height: "85%",
   },
 });

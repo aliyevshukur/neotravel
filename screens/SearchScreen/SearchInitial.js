@@ -23,14 +23,9 @@ export const SearchInitial = ({ navigation }) => {
       setIsOnSearch(true);
     } else {
       setIsOnSearch(false);
-      console.log("submitSearchHandler ---- worked ");
     }
   };
 
-  const crossButtonHandler = () => {
-    setIsOnSearch(false);
-    setSearchValue("");
-  };
   return (
     <AppLayout style={styles.container}>
       <CustomInput
@@ -41,7 +36,6 @@ export const SearchInitial = ({ navigation }) => {
         style={{ marginTop: 30, marginBottom: 33 }}
         long={true}
         placeHolder="Search for a city, area, or a hotel"
-        crossButtonHandler={() => crossButtonHandler()}
       />
       <ScrollView>
         {!isOnSearch ? (

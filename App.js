@@ -22,7 +22,11 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <StatusBar backgroundColor={"transparent"} translucent={true} />
+        <StatusBar
+          // hidden={true}
+          backgroundColor={"rgba(0,0,0,0.4)"}
+          translucent={true}
+        />
         <RootNav />
       </PersistGate>
     </Provider>
