@@ -4,10 +4,14 @@ import { FlatList, View, StyleSheet, Dimensions } from "react-native";
 import COLORS from "../styles/colors";
 import { HotelLarge } from "./cards/HotelLarge";
 
-export const LargeHotelSlider = ({ hotels, bgColor = "bgcLight" }) => {
+export const LargeHotelSlider = ({ hotels, bgColor = "bgcLight", style }) => {
   return (
     <View
-      style={[styles.catalogueVertical, { backgroundColor: COLORS[bgColor] }]}
+      style={[
+        styles.catalogueVertical,
+        { backgroundColor: COLORS[bgColor] },
+        { ...style },
+      ]}
     >
       <FlatList
         data={hotels}
@@ -33,12 +37,12 @@ const styles = StyleSheet.create({
   hotelLargeStyle: {
     marginLeft: 20,
     marginRight: 18,
-    marginTop: 43,
+    marginTop: "5%",
     width: "90%",
   },
   catalogueVertical: {
     width: Dimensions.get("window").width,
     marginTop: 39,
-    paddingBottom: 150,
+    // paddingBottom: 150,
   },
 });

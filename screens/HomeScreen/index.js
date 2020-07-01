@@ -84,7 +84,7 @@ export const HomePage = connect(mapStateToProps, { getHotelListFB })(
               />
             </View>
             <View style={styles.catalogue}>
-              <CustomText style={styles.catalogueName}> 
+              <CustomText style={styles.catalogueName}>
                 {texts.catalogueName}
               </CustomText>
               <FlatList
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   searchArea: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height / 2.12,
+    height: "44%",
     backgroundColor: COLORS.bgcDark,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,

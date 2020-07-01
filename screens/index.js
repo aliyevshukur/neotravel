@@ -8,4 +8,3 @@ export { HomePage } from "./HomeScreen";
 export { FilterScreen } from "./FilterScreen";
 export { RoomScreen } from "./RoomScreen";
 export { SearchInitial } from "./SearchScreen/SearchInitial";
-

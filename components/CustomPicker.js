@@ -37,15 +37,15 @@ export const CustomPicker = ({
 const styles = StyleSheet.create({
   picker: {
     width: 120,
-    height: 50,
+    height: 54.5,
     marginLeft: 15,
     color: COLORS.grayDark,
     borderRadius: 50,
-    padding: 0,
+    paddingRight: 10,
   },
   pickerContainer: {
     width: 120,
-    height: 50,
+    height: 54.5,
     flexDirection: "row",
     alignItems: "center",
     marginLeft: 10,
@@ -56,6 +56,6 @@ const styles = StyleSheet.create({
   pickerPng: {
     width: 9.3,
     height: 5.28,
-    right: 40,
+    right: 30,
   },
 });
