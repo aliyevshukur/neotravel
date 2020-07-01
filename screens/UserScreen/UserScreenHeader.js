@@ -3,6 +3,7 @@ import { StyleSheet, Text, Image, View, Dimensions } from "react-native";
 
 import { shadow } from "../../styles/commonStyles";
 import { CustomText } from "../../components";
+import COLORS from "../../styles/colors";
 
 export const UserScreenHeader = ({ profilePicture, fullName, userName }) => {
   return (
@@ -23,8 +24,8 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
     alignItems: "center",
     width: width + 10,
-    backgroundColor: "rgba(0,0,0,0)",
-    ...shadow,
+    backgroundColor: COLORS.grayLight,
+    elevation: 5
   },
   profilePicture: {
     borderRadius: 50,
