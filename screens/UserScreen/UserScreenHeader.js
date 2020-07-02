@@ -4,11 +4,16 @@ import { StyleSheet, Text, Image, View, Dimensions } from "react-native";
 import { shadow } from "../../styles/commonStyles";
 import { CustomText } from "../../components";
 import COLORS from "../../styles/colors";
+import fb from "../../firebaseConfig";
 
 export const UserScreenHeader = ({ profilePicture, fullName, userName }) => {
+  // const isPicture = fb.auth.currentUser.photoURL !== null;
   return (
     <View style={styles.container}>
-      <Image style={styles.profilePicture} source={profilePicture} />
+      <Image
+        style={styles.profilePicture}
+        source={{ uri: fb?.auth?.currentUser?.photoURL }}
+      />
       <CustomText style={styles.userName}>{fullName}</CustomText>
     </View>
   );
@@ -25,7 +30,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: width + 10,
     backgroundColor: COLORS.grayLight,
-    elevation: 5
+    elevation: 5,
   },
   profilePicture: {
     borderRadius: 50,
