@@ -29,7 +29,6 @@ export const HomePage = connect(mapStateToProps, { getHotelListFB })(
   ({ navigation, getHotelListFB, hotelList }) => {
     useEffect(() => {
       getHotelListFB();
-      console.log("Hotel List: ", hotelList);
     }, []);
 
     const texts = {

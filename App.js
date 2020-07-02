@@ -15,7 +15,7 @@ export default function App() {
       <AppLoading
         startAsync={loadFonts}
         onFinish={() => setLoaded(true)}
-        onError={() => console.log("Loading Rejected")}
+        onError={() => "Loading Rejected"}
       />
     );
   }

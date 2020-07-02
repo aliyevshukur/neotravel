@@ -5,14 +5,17 @@ import { CustomSvg } from "../../components";
 import { logOut } from "../../store/auth";
 import { connect } from "react-redux";
 
-
 export const UserMenuItem = connect(null, { logOut })(
-  ({ icon, label, logOut }) => {
+  ({ icon, label, logOut, navigation, onPressItem }) => {
     return (
-      <TouchableOpacity onPress={logOut}>
+      <TouchableOpacity
+        onPress={() => {
+          label == "Sign out" ? logOut() : navigation.navigate(onPressItem);
+        }}
+      >
         <View style={styles.container}>
           <View style={styles.icon}>
-            <CustomSvg name={icon} gradient={true} style={styles.svg}/>
+            <CustomSvg name={icon} gradient={true} style={styles.svg} />
           </View>
           <Text>{label}</Text>
         </View>
