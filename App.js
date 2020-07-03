@@ -1,3 +1,15 @@
+// ignore warning message
+import { YellowBox } from "react-native";
+import _ from "lodash";
+
+YellowBox.ignoreWarnings(["Setting a timer"]);
+const _console = _.clone(console);
+console.warn = (message) => {
+  if (message.indexOf("Setting a timer") <= -1) {
+    _console.warn(message);
+  }
+};
+
 import React, { useState } from "react";
 import { AppLoading } from "expo";
 import { RootNav } from "./navigation";
@@ -22,8 +34,8 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <StatusBar backgroundColor={"transparent"} translucent={true} />
-        <RootNav />
+      <StatusBar backgroundColor={"transparent"} translucent={true} />
+      <RootNav />
       </PersistGate>
     </Provider>
   );
