@@ -14,6 +14,7 @@ import { SearchStack } from "../SearchStack";
 
 import COLORS from "../../styles/colors";
 import { SearchInitial } from "../../screens/SearchScreen/SearchInitial";
+import { Dimensions } from "react-native";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -50,7 +51,7 @@ export const BottomTabNav = () => {
           // marginLeft: 5,
           // marginRight: 5,
           backgroundColor: COLORS.bgcLight,
-          height: 78,
+          height: Dimensions.get("window").height / 10,
         },
       }}
       initialRouteName={TabItems[0].name}

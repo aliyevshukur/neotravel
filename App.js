@@ -27,15 +27,19 @@ export default function App() {
       <AppLoading
         startAsync={loadFonts}
         onFinish={() => setLoaded(true)}
-        onError={() => console.log("Loading Rejected")}
+        onError={() => "Loading Rejected"}
       />
     );
   }
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-      <StatusBar backgroundColor={"transparent"} translucent={true} />
-      <RootNav />
+        <StatusBar
+          // hidden={true}
+          backgroundColor={"rgba(0,0,0,0.4)"}
+          translucent={true}
+        />
+        <RootNav />
       </PersistGate>
     </Provider>
   );

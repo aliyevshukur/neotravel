@@ -72,7 +72,6 @@ export const FilterScreen = ({ navigation, route }) => {
     // Take filter values from userChoices state
   };
 
-  console.log("route ---- ", route);
 
   return (
     <View style={styles.container}>

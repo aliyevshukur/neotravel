@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   },
   searchArea: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height / 2.12,
+    height: "44%",
     backgroundColor: COLORS.bgcDark,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,

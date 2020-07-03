@@ -45,8 +45,10 @@ export const MapViewSearch = ({ hotels, navigation }) => {
           </Marker>
         ))}
       </MapView>
-      <SmallCardSlider hotels={hotels} style={styles.catalogueHorizontalMap} />
-
+      <SmallCardSlider
+        hotels={hotels}
+        style={[styles.catalogueHorizontalMap]}
+      />
     </>
   );
 };
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
   catalogueHorizontalMap: {
     height: 180,
     position: "absolute",
-    bottom: 60,
+    bottom: 50,
   },
   markerCallView: {
     // flex: 1,
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
     width: Dimensions.get("window").width,
-    height: 450,
+    height: Dimensions.get("window").height,
     alignItems: "flex-end",
   },
   markerBtn: {
