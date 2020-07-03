@@ -136,7 +136,7 @@ export const FilterScreen = ({ navigation, route }) => {
         />
       </View>
       <View style={styles.applyHolder}>
-        <CustomButton title={"Apply"} width={338} onPress={applyHandler} />
+        <CustomButton title={"Apply"} onPress={applyHandler} style={styles.applyBtn}/>
       </View>
     </View>
   );
@@ -249,6 +249,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingBottom: 24,
-    zIndex: 1,
   },
+  applyBtn: {
+    width: 338,
+    fontSize: 24,
+    fontFamily: "NunitoBold",
+  }
 });
