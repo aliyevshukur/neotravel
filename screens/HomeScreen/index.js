@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   ImageBackground,
   Dimensions,
@@ -17,97 +16,131 @@ import { CustomButton } from "../../components/CustomButton";
 import { CustomInput } from "../../components/CustomInput";
 import { CustomPicker } from "../../components/CustomPicker";
 import { HotelMedium } from "../../components/cards/HotelMedium";
-import { getHotelListFB, getHotelList } from "../../store/hotels";
-
-const hotels = [{ id: "1" }, { id: "2" }, { id: "3" }];
+import {
+  getHotelListFB,
+  getHotelList,
+  getHotelsOnDiscount,
+  getRecommendedHotels,
+} from "../../store/hotels";
+import { findRecommendedHotels } from "../../utils/getRecommededHotels";
+import { EmptyListComponent } from "./EmptyListComponent";
 
 const mapStateToProps = (state) => ({
   hotelList: getHotelList(state),
+  recommendedHotels: getRecommendedHotels(state),
+  hotelsOnDiscount: getHotelsOnDiscount(state),
 });
 
-export const HomePage = connect(mapStateToProps, { getHotelListFB })(
-  ({ navigation, getHotelListFB, hotelList }) => {
-    useEffect(() => {
-      getHotelListFB();
-    }, []);
+export const HomePage = connect(mapStateToProps, {
+  getHotelListFB,
+})((props) => {
+  const { navigation, getHotelListFB, hotelList } = props;
 
-    const texts = {
-      description: "Find place that gives you ultimate calm",
-      catalogueName: "Recommended",
-    };
+  const [recommendedHotels, setRecommendedHotels] = useState([]);
 
-    return (
-      <ImageBackground
-        resizeMode="stretch"
-        source={bgcImage}
-        style={{ width: 463, height: "100%" }}
-      >
-        <ScrollView>
-          <View style={styles.homeSearchContainer}>
-            <View style={styles.headerText}>
-              <CustomText style={styles.appDescription}>
-                {texts.description}
-              </CustomText>
-            </View>
-            <View style={styles.searchArea}>
-              <View style={styles.placeRow}>
-                <CustomInput
-                  long={false}
-                  isSearch={false}
-                  isCross={false}
-                  placeholder="Place"
-                  dark={true}
-                  textStyle={{ color: COLORS.white }}
-                />
-                <CustomPicker dark={true} title="Guests" />
-              </View>
-              <View style={styles.dateRow}>
-                <CustomInput
-                  long={false}
-                  isSearch={false}
-                  isCross={false}
-                  placeholder="Date"
-                  dark={true}
-                />
-                <CustomPicker dark={true} title="Nights" />
-              </View>
-              <CustomButton
-                style={{
-                  marginTop: 20,
-                  fontSize: 24,
-                  width: "90%",
-                  marginTop: 30,
-                }}
-                title="Search a room"
-                onPress={() => navigation.navigate("HomeSearchScreen")}
-              />
-            </View>
-            <View style={styles.catalogue}>
-              <CustomText style={styles.catalogueName}>
-                {texts.catalogueName}
-              </CustomText>
-              <FlatList
-                data={hotelList}
-                horizontal={true}
-                renderItem={({ item }) => (
-                  <HotelMedium
-                    cardInfo={{
-                      imgUrl: item.images[0],
-                      price: item.price,
-                      name: item.name,
-                    }}
-                    style={styles.mediumHotelCard}
-                    key={item.id}
-                  />
-                )}
-              />
-            </View>
+  const texts = {
+    description: "Find place that gives you ultimate calm",
+    catalogueName: "Recommended",
+  };
+
+  useEffect(() => {
+    fetchHotelsData();
+  }, []);
+
+  useEffect(() => {
+    findRecommendedHotelsData();
+  }, [hotelList]);
+
+  const fetchHotelsData = async () => {
+    const response = await getHotelListFB();
+  };
+
+  const findRecommendedHotelsData = async () => {
+    const data = await findRecommendedHotels(hotelList, 3);
+    setRecommendedHotels(data);
+  };
+
+  
+
+  return (
+    <ImageBackground
+      resizeMode="stretch"
+      source={bgcImage}
+      style={{ width: 463, height: "100%" }}
+    >
+      <ScrollView>
+        <View style={styles.homeSearchContainer}>
+          <View style={styles.headerText}>
+            <CustomText style={styles.appDescription}>
+              {texts.description}
+            </CustomText>
           </View>
-        </ScrollView>
-      </ImageBackground>
-    );
-  }
-);
+          <View style={styles.searchArea}>
+            <View style={styles.placeRow}>
+              <CustomInput
+                long={false}
+                isSearch={false}
+                isCross={false}
+                placeholder="Place"
+                dark={true}
+                textStyle={{ color: COLORS.white }}
+              />
+              <CustomPicker dark={true} title="Guests" />
+            </View>
+            <View style={styles.dateRow}>
+              <CustomInput
+                long={false}
+                isSearch={false}
+                isCross={false}
+                placeholder="Date"
+                dark={true}
+              />
+              <CustomPicker dark={true} title="Nights" />
+            </View>
+            <CustomButton
+              style={{
+                marginTop: 20,
+                fontSize: 24,
+                width: "90%",
+                marginTop: 30,
+              }}
+              title="Search a room"
+              onPress={() => navigation.navigate("HomeSearchScreen")}
+            />
+          </View>
+          <View style={styles.catalogue}>
+            <CustomText style={styles.catalogueName}>
+              {texts.catalogueName}
+            </CustomText>
+            {recommendedHotels.length != 0 ? (
+              <FlatList
+                data={recommendedHotels}
+                horizontal={true}
+                renderItem={({ item }) => {
+                  return (
+                    <HotelMedium
+                      cardInfo={{
+                        imgUrl: item.images[0],
+                        price: item.price,
+                        name: item.hotelName,
+                        rating: item.hotelRating,
+                        currency: item.currency,
+                        place: item.hotelCity,
+                      }}
+                      style={styles.mediumHotelCard}
+                    />
+                  );
+                }}
+                keyExtractor={(item) => item?.id}
+                ListEmptyComponent={EmptyListComponent}
+              />
+            ) : null}
+          </View>
+        </View>
+      </ScrollView>
+    </ImageBackground>
+  );
+});
 
 const styles = StyleSheet.create({
   container: {
