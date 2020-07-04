@@ -12,11 +12,11 @@ import COLORS from "../../styles/colors";
 import image from "../../assets/images/notfBg.png";
 import Constants from "expo-constants";
 import { NotfCard } from "./NotfCard";
-import { ScrollView } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 
 const notifications = [
   { description: "Please rate your stay at Venice Royal, Venice, Italy. " },
-  { description: "Your stay at Hotel Venice Royal is booked in 2 days! " },
+  { description: "Your stay at Hotel Venice Royal is booked in 2 days!" },
   {
     description:
       "You have earned 3000 loyalty points! See how to use them here. ",
@@ -35,29 +35,49 @@ export const NotificationScreen = ({ navigation }) => {
             <CustomText weight="bold" style={styles.dateText}>
               Nov 12 - 24{" "}
             </CustomText>
-            <CustomButton title="Search a room" style={styles.searchBtn} />
+            <CustomButton
+              onPress={() => navigation.navigate("SearchStack")}
+              title="Search a room"
+              style={styles.searchBtn}
+            />
           </View>
         </ImageBackground>
       </View>
-      {/* <ScrollView>
-        {notifications.map((notf, ind) => (
-          <NotfCard item={notf} isLast={notifications.length === ind} />
-        ))}
-      </ScrollView> */}
+      <FlatList
+        contentContainerStyle={styles.notfList}
+        ItemSeparatorComponent={({ highlighted }) => (
+          <View style={[styles.separator, highlighted && { marginLeft: 0 }]} />
+        )}
+        data={notifications}
+        renderItem={({ item, index }) => {
+          return (
+            <NotfCard item={item} isLast={notifications.length - 1 === index} />
+          );
+        }}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  notfList: {
+    // flex: 1,
+    alignItems: "stretch",
+    // marginTop: 200,
+  },
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: Constants.statusBarHeight,
+    backgroundColor: COLORS.bgcLight,
+    marginTop: Constants.statusBarHeight,
   },
   imageWrapper: {
     width: Dimensions.get("window").width,
-    flex: 1,
+    // flex: 1,
+  },
+  separator: {
+    height: 1,
+    width: "100%",
+    backgroundColor: COLORS.white,
   },
   image: {
     alignItems: "center",
