@@ -38,11 +38,6 @@ export const HomePage = connect(mapStateToProps, {
 
   const [recommendedHotels, setRecommendedHotels] = useState([]);
 
-  const texts = {
-    description: "Find place that gives you ultimate calm",
-    catalogueName: "Recommended",
-  };
-
   useEffect(() => {
     fetchHotelsData();
   }, []);
@@ -60,7 +55,10 @@ export const HomePage = connect(mapStateToProps, {
     setRecommendedHotels(data);
   };
 
-  
+  const texts = {
+    description: "Find place that gives you ultimate calm",
+    catalogueName: "Recommended",
+  };
 
   return (
     <ImageBackground

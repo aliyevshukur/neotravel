@@ -9,3 +9,6 @@ export { FilterScreen } from "./FilterScreen";
 export { RoomScreen } from "./RoomScreen";
 export { SearchInitial } from "./SearchScreen/SearchInitial";
 export { SettingsPage } from "./SettingsPage";
+export { NotificationScreen } from "./Notification";
+export { HotelScreen} from './HotelScreen';
+export { PaymentsScreen} from './PaymentsScreen';

@@ -1,5 +1,11 @@
-import React from "react";
-import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { CustomText } from "../CustomText";
@@ -16,6 +22,13 @@ export const HotelMedium = ({ cardInfo, onPress, style }) => {
         value.length <= length ? value : value.substring(0, length) + end)
       : null;
   };
+
+  const imageURL =
+    item.imgUrl.slice(0, item.imgUrl.indexOf("?")) + "?w=1.0&q=5";
+  console.log(imageURL);
+
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <TouchableOpacity
       style={[styles.container, { ...style }]}
@@ -29,10 +42,20 @@ export const HotelMedium = ({ cardInfo, onPress, style }) => {
         ]}
         style={styles.gradient}
       >
+        {!loaded && (
+          <View style={styles.loaderWrapper}>
+            <ActivityIndicator
+              size="large"
+              color={COLORS.pink}
+              style={styles.loader}
+            />
+          </View>
+        )}
         <Image
           resizeMode={"cover"}
           style={styles.bgImg}
-          source={{ uri: item.imgUrl }}
+          source={{ uri: imageURL }}
+          onLoad={() => setLoaded(true)}
         />
         <CustomText style={styles.name}>
           {makeItShort(item.name, 30) || "~"}
@@ -110,5 +133,15 @@ const styles = StyleSheet.create({
     left: 213,
     top: 150,
     backgroundColor: "transparent",
+  },
+  loaderWrapper: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+  },
+  loader: {
+    position: "relative",
+    top: "-50%",
+    left: "-50%",
   },
 });
