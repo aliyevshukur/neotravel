@@ -37,47 +37,50 @@ export const SearchInitial = ({ navigation }) => {
         long={true}
         placeHolder="Search for a city, area, or a hotel"
       />
-      <ScrollView>
-        {!isOnSearch ? (
-          <>
-            <CardSlider
-              title="recommended"
-              titleStyle={styles.recommendedTitleStyle}
-              containerStyle={styles.recommendedContainerStyle}
-            />
-            <CardSlider
-              title="deals"
-              titleStyle={styles.dealsTitleStyle}
-              containerStyle={styles.dealsContainerStyle}
-            />
-          </>
-        ) : (
-          <>
-            <FilterRow
-              backScreen="initial"
-              navigation={navigation}
-              onDirectToFilter={() =>
-                navigation.navigate("Filter", { backScreen: "initial" })
-              }
-              listType={listType}
-              onViewTypeChange={() =>
-                setListType((v) => (v === "map" ? (v = "list") : (v = "map")))
-              }
-            />
-            <View style={styles.listContainer}>
-              {listType === "list" ? (
-                isOnSearch ? (
+      {!isOnSearch ? (
+        <ScrollView>
+          <CardSlider
+            title="recommended"
+            titleStyle={styles.recommendedTitleStyle}
+            containerStyle={styles.recommendedContainerStyle}
+          />
+          <CardSlider
+            title="deals"
+            titleStyle={styles.dealsTitleStyle}
+            containerStyle={styles.dealsContainerStyle}
+          />
+        </ScrollView>
+      ) : (
+        <>
+          <FilterRow
+            backScreen="initial"
+            navigation={navigation}
+            onDirectToFilter={() =>
+              navigation.navigate("Filter", { backScreen: "initial" })
+            }
+            listType={listType}
+            onViewTypeChange={() =>
+              setListType((v) => (v === "map" ? (v = "list") : (v = "map")))
+            }
+          />
+          <View style={styles.listContainer}>
+            {listType === "list" ? (
+              isOnSearch ? (
+                <ScrollView>
                   <LargeHotelSlider hotels={hotels} />
-                ) : (
-                  <ListViewSearch hotels={hotels} />
-                )
+                </ScrollView>
               ) : (
-                <MapViewSearch hotels={hotels} />
-              )}
-            </View>
-          </>
-        )}
-      </ScrollView>
+                <ListViewSearch hotels={hotels} />
+              )
+            ) : (
+              <MapViewSearch
+                bottomListStyle={{ bottom: 110 }}
+                hotels={hotels}
+              />
+            )}
+          </View>
+        </>
+      )}
     </AppLayout>
   );
 };
@@ -97,8 +100,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   listContainer: {
-    height: "100%",
-    flex: 1,
     // alignItems: "flex-end",
   },
 
