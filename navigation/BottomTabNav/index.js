@@ -2,7 +2,7 @@ import React from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
-  Favorites,
+  NotificationScreen,
   SecondScreen,
   UserScreen,
   SignIn,
@@ -33,8 +33,8 @@ const TabItems = [
     icon: "search",
   },
   {
-    name: "Favorites",
-    component: Favorites,
+    name: "NotificationScreen",
+    component: NotificationScreen,
     icon: "bell",
   },
   {

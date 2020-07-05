@@ -1,27 +1,49 @@
-import React from 'react';
-import {StyleSheet, View, TouchableNativeFeedback} from 'react-native';
-import COLORS from '../../styles/colors';
-import { CustomSvg } from './CustomSvg';
+import React from "react";
+import { StyleSheet, View, TouchableNativeFeedback } from "react-native";
+import COLORS from "../../styles/colors";
+import { CustomSvg } from "./CustomSvg";
 
-export const IconWbg = ({style, iconName="location", iconColor, iconWidth, iconHeight, theme="light", gradient=true, onPress}) => {
-
-    return (
-      <View style={styles.touchable} onPress={onPress}>
-        <View style={[styles.container, style, {backgroundColor: theme=="dark" ? COLORS.bgcDark : COLORS.bgcLight}]}>
-          <View style={{...styles.svgHolder, width: iconWidth || 15, height: iconHeight || 21}}>
-            <CustomSvg style={{...styles.icon, color: iconColor || COLORS.tabNavIcon}} name={iconName} gradient={gradient}/>
-          </View>
+export const IconWbg = ({
+  style,
+  iconName = "location",
+  iconColor,
+  iconWidth,
+  iconHeight,
+  theme = "light",
+  gradient = true,
+  onPress,
+}) => {
+  return (
+    <View style={styles.touchable} onPress={onPress}>
+      <View
+        style={[
+          styles.container,
+          style,
+          {
+            backgroundColor: theme == "dark" ? COLORS.bgcDark : COLORS.bgcLight,
+          },
+        ]}
+      >
+        <View
+          style={{
+            ...styles.svgHolder,
+            width: iconWidth || 15,
+            height: iconHeight || 21,
+          }}
+        >
+          <CustomSvg
+            style={{ ...styles.icon, color: iconColor || COLORS.tabNavIcon }}
+            name={iconName}
+            gradient={gradient}
+          />
         </View>
       </View>
-        
-        
-    );
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-  touchable: {
-    
-  },
+  touchable: {},
   container: {
     justifyContent: "center",
     alignItems: "center",
@@ -39,6 +61,5 @@ const styles = StyleSheet.create({
   icon: {
     width: "100%",
     height: "100%",
-  }
-    
+  },
 });
