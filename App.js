@@ -21,6 +21,7 @@ import { loadFonts } from "./styles/fonts";
 import store, { persistor } from "./store";
 
 
+
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   if (!loaded) {

@@ -16,6 +16,9 @@ import COLORS from "../../styles/colors";
 import { SearchInitial } from "../../screens/SearchScreen/SearchInitial";
 import { Dimensions } from "react-native";
 
+
+import {useSelector} from 'react-redux';
+
 const { Navigator, Screen } = createBottomTabNavigator();
 
 const TabItems = [
@@ -42,6 +45,10 @@ const TabItems = [
 ];
 
 export const BottomTabNav = () => {
+
+  const tabStatus = useSelector(state => state.navReducer);
+
+
   return (
     <Navigator
       tabBarOptions={{
@@ -62,6 +69,7 @@ export const BottomTabNav = () => {
           name={name}
           component={component}
           options={{
+            tabBarVisible: tabStatus.status,
             tabBarIcon: ({ focused }) => {
               return (
                 <TabBarIcon icon={icon} isActive={focused ? true : false} />

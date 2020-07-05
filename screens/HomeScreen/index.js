@@ -16,6 +16,10 @@ import { CustomButton } from "../../components/CustomButton";
 import { CustomInput } from "../../components/CustomInput";
 import { CustomPicker } from "../../components/CustomPicker";
 import { HotelMedium } from "../../components/cards/HotelMedium";
+
+import {useSelector, useDispatch} from 'react-redux';
+import {setTabVisibility} from '../../store/navReducer';
+
 import {
   getHotelListFB,
   getHotelList,
@@ -38,13 +42,20 @@ export const HomePage = connect(mapStateToProps, {
 
   const [recommendedHotels, setRecommendedHotels] = useState([]);
 
+  const dispatch = useDispatch();
+  dispatch(setTabVisibility(true));
+
   useEffect(() => {
     fetchHotelsData();
   }, []);
 
+  // useEffect(() => {
+  //   findRecommendedHotelsData();
+  // }, [hotelList]);
+
   useEffect(() => {
     findRecommendedHotelsData();
-  }, [hotelList]);
+  }, []);
 
   const fetchHotelsData = async () => {
     const response = await getHotelListFB();
@@ -59,6 +70,10 @@ export const HomePage = connect(mapStateToProps, {
     description: "Find place that gives you ultimate calm",
     catalogueName: "Recommended",
   };
+
+  const cardPressed = (roomId) => {
+    navigation.navigate("HotelScreen", {roomId});
+  }
 
   return (
     <ImageBackground
@@ -126,6 +141,7 @@ export const HomePage = connect(mapStateToProps, {
                         place: item.hotelCity,
                       }}
                       style={styles.mediumHotelCard}
+                      onPress={() => cardPressed(item?.id)}
                     />
                   );
                 }}
