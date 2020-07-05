@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+// import { CachedImage } from 'react-native-cached-image';
 
 import { CustomText } from "../CustomText";
 import COLORS from "../../styles/colors";

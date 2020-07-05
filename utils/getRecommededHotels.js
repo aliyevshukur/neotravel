@@ -2,7 +2,7 @@ import { fetchRoomsOfHotelsFB } from "./firestoreRequests";
 
 export const findRecommendedHotels = async (hotels, count = 5) => {
   if (hotels.length === 0) {
-    return pickerHotels;
+    return [];
   }
 
   // Pick random hotels to recommend :-)

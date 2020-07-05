@@ -36,7 +36,7 @@ export const CustomPicker = ({
 
 const styles = StyleSheet.create({
   picker: {
-    width: 120,
+    width: 180,
     height: 54.5,
     marginLeft: 15,
     color: COLORS.grayDark,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   pickerContainer: {
-    width: 120,
+    width: 180,
     height: 54.5,
     flexDirection: "row",
     alignItems: "center",

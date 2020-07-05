@@ -6,22 +6,26 @@ import {
   Dimensions,
   FlatList,
   ScrollView,
+  Alert,
 } from "react-native";
 import { connect } from "react-redux";
 
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
-import { CustomText } from "../../components/CustomText";
-import { CustomButton } from "../../components/CustomButton";
-import { CustomInput } from "../../components/CustomInput";
-import { CustomPicker } from "../../components/CustomPicker";
-import { HotelMedium } from "../../components/cards/HotelMedium";
+import {
+  CustomText,
+  CustomButton,
+  CustomInput,
+  CustomPicker,
+  CustomRangeDatepicker,
+} from "../../components";
 import {
   getHotelListFB,
   getHotelList,
   getHotelsOnDiscount,
   getRecommendedHotels,
 } from "../../store/hotels";
+import { HotelMedium } from "../../components/cards/HotelMedium";
 import { findRecommendedHotels } from "../../utils/getRecommededHotels";
 import { EmptyListComponent } from "./EmptyListComponent";
 
@@ -35,16 +39,20 @@ export const HomePage = connect(mapStateToProps, {
   getHotelListFB,
 })((props) => {
   const { navigation, getHotelListFB, hotelList } = props;
-
+  const texts = {
+    description: "Find place that gives you ultimate calm",
+    catalogueName: "Recommended",
+  };
   const [recommendedHotels, setRecommendedHotels] = useState([]);
+  const [fieldValues, setFieldValues] = useState({
+    place: "",
+    date: "",
+  });
 
   useEffect(() => {
     fetchHotelsData();
-  }, []);
-
-  useEffect(() => {
     findRecommendedHotelsData();
-  }, [hotelList]);
+  }, []);
 
   const fetchHotelsData = async () => {
     const response = await getHotelListFB();
@@ -55,9 +63,27 @@ export const HomePage = connect(mapStateToProps, {
     setRecommendedHotels(data);
   };
 
-  const texts = {
-    description: "Find place that gives you ultimate calm",
-    catalogueName: "Recommended",
+  const onFieldChange = (name, value) => {
+    setFieldValues({
+      ...fieldValues,
+      [name]: value,
+    });
+  };
+
+  const onFormSubmit = () => {
+    for (key in fieldValues) {
+      if (fieldValues[key].trim() === "") {
+        Alert.alert(`Field ${fieldValues[key]} is empty`);
+        return;
+      }
+    }
+
+    const dateValues = fieldValues.date.split("/");
+    const isDateValid = dateValues[0];
+
+    if (!isDateValid) {
+      return;
+    }
   };
 
   return (
@@ -76,24 +102,35 @@ export const HomePage = connect(mapStateToProps, {
           <View style={styles.searchArea}>
             <View style={styles.placeRow}>
               <CustomInput
-                long={false}
+                long={true}
                 isSearch={false}
                 isCross={false}
                 placeholder="Place"
                 dark={true}
                 textStyle={{ color: COLORS.white }}
+                onChangeText={(value) => onFieldChange("place", value)}
               />
-              <CustomPicker dark={true} title="Guests" />
             </View>
-            <View style={styles.dateRow}>
-              <CustomInput
+            <View style={styles.searchBottom}>
+              {/* <CustomInput
                 long={false}
                 isSearch={false}
                 isCross={false}
                 placeholder="Date"
                 dark={true}
+                onChangeText={(value) => onFieldChange("date", value)}
               />
-              <CustomPicker dark={true} title="Nights" />
+              <CustomPicker dark={true} title="Nights" /> */}
+
+              <CustomPicker dark={true} title="Guests" />
+
+              <View style={styles.datepickerWrapper}>
+                <CustomRangeDatepicker
+                  placeholder={"Pick date"}
+                  min={new Date()}
+                  style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 50}}
+                />
+              </View>
             </View>
             <CustomButton
               style={{
@@ -165,7 +202,7 @@ const styles = StyleSheet.create({
   searchArea: {
     width: Dimensions.get("window").width,
     height: "44%",
-    backgroundColor: COLORS.bgcDark,
+    backgroundColor: COLORS.homeScreenCatalogueBackground,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     justifyContent: "center",
@@ -201,5 +238,15 @@ const styles = StyleSheet.create({
   },
   mediumHotelCard: {
     marginLeft: 18,
+  },
+  searchBottom: {
+    width: '100%',
+    paddingHorizontal: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  datepickerWrapper: {
+    marginTop: 12,
   },
 });
