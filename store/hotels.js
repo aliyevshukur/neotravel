@@ -66,7 +66,7 @@ export const getHotelListFB = () => async (dispatch) => {
     const allHotels = await hotelsRef.get();
 
     if (allHotels) {
-      const hotelsArr = Object.keys(allHotels.docs).map((key) => {
+      const hotelsArr = Object.keys(allHotels.docs).map((key) => { 
         const doc = allHotels.docs[key];
         return {
           id: doc.id,
