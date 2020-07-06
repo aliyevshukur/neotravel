@@ -1,6 +1,8 @@
 export { CustomText } from "./CustomText";
 export { CustomButton } from "./CustomButton";
 export { CustomInput } from "./CustomInput";
+export { CustomPicker } from "./CustomPicker";
+export { CustomRangeDatepicker } from "./CustomRangeDatePicker";
 export { Rating } from "./cards/Rating.js";
 export { HotelSmall } from "./cards/HotelSmall";
 export { HotelMedium } from "./cards/HotelMedium";

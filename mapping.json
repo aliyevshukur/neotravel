@@ -1,0 +1,46 @@
+{
+  "components": {
+    "Datepicker": {
+      "meta": {},
+      "appearances": {
+        "default": {
+          "mapping": {
+            "paddingHorizontal": 43
+          },
+          "variantGroups": {
+            "status": {
+              "basic": {
+                "borderColor": "#DFDEDE",
+                "backgroundColor": "#FFFFFF",
+                "textColor": "#616167",
+                "state": {
+                  "active": {
+                    "borderColor": "#FF61A8",
+                    "backgroundColor": "#FFFFFF"
+                  }
+                }
+              }
+            },
+            "size": {
+              "small": {
+                "paddingVertical": 16,
+                "borderRadius": 28,
+                "borderWidth": 2.6
+              },
+              "medium": {
+                "borderRadius": 28,
+                "borderWidth": 2.6,
+                "paddingVertical": 16
+              },
+              "large": {
+                "borderRadius": 28,
+                "borderWidth": 2.6,
+                "paddingVertical": 16
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

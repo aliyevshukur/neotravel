@@ -11,6 +11,8 @@ console.warn = (message) => {
 };
 
 import React, { useState } from "react";
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider } from "@ui-kitten/components";
 import { AppLoading } from "expo";
 import { RootNav } from "./navigation";
 import { Provider } from "react-redux";
@@ -19,7 +21,7 @@ import { StatusBar } from "react-native";
 
 import { loadFonts } from "./styles/fonts";
 import store, { persistor } from "./store";
-
+import { default as mapping } from "./mapping.json";
 
 
 export default function App() {
@@ -34,16 +36,18 @@ export default function App() {
     );
   }
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <StatusBar
-          // hidden={true}
-          backgroundColor={"rgba(0,0,0,0.4)"}
-          translucent={true}
-        />
-        <RootNav />
+    <ApplicationProvider {...eva} theme={eva.light}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <StatusBar
+            // hidden={true}
+            backgroundColor={"rgba(0,0,0,0.4)"}
+            translucent={true}
+          />
 
-      </PersistGate>
-    </Provider>
+          <RootNav />
+        </PersistGate>
+      </Provider>
+    </ApplicationProvider>
   );
 }
