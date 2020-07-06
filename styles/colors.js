@@ -15,7 +15,7 @@ const COLORS = {
   tabNavIcon: "#BDBDBD", //will be used in tab-navigation icons background (Home, Search ...)
   darkPriceInCards: "#434343", //dark price color in cards
   imgLoad: "#C4C4C4", //background for not loaded images
-  homeScreenCatalogueBackground: "#FAFAFB",
+  homeScreenCatalogueBackground: "#FFFFFF", 
   pink: "#FF61A8", // Pink text color
 };
 

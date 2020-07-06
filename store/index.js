@@ -12,9 +12,14 @@ import {
   MODULE_NAME as hotelsModuleName,
 } from "./hotels";
 
+import {reducer as navReducer} from './navReducer';
+import {reducer as themeReducer} from './theme';
+
 const rootReducer = combineReducers({
   auth: authReducer,
   [hotelsModuleName]: hotelsReducer,
+  navReducer,
+  themeReducer,
 });
 
 const persistConfig = {

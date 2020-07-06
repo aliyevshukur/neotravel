@@ -2,7 +2,7 @@ import React from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
-  Favorites,
+  NotificationScreen,
   SecondScreen,
   UserScreen,
   SignIn,
@@ -15,6 +15,9 @@ import { SearchStack } from "../SearchStack";
 import COLORS from "../../styles/colors";
 import { SearchInitial } from "../../screens/SearchScreen/SearchInitial";
 import { Dimensions } from "react-native";
+
+
+import {useSelector} from 'react-redux';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -30,8 +33,8 @@ const TabItems = [
     icon: "search",
   },
   {
-    name: "Favorites",
-    component: Favorites,
+    name: "NotificationScreen",
+    component: NotificationScreen,
     icon: "bell",
   },
   {
@@ -42,6 +45,10 @@ const TabItems = [
 ];
 
 export const BottomTabNav = () => {
+
+  const tabStatus = useSelector(state => state.navReducer);
+
+
   return (
     <Navigator
       tabBarOptions={{
@@ -62,6 +69,7 @@ export const BottomTabNav = () => {
           name={name}
           component={component}
           options={{
+            tabBarVisible: tabStatus.status,
             tabBarIcon: ({ focused }) => {
               return (
                 <TabBarIcon icon={icon} isActive={focused ? true : false} />

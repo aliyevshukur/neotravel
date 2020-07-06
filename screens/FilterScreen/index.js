@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, View, TouchableOpacity, FlatList } from "react-native";
+import { StyleSheet, View, TouchableOpacity, FlatList, Dimensions, BackHandler} from "react-native";
+
+
+import {useSelector, useDispatch} from 'react-redux';
+import {setTabVisibility} from '../../store/navReducer';
 
 import { CustomSvg, CustomText } from "../../components";
 import { CustomButton } from "../../components/CustomButton";
@@ -8,6 +12,9 @@ import { ToggleButton } from "../../components/ToggleButton";
 import { SelectAlert } from "./SelectAlert";
 
 export const FilterScreen = ({ navigation, route }) => {
+  const theme = useSelector(state => state.themeReducer).theme;
+  const dispatch = useDispatch();
+  dispatch(setTabVisibility(false));
   const DATA = {
     budget: {
       fieldId: "budget", //must be same as object name
@@ -64,6 +71,17 @@ export const FilterScreen = ({ navigation, route }) => {
     });
   };
 
+  const backHandler = () => {
+    navigation.navigate(route.params.backScreen);
+    dispatch(setTabVisibility(true));
+  }
+  BackHandler.addEventListener("hardwareBackPress", function () {
+    //hardware back Button actions could be handled here
+    dispatch(setTabVisibility(true));
+    navigation.navigate(route.params.backScreen);
+    return true
+  });
+
   const resetHandler = () => {
     setUserChoices({});
   };
@@ -74,7 +92,7 @@ export const FilterScreen = ({ navigation, route }) => {
 
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark }}>
       {modal ? (
         <SelectAlert
           selectInfo={{
@@ -91,23 +109,29 @@ export const FilterScreen = ({ navigation, route }) => {
         <View style={styles.titleHolder}>
           <TouchableOpacity
             style={styles.backBtn}
-            onPress={() => navigation.navigate(route.params.backScreen)}
+            onPress={backHandler}
           >
-            <CustomSvg name={"chevronLeft"} style={styles.chevronLeft} />
+            <CustomSvg name={"chevronLeft"}
+            style={{...styles.chevronLeft, color: theme=="light"? COLORS.blackText : COLORS.white}}
+            />
           </TouchableOpacity>
-          <CustomText style={styles.titleText}>Filter</CustomText>
+          <CustomText
+          style={{...styles.titleText, color: theme=="light"? COLORS.blackText : COLORS.white}}
+          >Filter</CustomText>
         </View>
-        <TouchableOpacity style={styles.resetBtn} onPress={resetHandler}>
-          <CustomText style={styles.resetText}>Reset</CustomText>
+        <TouchableOpacity
+        style={{...styles.resetBtn, backgroundColor: theme=="light"? COLORS.bgcLight : COLORS.bgcDark}}
+        onPress={resetHandler}>
+          <CustomText style={{...styles.resetText, color: theme=="light"? COLORS.grayDark : COLORS.gray }}>Reset</CustomText>
         </TouchableOpacity>
       </View>
-      <View style={styles.horizontalLine}></View>
+      <View style={{...styles.horizontalLine, backgroundColor: theme=="light"? COLORS.offWhite : COLORS.grayDark}}/>
       <View style={styles.main}>
         <FlatList
           data={Object.values(DATA)}
           renderItem={({ item }) => (
             <View style={styles.filterItem}>
-              <CustomText style={styles.filterItemTitle}>
+              <CustomText style={{...styles.filterItemTitle, color: theme=="light"? COLORS.blackText : COLORS.gray}}>
                 {item.name}
               </CustomText>
               {item.selectables ? (
@@ -115,13 +139,13 @@ export const FilterScreen = ({ navigation, route }) => {
                   style={styles.selectTouch}
                   onPress={() => selectHandler(item.fieldId)}
                 >
-                  <CustomText style={styles.selectText}>
+                  <CustomText style={{...styles.selectText, color: theme=="light"? COLORS.grayDark : COLORS.gray}}>
                     {userChoices[item.fieldId] || "Select"}
                   </CustomText>
                   {userChoices[item.fieldId] ? null : (
                     <CustomSvg
                       name={"chevronRight"}
-                      style={styles.chevronRight}
+                      style={{...styles.chevronRight, color: theme=="light"? COLORS.grayDark : COLORS.gray}}
                     />
                   )}
                 </TouchableOpacity>
@@ -136,7 +160,7 @@ export const FilterScreen = ({ navigation, route }) => {
         />
       </View>
       <View style={styles.applyHolder}>
-        <CustomButton title={"Apply"} width={338} onPress={applyHandler} />
+        <CustomButton title={"Apply"} onPress={applyHandler} style={styles.applyBtn}/>
       </View>
     </View>
   );
@@ -208,7 +232,7 @@ const styles = StyleSheet.create({
   },
   main: {
     width: "100%",
-    maxHeight: 480,
+    maxHeight: Dimensions.get('window').height*0.68,
     paddingBottom: 24,
   },
   filterItem: {
@@ -245,10 +269,16 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   applyHolder: {
+    position: "absolute",
+    bottom: 0,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
     paddingBottom: 24,
-    zIndex: 1,
   },
+  applyBtn: {
+    width: "90%",
+    fontSize: 24,
+    fontFamily: "NunitoBold",
+  }
 });

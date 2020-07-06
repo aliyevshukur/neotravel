@@ -8,7 +8,7 @@ import { CustomButton } from "../../../components/CustomButton";
 import COLORS from "../../../styles/colors";
 import { SmallCardSlider } from "../../../components";
 
-export const MapViewSearch = ({ hotels, navigation }) => {
+export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
   const texts = {
     markerCalloutName: "go to hotel",
   };
@@ -20,7 +20,7 @@ export const MapViewSearch = ({ hotels, navigation }) => {
   };
 
   return (
-    <>
+    <View>
       <MapView style={styles.map} initialRegion={initialRegion}>
         {hotels.map((marker) => (
           <Marker
@@ -47,9 +47,9 @@ export const MapViewSearch = ({ hotels, navigation }) => {
       </MapView>
       <SmallCardSlider
         hotels={hotels}
-        style={[styles.catalogueHorizontalMap]}
+        style={[styles.catalogueHorizontalMap, bottomListStyle]}
       />
-    </>
+    </View>
   );
 };
 
@@ -65,10 +65,10 @@ const styles = StyleSheet.create({
     // alignItems: "center",
   },
   map: {
-    flex: 1,
+    // flex: 1,
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
-    alignItems: "flex-end",
+    height: "100%",
+    // alignItems: "flex-end",
   },
   markerBtn: {
     width: 84,
