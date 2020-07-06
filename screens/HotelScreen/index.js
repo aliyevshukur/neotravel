@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -21,10 +21,20 @@ import {
 } from "../../components";
 import COLORS from "../../styles/colors";
 
+import {useSelector, useDispatch} from 'react-redux';
+import {setTabVisibility} from '../../store/navReducer';
+
+
 const screenH = Dimensions.get("window").height;
 const screenW = Dimensions.get("window").width;
 
-export const HotelScreen = ({ navigation }) => {
+
+export const HotelScreen = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+  dispatch(setTabVisibility(false));
+
+  const {roomId} = route.params;
+
   const hotelInfo = {
     name: "Mountain Resort",
     rating: "4.5",
@@ -57,6 +67,7 @@ export const HotelScreen = ({ navigation }) => {
   });
 
   const goBackHandler = () => {
+    dispatch(setTabVisibility(true));
     navigation.goBack();
   };
   const likeHandler = () => {
@@ -70,6 +81,10 @@ export const HotelScreen = ({ navigation }) => {
     setGallery(false);
   };
 
+  const selectRoomsHandler = () => {
+    navigation.navigate("RoomScreen");
+  }
+
   BackHandler.addEventListener("hardwareBackPress", function () {
     if (isGallery) {
       setGallery(false);
@@ -77,6 +92,9 @@ export const HotelScreen = ({ navigation }) => {
     }
 
     //hardware back Button actions could be handled here
+    dispatch(setTabVisibility(true));
+    navigation.goBack();
+    return true
   });
 
   return (
@@ -190,7 +208,9 @@ export const HotelScreen = ({ navigation }) => {
         </CustomText>
       </View>
       <CustomButton
-        style={{ ...styles.btnSelect, elevation: isGallery ? 0 : 5 }}
+      title={"Select Rooms"}
+      style={{ ...styles.btnSelect, elevation: isGallery ? 0 : 5 }}
+      onPress={selectRoomsHandler}
       />
     </View>
   );

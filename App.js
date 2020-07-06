@@ -23,6 +23,7 @@ import { loadFonts } from "./styles/fonts";
 import store, { persistor } from "./store";
 import { default as mapping } from "./mapping.json";
 
+
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   if (!loaded) {

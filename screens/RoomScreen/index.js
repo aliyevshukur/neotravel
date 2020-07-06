@@ -9,7 +9,7 @@ import {
 import { CustomSvg, CustomText, RoomLarge } from "../../components";
 import COLORS from "../../styles/colors";
 
-export const RoomScreen = () => {
+export const RoomScreen = ({navigation, route}) => {
   const DATA = [
     {
       id: "4399593499594004392995",
@@ -48,6 +48,7 @@ export const RoomScreen = () => {
 
   const goBackHandler = () => {
     console.log("GO BACK");
+    navigation.goBack();
   };
 
   const infoHandler = (id) => {
@@ -62,6 +63,7 @@ export const RoomScreen = () => {
   };
   const selectHandler = (id) => {
     const index = DATA.findIndex((item) => item.id == id);
+    navigation.navigate("ReservationScreen");
   };
 
   return (

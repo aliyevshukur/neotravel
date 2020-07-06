@@ -12,6 +12,10 @@ import { connect } from "react-redux";
 
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
+
+import {useSelector, useDispatch} from 'react-redux';
+import {setTabVisibility} from '../../store/navReducer';
+
 import {
   CustomText,
   CustomButton,
@@ -49,6 +53,9 @@ export const HomePage = connect(mapStateToProps, {
     date: "",
   });
 
+  const dispatch = useDispatch();
+  dispatch(setTabVisibility(true));
+
   useEffect(() => {
     fetchHotelsData();
     findRecommendedHotelsData();
@@ -85,6 +92,10 @@ export const HomePage = connect(mapStateToProps, {
       return;
     }
   };
+
+  const cardPressed = (roomId) => {
+    navigation.navigate("HotelScreen", {roomId});
+  }
 
   return (
     <ImageBackground
@@ -163,6 +174,7 @@ export const HomePage = connect(mapStateToProps, {
                         place: item.hotelCity,
                       }}
                       style={styles.mediumHotelCard}
+                      onPress={() => cardPressed(item?.id)}
                     />
                   );
                 }}
