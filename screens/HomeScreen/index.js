@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   ImageBackground,
   Dimensions,
@@ -18,8 +17,6 @@ import { CustomInput } from "../../components/CustomInput";
 import { CustomPicker } from "../../components/CustomPicker";
 import { HotelMedium } from "../../components/cards/HotelMedium";
 import { getHotelListFB, getHotelList } from "../../store/hotels";
-
-const hotels = [{ id: "1" }, { id: "2" }, { id: "3" }];
 
 const mapStateToProps = (state) => ({
   hotelList: getHotelList(state),

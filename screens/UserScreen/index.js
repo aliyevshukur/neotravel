@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  Button,
-} from "react-native";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
 
 import { AppLayout } from "../../commons/AppLayout";
@@ -16,13 +10,10 @@ import {
   selectUserName,
   selectUserId,
   selectUserPhotoUrl,
-  uploadProfilePhoto,
-  logOut,
 } from "../../store/auth";
 import fb from "../../firebaseConfig";
 import COLORS from "../../styles/colors";
-import { uploadImage } from "../../store/userInfo.js/uploadImage";
-import * as ImagePicker from "expo-image-picker";
+import profileDefault from "../../assets/images/profileDefault.png";
 
 const mapStateToProps = (state) => ({
   userName: selectUserName(state),
@@ -32,74 +23,68 @@ const mapStateToProps = (state) => ({
 
 export const UserScreen = connect(mapStateToProps, {
   getUserInfo,
-})(
-  ({
-    getUserInfo,
-    id,
-    userName,
-    profilePhoto,
-    navigation,
-    uploadProfilePhoto,
-  }) => {
-    // const imagePath = fb.auth?.currentUser?.photoURL
-    //   ? fb.auth.currentUser.photoURL
-    //   : "../../assets/images/UserScreen";
+})(({ getUserInfo, userName, profilePhoto, navigation }) => {
+  const haveProfilePhoto = !!fb?.auth?.currentUser?.photoURL;
 
-    useEffect(() => {
-      getUserInfo();
-    }, [userName, profilePhoto]);
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
-    const menuItems = [
-      {
-        icon: "heartFull", //dont edit icon names
-        label: "Your Favorites",
-        onPressItem: "Favorites",
-      },
-      {
-        icon: "creditCard",
-        label: "Payment",
-        onPressItem: "Favorites",
-      },
-      {
-        icon: "lifeRing",
-        label: "Help",
-        onPressItem: "Favorites",
-      },
-      {
-        icon: "piggyBank",
-        label: "Promotions",
-        onPressItem: "Favorites",
-      },
-      {
-        icon: "setting",
-        label: "Settings",
-        onPressItem: "SettingsPage",
-      },
-      {
-        icon: "signOut",
-        label: "Sign out",
-        onPressItem: "Favorites",
-      },
-    ];
+  const menuItems = [
+    {
+      icon: "heartFull", //dont edit icon names
+      label: "Your Favorites",
+      onPressItem: "Favorites",
+    },
+    {
+      icon: "creditCard",
+      label: "Payment",
+      onPressItem: "Favorites",
+    },
+    {
+      icon: "lifeRing",
+      label: "Help",
+      onPressItem: "Favorites",
+    },
+    {
+      icon: "piggyBank",
+      label: "Promotions",
+      onPressItem: "Favorites",
+    },
+    {
+      icon: "setting",
+      label: "Settings",
+      onPressItem: "SettingsPage",
+    },
+    {
+      icon: "signOut",
+      label: "Sign out",
+      onPressItem: "Favorites",
+    },
+  ];
 
-    const profilePicture = fb.auth?.currentUser?.photoURL
-      ? fb.auth.currentUser.photoURL
-      : require("../../assets/images/UserScreen/profile-picture.png");
-
-    // userName !== fb.auth?.currentUser?.displayName
-
-    // userName !== fb.auth?.currentUser?.displayName
-    return false ? (
-      <ActivityIndicator
-        size="large"
-        color={COLORS.pink}
-        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-      />
-    ) : (
+  return (
+    <>
+      {fb?.auth?.currentUser?.photoURL &&
+        (fb?.auth?.currentUser?.photoURL !== profilePhoto ||
+          fb?.auth?.currentUser?.displayName !== userName) && (
+          <ActivityIndicator
+            size="large"
+            color={COLORS.pink}
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          />
+        )}
       <AppLayout style={styles.container}>
         <View>
           {/* User profile picture and name */}
-          <UserScreenHeader profilePicture={profilePhoto} fullName={userName} />
+          <UserScreenHeader
+            profilePicture={haveProfilePhoto ? profilePhoto : profileDefault}
+            fullName={userName}
+          />
           {menuItems.map(({ icon, label, onPressItem }, i) => {
             return (
               <UserMenuItem
@@ -113,9 +98,9 @@ export const UserScreen = connect(mapStateToProps, {
           })}
         </View>
       </AppLayout>
-    );
-  }
-);
+    </>
+  );
+});
 
 const styles = StyleSheet.create({
   container: {
