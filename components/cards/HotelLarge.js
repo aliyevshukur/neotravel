@@ -60,7 +60,7 @@ export const HotelLarge = ({
             {makeItShort(item.description, 25) || "~"}
           </CustomText>
           <CustomText style={styles.pricing}>
-            {makeItShort(item.pricing, 20) || "~"}
+            {item.pricing ? "Prepaid" : "No prepayment"}
           </CustomText>
           <CustomText style={styles.price}>
             {makeItShort(item.currency, 3) || "$"} {item.price || "~"}

@@ -18,32 +18,37 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
+  console.log("hotels", hotels);
 
   return (
     <View>
-      <MapView style={styles.map} initialRegion={initialRegion}>
-        {hotels.map((marker) => (
-          <Marker
-            key={marker.id}
-            coordinate={marker.latlng}
-            //   title={marker.title}
-            //   description={marker.description}
-          >
-            <CustomButton
-              style={styles.markerBtn}
-              title={`$${marker.price}+`}
-            />
-            <Callout
-              onPress={() => navigation.navigate({ name: "HotelScreen" })}
+      <MapView style={styles.map} initialRegion={hotels[0].marker}>
+        {hotels.map((marker) => {
+          console.log(marker.marker);
+
+          return (
+            <Marker
+              key={marker.id}
+              coordinate={marker.marker}
+              //   title={marker.title}
+              //   description={marker.description}
             >
-              <View style={styles.markerCallView}>
-                <CustomText style={{ color: COLORS.gradientOrange }}>
-                  {texts.markerCalloutName}
-                </CustomText>
-              </View>
-            </Callout>
-          </Marker>
-        ))}
+              <CustomButton
+                style={styles.markerBtn}
+                title={`$${marker.price}+`}
+              />
+              <Callout
+                onPress={() => navigation.navigate({ name: "HotelScreen" })}
+              >
+                <View style={styles.markerCallView}>
+                  <CustomText style={{ color: COLORS.gradientOrange }}>
+                    {texts.markerCalloutName}
+                  </CustomText>
+                </View>
+              </Callout>
+            </Marker>
+          );
+        })}
       </MapView>
       <SmallCardSlider
         hotels={hotels}

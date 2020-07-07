@@ -2,9 +2,9 @@ import fb from "../firebaseConfig";
 
 // ACTIONS
 const SET_HOTEL_LIST = "SET_HOTEL_LIST";
-const SET_RECOMMENDED_HOTELS = "SET_RECOMMENDED_HOTELS";
 const SET_ROOM_LIST = "SET_ROOM_LIST";
 const SET_HOTELS_ON_DISCOUNT = "SET_HOTELS_ON_DISCOUNT";
+const SET_SEARCH_ROOM_RESULT = "SET_SEARCH_ROOM_RESULT";
 
 export const MODULE_NAME = "hotels";
 export const getHotelList = (state) => state[MODULE_NAME].hotelList;
@@ -13,12 +13,14 @@ export const getRecommendedHotels = (state) =>
 export const getHotelsOnDiscount = (state) =>
   state[MODULE_NAME].hotelsOnDiscount;
 export const getRoomList = (state) => state[MODULE_NAME].roomList;
+export const getSearchResult = (state) => state[MODULE_NAME].searchResult;
 
 const initialState = {
   hotelList: [],
   roomList: [],
   recommendedHotels: [],
   hotelsOnDiscount: [],
+  searchResult: [],
 };
 
 // REDUCER
@@ -38,6 +40,11 @@ export const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         hotelsOnDiscount: payload,
+      };
+    case SET_SEARCH_ROOM_RESULT:
+      return {
+        ...state,
+        searchResult: payload,
       };
     default:
       return state;
@@ -59,6 +66,11 @@ export const setRoomList = (payload) => ({
   payload,
 });
 
+export const setSearchRoomResults = (payload) => ({
+  type: SET_SEARCH_ROOM_RESULT,
+  payload,
+});
+
 // MIDDLEWARES
 export const getHotelListFB = () => async (dispatch) => {
   try {
@@ -66,7 +78,7 @@ export const getHotelListFB = () => async (dispatch) => {
     const allHotels = await hotelsRef.get();
 
     if (allHotels) {
-      const hotelsArr = Object.keys(allHotels.docs).map((key) => { 
+      const hotelsArr = Object.keys(allHotels.docs).map((key) => {
         const doc = allHotels.docs[key];
         return {
           id: doc.id,
@@ -131,4 +143,43 @@ export const getRoomListFB = () => async (dispatch) => {
       dispatch(setRoomList([]));
     }
   } catch (error) {}
-}; 
+};
+
+export const searchRoomsFB = (place, guests, date) => async (dispatch) => {
+  const hotelData = {};
+  const hotelIDs = [];
+
+  const hotelsRef = fb.db.collection("hotels").where("city", "==", place);
+  const searchedHotels = await hotelsRef.get();
+  searchedHotels.forEach((doc) => {
+    hotelData[doc.id] = doc.data();
+    hotelIDs.push(doc.id);
+  });
+
+  if (hotelIDs.length !== 0) {
+    let searchResult = [];
+    const roomsRef = fb.db
+      .collection("rooms")
+      .where("hotelID", "in", hotelIDs)
+      .where("maxGuests", ">=", guests);
+    const searchedRooms = await roomsRef.get();
+
+    searchResult = searchedRooms.docs.map((doc) => {
+      return {
+        id: doc.id,
+        marker: hotelData[doc.data().hotelID].marker,
+        hotelName: hotelData[doc.data().hotelID].name,
+        hotelRating: hotelData[doc.data().hotelID].rating,
+        ...doc.data(),
+      };
+    });
+
+    if (searchResult.length !== 0) {
+      dispatch(setSearchRoomResults(searchResult));
+    } else {
+      dispatch(setSearchRoomResults([]));
+    }
+  } else {
+    dispatch(setSearchRoomResults([]));
+  }
+};

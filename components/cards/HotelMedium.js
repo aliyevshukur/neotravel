@@ -26,7 +26,6 @@ export const HotelMedium = ({ cardInfo, onPress, style }) => {
 
   const imageURL =
     item.imgUrl.slice(0, item.imgUrl.indexOf("?")) + "?w=1.0&q=5";
-  console.log(imageURL);
 
   const [loaded, setLoaded] = useState(false);
 
@@ -43,7 +42,7 @@ export const HotelMedium = ({ cardInfo, onPress, style }) => {
         ]}
         style={styles.gradient}
       >
-        {!loaded && (
+        {/* {!loaded && (
           <View style={styles.loaderWrapper}>
             <ActivityIndicator
               size="large"
@@ -51,7 +50,7 @@ export const HotelMedium = ({ cardInfo, onPress, style }) => {
               style={styles.loader}
             />
           </View>
-        )}
+        )} */}
         <Image
           resizeMode={"cover"}
           style={styles.bgImg}
