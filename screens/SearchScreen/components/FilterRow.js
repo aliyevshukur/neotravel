@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import {useSelector} from 'react-redux';
 
-import { CustomText } from "../../../components";
+import { CustomText, CustomSvg } from "../../../components";
 
 import filterPng from "../../../assets/images/homeScreen/Filter.png";
+import COLORS from "../../../styles/colors";
 
 export const FilterRow = ({
   backScreen,
@@ -18,6 +20,10 @@ export const FilterRow = ({
   onViewTypeChange,
   navigation,
 }) => {
+
+  const theme = useSelector(state => state.themeReducer).theme;
+
+
   const texts = {
     navRight: "Filter",
     navLeft: {
@@ -26,7 +32,11 @@ export const FilterRow = ({
     },
   };
   return (
-    <View style={styles.headNav}>
+    <View style={{
+      ...styles.headNav,
+      borderBottomColor: theme=="light" ? COLORS.white : COLORS.grayDark,
+      borderTopColor: theme=="light" ? COLORS.white : COLORS.grayDark
+    }}>
       <View style={styles.headNavFilter}>
         <TouchableOpacity
           onPress={() =>
@@ -34,12 +44,12 @@ export const FilterRow = ({
           }
           style={{ flexDirection: "row", alignItems: "center" }}
         >
-          <Image source={filterPng} style={styles.filterPng} />
-          <CustomText style={styles.filterTxt}>{texts.navRight}</CustomText>
+          <CustomSvg name={'filter'} style={{...styles.filterSvg, color: theme=="light" ? COLORS.gray : COLORS.offWhite}}/>
+          <CustomText style={{...styles.filterTxt, color: theme=="light" ? COLORS.grayDark : COLORS.gray}}>{texts.navRight}</CustomText>
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={onViewTypeChange}>
-        <CustomText style={styles.listTypeName}>
+        <CustomText style={{...styles.listTypeName, color: theme=="light" ? COLORS.grayDark : COLORS.gray}}>
           {listType === "map" ? texts.navLeft.list : texts.navLeft.map}
         </CustomText>
       </TouchableOpacity>
@@ -72,7 +82,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginRight: 20,
   },
-  filterPng: {
+  filterSvg: {
     width: 16,
     height: 16,
     marginLeft: 18,

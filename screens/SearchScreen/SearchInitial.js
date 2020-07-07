@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
+import {useSelector} from 'react-redux';
 
 import COLORS from "../../styles/colors";
 import { CustomInput, LargeHotelSlider } from "../../components";
@@ -13,6 +14,9 @@ import { ListViewSearch } from "../HomeScreen/SearchScreen/ListViewSearch";
 import { hotels } from "../HomeScreen/SearchScreen";
 
 export const SearchInitial = ({ navigation }) => {
+
+  const theme = useSelector(state => state.themeReducer).theme;
+
   const [searchValue, setSearchValue] = useState("");
 
   const [isOnSearch, setIsOnSearch] = useState(false);
@@ -27,7 +31,7 @@ export const SearchInitial = ({ navigation }) => {
   };
 
   return (
-    <AppLayout style={styles.container}>
+    <AppLayout style={{...styles.container,  backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
       <CustomInput
         returnKeyType="go"
         onSubmitEditing={() => submitSearchHandler()}
@@ -46,7 +50,7 @@ export const SearchInitial = ({ navigation }) => {
           />
           <CardSlider
             title="deals"
-            titleStyle={styles.dealsTitleStyle}
+            titleStyle={{...styles.dealsTitleStyle, color: theme=="light" ? COLORS.blackText : COLORS.white}}
             containerStyle={styles.dealsContainerStyle}
           />
         </ScrollView>
@@ -93,7 +97,7 @@ const styles = StyleSheet.create({
     paddingTop: 25,
   },
   recommendedContainerStyle: {
-    backgroundColor: COLORS.bgcDark,
+    backgroundColor: COLORS.blackText,
   },
   recommendedTitleStyle: {
     color: COLORS.bgcLight,

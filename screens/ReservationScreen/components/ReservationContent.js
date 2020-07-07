@@ -5,8 +5,10 @@ import {
   View,
   Text,
   SafeAreaView,
+  Dimensions,
 } from "react-native";
 import { Header } from "@react-navigation/stack";
+import {useSelector} from 'react-redux';
 
 import COLORS from "../../../styles/colors";
 import { CustomInput, CustomText } from "../../../components";
@@ -23,6 +25,11 @@ export const ReservationContent = (props) => {
     handleCardFieldChange,
     setIsKeyboardAvoidEnabled,
   } = props;
+
+  const theme = useSelector(state => state.themeReducer).theme;
+  const orderColor = theme=="light" ? COLORS.grayDark : COLORS.gray,
+  costColor = theme=="light" ? COLORS.blackText : COLORS.white,
+  infoColor = theme=="light" ? COLORS.gray : COLORS.grayLight
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -57,6 +64,7 @@ export const ReservationContent = (props) => {
           {formFields.map((input, index) => (
             <CustomInput
               key={index}
+              style={styles.inputCheckoutOne}
               isSearch={false}
               isCross={false}
               long={true}
@@ -79,8 +87,9 @@ export const ReservationContent = (props) => {
           <View style={styles.cardForm}>
             <CustomInput
               isSearch={false}
+              style={styles.inputCheckout}
               isCross={false}
-              long={true}
+              // long={true}
               placeholder={"CardNumber"}
               value={cardFormValues.cardNumber}
               onChangeText={(value) =>
@@ -89,22 +98,35 @@ export const ReservationContent = (props) => {
               keyboardType={"numeric"}
               maxLength={16}
             />
-
+            <View style={styles.expiryHolder}>
+              <CustomInput
+                isSearch={false}
+                isCross={false}
+                style={styles.inputExpiry}
+                placeholder={"Expiry"}
+                value={cardFormValues.CVV}
+                onChangeText={(value) => handleCardFieldChange("CVV", value)}
+                maxLength={3}
+                keyboardType={"numeric"}
+                onTouchStart={() => handleInputTouch("card", "CVV")}
+              />
+              <CustomInput
+                isSearch={false}
+                isCross={false}
+                style={styles.inputExpiry}
+                placeholder={"CVV"}
+                value={cardFormValues.CVV}
+                onChangeText={(value) => handleCardFieldChange("CVV", value)}
+                maxLength={3}
+                keyboardType={"numeric"}
+                onTouchStart={() => handleInputTouch("card", "CVV")}
+              />
+            </View>
             <CustomInput
               isSearch={false}
               isCross={false}
-              placeholder={"CVV"}
-              value={cardFormValues.CVV}
-              onChangeText={(value) => handleCardFieldChange("CVV", value)}
-              maxLength={3}
-              keyboardType={"numeric"}
-              onTouchStart={() => handleInputTouch("card", "CVV")}
-            />
-
-            <CustomInput
-              isSearch={false}
-              isCross={false}
-              long={true}
+              style={styles.inputCheckout}
+              // long={true}
               placeholder={"Name"}
               value={cardFormValues.name}
               onChangeText={(value) => handleCardFieldChange("name", value)}
@@ -135,21 +157,26 @@ export const ReservationContent = (props) => {
         <View style={styles.checkout3}>
           <HotelLarge
             isMinimal={true}
+            style={{width: "90%"}}
             cardInfo={{
-              imgUrl:
-                "https://images.unsplash.com/photo-1444201983204-c43cbd584d93?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+              imgUrl: "https://images.unsplash.com/photo-1540541338287-41700207dee6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=10"
             }}
           />
           <View style={styles.orderDescription}>
-            <Text style={styles.orderText}>2 People</Text>
-            <Text style={styles.orderText}>Standart King Room</Text>
-            <Text style={styles.orderText}>2 nights</Text>
-            <Text style={styles.orderText}>Jan 18 2019 to Jan 20 2019</Text>
+            <CustomText style={{...styles.orderText, color: orderColor}}>2 People</CustomText>
+            <CustomText style={{...styles.orderText, color: orderColor}}>Standart King Room</CustomText>
+            <CustomText style={{...styles.orderText, color: orderColor}}>2 nights</CustomText>
+            <CustomText style={{...styles.orderText, color: orderColor}}>Jan 18 2019 to Jan 20 2019</CustomText>
           </View>
           <View style={styles.lineWrapper}>
-            <View style={styles.line} />
+            <View style={{...styles.line, color: infoColor}} />
           </View>
-          <CustomText style={styles.cost}>$1350 USD</CustomText>
+          <View style={styles.costHolder}>
+            <CustomText style={{...styles.cost, color: costColor}}>$1350</CustomText>
+            <TouchableOpacity style={styles.infoBtn}>
+              <CustomSvg name={"infoCircle"} style={{width: "100%", height: "100%", color: infoColor}}/>
+            </TouchableOpacity>
+          </View> 
         </View>
       );
     default:
@@ -159,23 +186,43 @@ export const ReservationContent = (props) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    alignItems: "flex-start",
-  },
-  userForm: {
+    alignItems: "center",
     width: "100%",
-    justifyContent: "flex-end",
+  },
+  // userForm: {
+  //   width: "100%",
+  //   justifyContent: "flex-end",
+  //   alignItems: "center",
+  // },
+  cardForm: {
+    marginTop: 5,
+    width: "100%",
     alignItems: "center",
   },
-  cardForm: {
-    alignItems: "flex-end",
-    marginTop: 5,
+  expiryHolder: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "90%",
+  },
+  inputCheckoutOne: {
+    width: "90%",
+    height: Dimensions.get('window').height*0.07,
+  },
+  inputCheckout: {
+    height: Dimensions.get('window').height*0.07,
+    width: "90%",
+  },
+  inputExpiry: {
+    width: "43%",
+    height: Dimensions.get('window').height*0.07,
   },
   checkout3: {
     width: "100%",
+    alignItems: "center",
     justifyContent: "space-between",
-    padding: 25,
   },
   orderDescription: {
+    width: "90%",
     marginTop: 5,
   },
   orderText: {
@@ -188,17 +235,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   line: {
-    width: 350,
+    width: "90%",
+    borderRadius: 2,
     height: 2,
     backgroundColor: COLORS.grayLight,
-    marginVertical: 15,
+    marginVertical: Dimensions.get("window").height*0.03,
+  },
+  costHolder: {
+    width: "90%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   cost: {
-    fontWeight: "bold",
     fontSize: 32,
     color: COLORS.blackText,
   },
+  infoBtn: {
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   saveCard: {
+    width: "90%",
     flexDirection: "row",
     alignItems: "center",
     marginTop: 15,

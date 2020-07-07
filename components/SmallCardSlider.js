@@ -1,5 +1,6 @@
 import React from "react";
 import { FlatList, View, StyleSheet, Dimensions } from "react-native";
+import {useSelector} from 'react-redux';
 
 import { CustomText } from "./CustomText";
 import { HotelSmall } from "./cards/HotelSmall";
@@ -11,10 +12,12 @@ export const SmallCardSlider = ({
   title,
   transparent = false,
 }) => {
+  const theme = useSelector(state => state.themeReducer).theme;
+
   return (
     <View style={[styles.catalogueHorizontal, style]}>
       {title ? (
-        <CustomText style={styles.catalogueHeader}>{title}</CustomText>
+        <CustomText style={{...styles.catalogueHeader, color: theme=="light" ? COLORS.blackText : COLORS.white}}>{title}</CustomText>
       ) : null}
       <FlatList
         data={hotels}
