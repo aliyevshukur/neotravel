@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -21,10 +21,21 @@ import {
 } from "../../components";
 import COLORS from "../../styles/colors";
 
+import {useSelector, useDispatch} from 'react-redux';
+import {setTabVisibility} from '../../store/navReducer';
+
+
 const screenH = Dimensions.get("window").height;
 const screenW = Dimensions.get("window").width;
 
-export const HotelScreen = ({ navigation }) => {
+
+export const HotelScreen = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+  dispatch(setTabVisibility(false));
+  const theme = useSelector(state => state.themeReducer).theme;
+
+  const {roomId} = route.params;
+
   const hotelInfo = {
     name: "Mountain Resort",
     rating: "4.5",
@@ -57,6 +68,7 @@ export const HotelScreen = ({ navigation }) => {
   });
 
   const goBackHandler = () => {
+    dispatch(setTabVisibility(true));
     navigation.goBack();
   };
   const likeHandler = () => {
@@ -70,6 +82,10 @@ export const HotelScreen = ({ navigation }) => {
     setGallery(false);
   };
 
+  const selectRoomsHandler = () => {
+    navigation.navigate("RoomScreen");
+  }
+
   BackHandler.addEventListener("hardwareBackPress", function () {
     if (isGallery) {
       setGallery(false);
@@ -77,10 +93,13 @@ export const HotelScreen = ({ navigation }) => {
     }
 
     //hardware back Button actions could be handled here
+    dispatch(setTabVisibility(true));
+    navigation.goBack();
+    return true
   });
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
       {isGallery ? (
         <Gallery
           style={styles.gallery}
@@ -149,7 +168,9 @@ export const HotelScreen = ({ navigation }) => {
         </View>
       </TouchableOpacity>
       <View style={styles.titleHolder}>
-        <CustomText style={styles.titleText}>{hotelInfo.name}</CustomText>
+        <CustomText style={{...styles.titleText, color: theme=="light" ? COLORS.blackText : COLORS.white}}
+        >{hotelInfo.name}
+        </CustomText>
         <Rating style={styles.rating} value={hotelInfo.rating} />
       </View>
       <View style={styles.mapHolder}>
@@ -176,7 +197,7 @@ export const HotelScreen = ({ navigation }) => {
         <IconWbg
           style={{ ...styles.btnLocation, elevation: isGallery ? 0 : 5 }}
         />
-        <CustomText style={styles.textLocation}>
+        <CustomText style={{...styles.textLocation, color: theme=="light" ? COLORS.grayDark : COLORS.gray}}>
           {hotelInfo.location}
         </CustomText>
       </View>
@@ -185,12 +206,14 @@ export const HotelScreen = ({ navigation }) => {
           style={{ ...styles.btnLocation, elevation: isGallery ? 0 : 5 }}
           iconName={"walking"}
         />
-        <CustomText style={styles.textLocation}>
+        <CustomText style={{...styles.textLocation, color: theme=="light" ? COLORS.grayDark : COLORS.gray}}>
           {hotelInfo.distance}
         </CustomText>
       </View>
       <CustomButton
-        style={{ ...styles.btnSelect, elevation: isGallery ? 0 : 5 }}
+      title={"Select Rooms"}
+      style={{ ...styles.btnSelect, elevation: isGallery ? 0 : 5 }}
+      onPress={selectRoomsHandler}
       />
     </View>
   );

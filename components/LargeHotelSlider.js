@@ -1,15 +1,19 @@
 import React from "react";
 import { FlatList, View, StyleSheet, Dimensions } from "react-native";
+import {useSelector} from 'react-redux';
 
 import COLORS from "../styles/colors";
 import { HotelLarge } from "./cards/HotelLarge";
 
-export const LargeHotelSlider = ({ hotels, bgColor = "bgcLight", style }) => {
+export const LargeHotelSlider = ({ hotels, bgColor, style }) => {
+
+  const theme = useSelector(state => state.themeReducer).theme;
+
   return (
     <View
       style={[
         styles.catalogueVertical,
-        { backgroundColor: COLORS[bgColor] },
+        { backgroundColor: COLORS[bgColor] || (theme=="light" ? COLORS.bgcLight: COLORS.bgcDark)},
         { ...style },
       ]}
     >

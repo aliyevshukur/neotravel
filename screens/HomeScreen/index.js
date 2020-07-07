@@ -15,6 +15,10 @@ import COLORS from "../../styles/colors";
 import { HotelMedium } from "../../components/cards/HotelMedium";
 import { findRecommendedRooms } from "../../utils/getRecommededHotels";
 import { EmptyListComponent } from "./EmptyListComponent";
+
+import {useSelector, useDispatch} from 'react-redux';
+import {setTabVisibility} from '../../store/navReducer';
+
 import {
   CustomText,
   CustomButton,
@@ -55,6 +59,9 @@ export const HomePage = connect(mapStateToProps, {
     guests: "",
     dateRange: {},
   });
+
+  const dispatch = useDispatch();
+  dispatch(setTabVisibility(true));
 
   useEffect(() => {
     fetchRoomsData();
@@ -102,6 +109,10 @@ export const HomePage = connect(mapStateToProps, {
       searchValues: fieldValues,
     });
   };
+
+  const cardPressed = (roomId) => {
+    navigation.navigate("HotelScreen", {roomId});
+  }
 
   return (
     <ImageBackground
@@ -159,27 +170,30 @@ export const HomePage = connect(mapStateToProps, {
             <CustomText style={styles.catalogueName}>
               {texts.catalogueName}
             </CustomText>
-            <FlatList
-              data={recommendedRooms}
-              horizontal={true}
-              renderItem={({ item }) => {
-                return (
-                  <HotelMedium
-                    cardInfo={{
-                      imgUrl: item.images[0],
-                      price: item.price,
-                      name: item.hotelName,
-                      rating: item.hotelRating,
-                      currency: item.currency,
-                      place: item.hotelCity,
-                    }}
-                    style={styles.mediumHotelCard}
-                  />
-                );
-              }}
-              keyExtractor={(item) => item.id}
-              ListEmptyComponent={EmptyListComponent}
-            />
+            {recommendedHotels.length != 0 ? (
+              <FlatList
+                data={recommendedHotels}
+                horizontal={true}
+                renderItem={({ item }) => {
+                  return (
+                    <HotelMedium
+                      cardInfo={{
+                        imgUrl: item.images[0],
+                        price: item.price,
+                        name: item.hotelName,
+                        rating: item.hotelRating,
+                        currency: item.currency,
+                        place: item.hotelCity,
+                      }}
+                      style={styles.mediumHotelCard}
+                      onPress={() => cardPressed(item?.id)}
+                    />
+                  );
+                }}
+                keyExtractor={(item) => item?.id}
+                ListEmptyComponent={EmptyListComponent}
+              />
+            ) : null}
           </View>
         </View>
       </ScrollView>

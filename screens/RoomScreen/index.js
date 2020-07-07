@@ -9,7 +9,11 @@ import {
 import { CustomSvg, CustomText, RoomLarge } from "../../components";
 import COLORS from "../../styles/colors";
 
-export const RoomScreen = () => {
+import {useSelector} from 'react-redux';
+
+export const RoomScreen = ({navigation, route}) => {
+  const theme = useSelector(state => state.themeReducer).theme;
+  
   const DATA = [
     {
       id: "4399593499594004392995",
@@ -47,7 +51,7 @@ export const RoomScreen = () => {
   ];
 
   const goBackHandler = () => {
-    console.log("GO BACK");
+    navigation.goBack();
   };
 
   const infoHandler = (id) => {
@@ -62,15 +66,16 @@ export const RoomScreen = () => {
   };
   const selectHandler = (id) => {
     const index = DATA.findIndex((item) => item.id == id);
+    navigation.navigate("ReservationScreen");
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.grayLight : COLORS.bgcDark}}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={goBackHandler}>
-          <CustomSvg name={"chevronLeft"} style={styles.chevronLeft} />
+          <CustomSvg name={"chevronLeft"} style={{...styles.chevronLeft, color: theme=="light" ? COLORS.blackText : COLORS.white}} />
         </TouchableOpacity>
-        <CustomText style={styles.titleText}>Mountain Resort</CustomText>
+        <CustomText style={{...styles.titleText, color: theme=="light" ? COLORS.blackText : COLORS.white}}>Mountain Resort</CustomText>
       </View>
       <View style={styles.main}>
         <FlatList

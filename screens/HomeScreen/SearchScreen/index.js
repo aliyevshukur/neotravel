@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Dimensions, Platform } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
+import { useSelector } from "react-redux";
 
 import COLORS from "../../../styles/colors";
 
@@ -42,6 +43,8 @@ export const hotels = [
 ];
 
 export const HomeSearchScreen = ({ route, navigation }) => {
+  const theme = useSelector((state) => state.themeReducer).theme;
+
   const [listType, setListType] = useState("map");
   const { searchResult, searchValues } = route.params;
   console.log("Search", route.params);
@@ -68,10 +71,14 @@ export const HomeSearchScreen = ({ route, navigation }) => {
     "November",
     "December",
   ];
-  console.log("searchValues", searchValues);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+      }}
+    >
       {/* <PrimarySearch /> */}
       <View style={styles.searchLabel}>
         <CustomText>

@@ -3,17 +3,40 @@ import { View, StyleSheet, Image } from "react-native";
 import COLORS from "../../styles/colors";
 import { CustomText, CustomSvg } from "../../components";
 
+import {useSelector} from 'react-redux';
+
+
 import icon from "../../assets/images/homeScreen/chevron-right.png";
+import { color } from "react-native-reanimated";
 
 export const NotfCard = ({ item, isLast }) => {
+
+  const theme = useSelector(state => state.themeReducer).theme;
+
+  let lastItemColor = COLORS.opaqueFirst,
+  itemColor = COLORS.bgcLight,
+  textColor = COLORS.blackText;
+
+  if(theme=="light") {
+    lastItemColor = COLORS.opaqueFirst;
+    itemColor = COLORS.bgcLight;
+    textColor = COLORS.blackText;
+  } else {
+    lastItemColor = COLORS.darkNotification;
+    itemColor = COLORS.bgcDark;
+    textColor = COLORS.gray;
+  }
+
+
+
   return (
     <View
       style={[
         styles.wrapper,
-        { backgroundColor: isLast ? COLORS.opaqueFirst : COLORS.bgcLight },
+        { backgroundColor: isLast ? lastItemColor  : itemColor },
       ]}
     >
-      <CustomText weight="semiBold" style={styles.description}>
+      <CustomText weight="semiBold" style={{...styles.description, color: textColor}}>
         {item.description}
       </CustomText>
       <View style={styles.icon}>

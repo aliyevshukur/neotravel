@@ -3,16 +3,20 @@ import { StyleSheet, View, TouchableNativeFeedback } from "react-native";
 import COLORS from "../../styles/colors";
 import { CustomSvg } from "./CustomSvg";
 
+import {useSelector} from 'react-redux';
 export const IconWbg = ({
   style,
   iconName = "location",
   iconColor,
   iconWidth,
   iconHeight,
-  theme = "light",
+  // theme = "light",
   gradient = true,
   onPress,
 }) => {
+
+  const theme = useSelector(state => state.themeReducer).theme;
+
   return (
     <View style={styles.touchable} onPress={onPress}>
       <View
@@ -20,7 +24,7 @@ export const IconWbg = ({
           styles.container,
           style,
           {
-            backgroundColor: theme == "dark" ? COLORS.bgcDark : COLORS.bgcLight,
+            backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
           },
         ]}
       >
