@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
+import {useSelector} from 'react-redux';
 
 import COLORS from "../../../styles/colors";
 
@@ -41,6 +42,8 @@ export const hotels = [
 ];
 
 export const HomeSearchScreen = ({ navigation }) => {
+  const theme = useSelector(state => state.themeReducer).theme;
+
   const [listType, setListType] = useState("map");
   const texts = {
     navRight: "Filter",
@@ -50,7 +53,7 @@ export const HomeSearchScreen = ({ navigation }) => {
     },
   };
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
       <PrimarySearch />
       <FilterRow
         onDirectToFilter={() =>

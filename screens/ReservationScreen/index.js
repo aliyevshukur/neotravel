@@ -7,11 +7,18 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Platform,
+  TouchableOpacity,
+  Dimensions,
 } from "react-native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-import { CustomButton } from "../../components";
+import { CustomButton, CustomText, CustomSvg } from "../../components";
 import { ProgressBar } from "./components/ProgressBar";
 import { ReservationContent } from "./components/ReservationContent";
+import COLORS from "../../styles/colors";
+
+
+import {useSelector} from 'react-redux';
 
 export function ReservationScreen() {
   const [stageNumber, setStageNumber] = useState(1);
@@ -33,6 +40,13 @@ export function ReservationScreen() {
     CVV: null,
     name: "",
   });
+
+  const theme = useSelector(state => state.themeReducer).theme;
+
+
+  const goBackHandler = () => {
+    setStageNumber(stageNumber -1)
+  }
 
   const handleUserFieldChange = (name, value) => {
     setUserFormValues({
@@ -73,57 +87,89 @@ export function ReservationScreen() {
         setButtonTitle("Complete");
     }
   }, [stageNumber]);
+
+  // contentContainerStyle={styles.container}
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <ProgressBar activeNumber={stageNumber} style={styles.progressBar} />
-      <KeyboardAvoidingView
-        style={styles.formWrapper}
-        behavior={Platform === "IOS" ? "padding" : "height"}
-        enabled={isKeyboardAvoidEnabled}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <>
-            <ReservationContent
-              stageNumber={stageNumber}
-              userFormValues={userFormValues}
-              cardFormValues={cardFormValues}
-              handleUserFieldChange={handleUserFieldChange}
-              handleCardFieldChange={handleCardFieldChange}
-              setIsKeyboardAvoidEnabled={setIsKeyboardAvoidEnabled}
-            />
-          </>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+    <KeyboardAwareScrollView style={{width: "100%"}} >
+    <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backBtn} onPress={goBackHandler}>
+          <CustomSvg name={"chevronLeft"} style={{...styles.chevronLeft, color: theme=="light" ? COLORS.blackText : COLORS.white}} />
+        </TouchableOpacity>
+        <CustomText style={{...styles.titleText, color: theme=="light" ? COLORS.blackText : COLORS.white}}>Reservation</CustomText>
+      </View>
+      <View style={styles.progressBarHolder}>
+        <ProgressBar activeNumber={stageNumber} style={styles.progressBar} />
+      </View>
+        <View style={styles.main}>
+              <ReservationContent
+                stageNumber={stageNumber}
+                userFormValues={userFormValues}
+                cardFormValues={cardFormValues}
+                handleUserFieldChange={handleUserFieldChange}
+                handleCardFieldChange={handleCardFieldChange}
+                setIsKeyboardAvoidEnabled={setIsKeyboardAvoidEnabled}
+              />
+          </View>
       <CustomButton
         title={buttonTitle}
         style={styles.button}
         onPress={handleButtonPress}
       />
-    </ScrollView>
+    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
-    justifyContent: "space-between",
-    overflow: "hidden",
-    paddingTop: 5,
-    paddingBottom: 25,
-    position: "relative",
-  },
-  formWrapper: {
-    alignItems: "center",
-    justifyContent: "flex-end",
     width: "100%",
+    height:  Dimensions.get('window').height,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    paddingTop: Dimensions.get('window').height*0.07,
+    paddingBottom: Dimensions.get('window').height*0.02,
+  },
+  backBtn: {
+    marginLeft: 19,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 11,
+    height: 22,
+    width: 22,
+  },
+  chevronLeft: {
+    height: "100%",
+    width: "100%",
+    color: COLORS.blackText,
+  },
+  titleText: {
+    marginLeft: 24,
+    fontFamily: "NunitoBold",
+    fontSize: 28,
+    fontStyle: "normal",
+    lineHeight: 38,
+    color: COLORS.blackText,
+  },
+  main: {
+    width: "100%",
+    alignItems: "center",
   },
   button: {
-    width: "80%",
+    position: "absolute",
+    bottom: Dimensions.get('window').height*0.02,
+    width: "90%",
     fontSize: 24,
-    marginTop: 20,
+  },
+  progressBarHolder: {
+    alignItems: "center",
+    marginBottom: 5,
+
   },
   progressBar: {
-    marginBottom: 5,
   },
 });

@@ -24,6 +24,8 @@ import COLORS from "../../styles/colors";
 import { uploadImage } from "../../store/userInfo.js/uploadImage";
 import * as ImagePicker from "expo-image-picker";
 
+import {useSelector} from 'react-redux';
+
 const mapStateToProps = (state) => ({
   userName: selectUserName(state),
   id: selectUserId(state),
@@ -44,6 +46,8 @@ export const UserScreen = connect(mapStateToProps, {
     // const imagePath = fb.auth?.currentUser?.photoURL
     //   ? fb.auth.currentUser.photoURL
     //   : "../../assets/images/UserScreen";
+
+    const theme = useSelector(state => state.themeReducer).theme;
 
     useEffect(() => {
       getUserInfo();
@@ -96,7 +100,7 @@ export const UserScreen = connect(mapStateToProps, {
         style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
       />
     ) : (
-      <AppLayout style={styles.container}>
+      <AppLayout style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
         <View>
           {/* User profile picture and name */}
           <UserScreenHeader profilePicture={profilePhoto} fullName={userName} />

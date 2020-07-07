@@ -23,9 +23,23 @@ const notifications = [
   },
 ];
 
+import {useDispatch, useSelector} from 'react-redux';
+import {setTheme} from '../../store/theme'
 export const NotificationScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const theme = useSelector(state => state.themeReducer).theme;
+
+  const searchRoomHandler = () => {
+    // navigation.navigate("SearchStack");
+    if(theme=="light") {
+      dispatch(setTheme("dark"));
+    } else {
+      dispatch(setTheme("light"));
+    }
+  }
+
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
       <View style={styles.imageWrapper}>
         <ImageBackground source={image} style={styles.image}>
           <View style={styles.contentWrapper}>
@@ -36,7 +50,7 @@ export const NotificationScreen = ({ navigation }) => {
               Nov 12 - 24{" "}
             </CustomText>
             <CustomButton
-              onPress={() => navigation.navigate("SearchStack")}
+              onPress={searchRoomHandler}
               title="Search a room"
               style={styles.searchBtn}
             />

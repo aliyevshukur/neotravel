@@ -17,6 +17,9 @@ const COLORS = {
   imgLoad: "#C4C4C4", //background for not loaded images
   homeScreenCatalogueBackground: "#FFFFFF", 
   pink: "#FF61A8", // Pink text color
+  darkNotification: "#333333", //notification in dark mode
+  lightProgress: "#E6E9EF",
+  darkProgress: "#1E1E1F",
 };
 
 export default COLORS;
