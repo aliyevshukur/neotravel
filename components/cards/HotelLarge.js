@@ -22,6 +22,7 @@ export const HotelLarge = ({
         value.length <= length ? value : value.substring(0, length) + end)
       : null;
   };
+  console.log(cardInfo);
   return (
     <TouchableOpacity
       style={[styles.container, { ...style }]}
