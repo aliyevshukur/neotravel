@@ -13,8 +13,8 @@ import { connect } from "react-redux";
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
 
-import {useSelector, useDispatch} from 'react-redux';
-import {setTabVisibility} from '../../store/navReducer';
+import { useSelector, useDispatch } from "react-redux";
+import { setTabVisibility } from "../../store/navReducer";
 
 import {
   CustomText,
@@ -94,8 +94,8 @@ export const HomePage = connect(mapStateToProps, {
   };
 
   const cardPressed = (roomId) => {
-    navigation.navigate("HotelScreen", {roomId});
-  }
+    navigation.navigate("HotelScreen", { roomId });
+  };
 
   return (
     <ImageBackground
@@ -139,7 +139,7 @@ export const HomePage = connect(mapStateToProps, {
                 <CustomRangeDatepicker
                   placeholder={"Pick date"}
                   min={new Date()}
-                  style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 50}}
+                  style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 50 }}
                 />
               </View>
             </View>
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     marginLeft: 18,
   },
   searchBottom: {
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 16,
     flexDirection: "row",
     justifyContent: "space-between",
