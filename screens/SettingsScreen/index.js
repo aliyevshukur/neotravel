@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 
 import {
   uploadProfilePhoto,
@@ -46,6 +46,10 @@ export const SettingsPage = connect(mapStateToProps, {
     const [name, setName] = useState(userName.split(" ")[0]);
     const [surname, setSurname] = useState(userName.split(" ")[1]);
     const [isModalShown, setIsModalShown] = useState(false);
+
+    
+    const theme = useSelector(state => state.themeReducer).theme;
+
 
     //Save Handler that set name and surname as userName of user
     const saveHandler = async () => {
@@ -93,7 +97,7 @@ export const SettingsPage = connect(mapStateToProps, {
     };
 
     return (
-      <View style={styles.container}>
+      <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
         <CustomText style={styles.header}>Settings</CustomText>
         <View style={styles.profileContainer}>
           {isUploading ? (
@@ -147,7 +151,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.bgcLight,
   },
   img: {
     width: Dimensions.get("window").height / 6,
