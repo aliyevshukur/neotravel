@@ -1,12 +1,18 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { CustomSvg } from "../../components";
+import { CustomSvg, CustomText } from "../../components";
 import { logOut } from "../../store/auth";
 import { connect } from "react-redux";
+import COLORS from "../../styles/colors";
+
+import {useSelector} from 'react-redux';
 
 export const UserMenuItem = connect(null, { logOut })(
   ({ icon, label, logOut, navigation, onPressItem }) => {
+
+  const theme = useSelector(state => state.themeReducer).theme;
+
     return (
       <TouchableOpacity
         onPress={() => {
@@ -17,7 +23,7 @@ export const UserMenuItem = connect(null, { logOut })(
           <View style={styles.icon}>
             <CustomSvg name={icon} gradient={true} style={styles.svg} />
           </View>
-          <Text>{label}</Text>
+          <CustomText style={{...styles.itemText, color: theme=="light" ? COLORS.blackText : COLORS.gray}}>{label}</CustomText>
         </View>
       </TouchableOpacity>
     );
@@ -42,4 +48,10 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  itemText: {
+    fontSize: 20,
+    lineHeight: 27,
+    fontFamily: "NunitoSemiBold",
+    color: COLORS.blackText,
+  }
 });

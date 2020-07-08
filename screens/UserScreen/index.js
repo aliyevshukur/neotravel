@@ -15,6 +15,8 @@ import fb from "../../firebaseConfig";
 import COLORS from "../../styles/colors";
 import profileDefault from "../../assets/images/profileDefault.png";
 
+import {useSelector} from 'react-redux';
+
 const mapStateToProps = (state) => ({
   userName: selectUserName(state),
   id: selectUserId(state),
@@ -23,8 +25,21 @@ const mapStateToProps = (state) => ({
 
 export const UserScreen = connect(mapStateToProps, {
   getUserInfo,
-})(({ getUserInfo, userName, profilePhoto, navigation }) => {
+})(
+  ({
+    getUserInfo,
+    id,
+    userName,
+    profilePhoto,
+    navigation,
+    uploadProfilePhoto,
+  }) => {
   const haveProfilePhoto = !!fb?.auth?.currentUser?.photoURL;
+    // const imagePath = fb.auth?.currentUser?.photoURL
+    //   ? fb.auth.currentUser.photoURL
+    //   : "../../assets/images/UserScreen";
+
+    const theme = useSelector(state => state.themeReducer).theme;
 
   useEffect(() => {
     getUserInfo();
@@ -62,10 +77,12 @@ export const UserScreen = connect(mapStateToProps, {
       onPressItem: "Favorites",
     },
   ];
+    // userName !== fb.auth?.currentUser?.displayName
 
-  return (
+    // userName !== fb.auth?.currentUser?.displayName
+    return (
     <>
-      {fb?.auth?.currentUser?.photoURL &&
+    {fb?.auth?.currentUser?.photoURL &&
         (fb?.auth?.currentUser?.photoURL !== profilePhoto ||
           fb?.auth?.currentUser?.displayName !== userName) && (
           <ActivityIndicator
@@ -78,7 +95,7 @@ export const UserScreen = connect(mapStateToProps, {
             }}
           />
         )}
-      <AppLayout style={styles.container}>
+      <AppLayout style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
         <View>
           {/* User profile picture and name */}
           <UserScreenHeader

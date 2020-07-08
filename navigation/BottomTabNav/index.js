@@ -47,17 +47,17 @@ const TabItems = [
 export const BottomTabNav = () => {
 
   const tabStatus = useSelector(state => state.navReducer);
-
+  const theme = useSelector(state => state.themeReducer).theme;
 
   return (
     <Navigator
       tabBarOptions={{
         showLabel: false,
         style: {
-          marginTop: 5,
+          // marginTop: 5,
           // marginLeft: 5,
           // marginRight: 5,
-          backgroundColor: COLORS.bgcLight,
+          backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark,
           height: Dimensions.get("window").height / 10,
         },
       }}
