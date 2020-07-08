@@ -36,6 +36,7 @@ export const LargeHotelSlider = ({ hotels, bgColor, style, addHotel }) => {
               description: item.description,
               pricing: item.pricing,
               currency: item.currency,
+              hotelID: item.hotelID,
             }}
             style={styles.hotelLargeStyle}
             key={item.id}

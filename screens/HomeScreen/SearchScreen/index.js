@@ -46,8 +46,9 @@ export const HomeSearchScreen = ({ route, navigation }) => {
   const theme = useSelector((state) => state.themeReducer).theme;
 
   const [listType, setListType] = useState("map");
-  const { searchResult, searchValues } = route.params;
-  console.log("Search", route.params);
+  const { searchResult, place, guests, startDate, endDate } = route.params;
+  console.log("searchResult", searchResult);
+  console.log("searchResult", place, guests, endDate, startDate);
 
   const texts = {
     navRight: "Filter",
@@ -82,11 +83,11 @@ export const HomeSearchScreen = ({ route, navigation }) => {
       {/* <PrimarySearch /> */}
       <View style={styles.searchLabel}>
         <CustomText>
-          {`${searchValues.place} ${searchValues.guests} guests ${
-            monthNames[searchValues?.dateRange?.startDate.getMonth()]
-          } ${searchValues.dateRange.startDate.getDate()} - ${
-            monthNames[searchValues?.dateRange?.endDate.getMonth()]
-          } ${searchValues.dateRange.endDate.getDate()}`}
+          {`${place} ${guests} guests ${
+            monthNames[startDate.getMonth()]
+          } ${startDate.getDate()} - ${
+            monthNames[endDate.getMonth()]
+          } ${endDate.getDate()}`}
         </CustomText>
       </View>
       <FilterRow
