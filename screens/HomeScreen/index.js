@@ -65,8 +65,11 @@ export const HomePage = connect(mapStateToProps, {
 
   useEffect(() => {
     fetchRoomsData();
-    findRecommendedHotelsData();
   }, []);
+
+  useEffect(() => {
+    findRecommendedHotelsData();
+  }, [roomList]);
 
   const fetchRoomsData = async () => {
     const response = await getRoomListFB();
@@ -84,7 +87,7 @@ export const HomePage = connect(mapStateToProps, {
     });
   };
 
-  const onFormSubmit = async () => {
+  const onFormSubmit = () => {
     for (const key in fieldValues) {
       if (key === "dateRange") {
         if (Object.keys(fieldValues[key]).length === 0) {
@@ -103,10 +106,14 @@ export const HomePage = connect(mapStateToProps, {
 
     const formattedGuests = +fieldValues.guests;
 
-    const response = await searchRoomsFB(formattedPlace, formattedGuests);
-    navigation.navigate("HomeSearchScreen", {
-      searchResult: searchResult,
-      searchValues: fieldValues,
+    searchRoomsFB(formattedPlace, formattedGuests).then((result) => {
+      navigation.navigate("HomeSearchScreen", {
+        searchResult: result,
+        place: fieldValues.place,
+        guests: fieldValues.guests,
+        startDate: fieldValues.dateRange.startDate,
+        endDate: fieldValues.dateRange.endDate,
+      });
     });
   };
 
@@ -138,13 +145,6 @@ export const HomePage = connect(mapStateToProps, {
               />
             </View>
             <View style={styles.searchBottom}>
-              <CustomPicker
-                dark={true}
-                title="Guests"
-                onValueChange={(value) => onFieldChange("guests", value)}
-                pickerValue={fieldValues.guests}
-              />
-
               <View style={styles.datepickerWrapper}>
                 <CustomRangeDatepicker
                   placeholder={"Pick date"}
@@ -154,6 +154,12 @@ export const HomePage = connect(mapStateToProps, {
                   rangeValue={fieldValues.dateRange}
                 />
               </View>
+              <CustomPicker
+                dark={true}
+                title="Guests"
+                onValueChange={(value) => onFieldChange("guests", value)}
+                pickerValue={fieldValues.guests}
+              />
             </View>
             <CustomButton
               style={{
@@ -170,30 +176,28 @@ export const HomePage = connect(mapStateToProps, {
             <CustomText style={styles.catalogueName}>
               {texts.catalogueName}
             </CustomText>
-            {recommendedHotels.length != 0 ? (
-              <FlatList
-                data={recommendedHotels}
-                horizontal={true}
-                renderItem={({ item }) => {
-                  return (
-                    <HotelMedium
-                      cardInfo={{
-                        imgUrl: item.images[0],
-                        price: item.price,
-                        name: item.hotelName,
-                        rating: item.hotelRating,
-                        currency: item.currency,
-                        place: item.hotelCity,
-                      }}
-                      style={styles.mediumHotelCard}
-                      onPress={() => cardPressed(item?.id)}
-                    />
-                  );
-                }}
-                keyExtractor={(item) => item?.id}
-                ListEmptyComponent={EmptyListComponent}
-              />
-            ) : null}
+            <FlatList
+              data={recommendedRooms}
+              horizontal={true}
+              renderItem={({ item }) => {
+                return (
+                  <HotelMedium
+                    cardInfo={{
+                      imgUrl: item.images[0],
+                      price: item.price,
+                      name: item.hotelName,
+                      rating: item.hotelRating,
+                      currency: item.currency,
+                      place: item.hotelCity,
+                    }}
+                    style={styles.mediumHotelCard}
+                    onPress={() => cardPressed(item?.id)}
+                  />
+                );
+              }}
+              keyExtractor={(item) => item?.id}
+              ListEmptyComponent={EmptyListComponent}
+            />
           </View>
         </View>
       </ScrollView>
