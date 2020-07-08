@@ -16,8 +16,8 @@ import { HotelMedium } from "../../components/cards/HotelMedium";
 import { findRecommendedRooms } from "../../utils/getRecommededHotels";
 import { EmptyListComponent } from "./EmptyListComponent";
 
-import {useSelector, useDispatch} from 'react-redux';
-import {setTabVisibility} from '../../store/navReducer';
+import { useSelector, useDispatch } from "react-redux";
+import { setTabVisibility } from "../../store/navReducer";
 
 import {
   CustomText,
@@ -111,8 +111,8 @@ export const HomePage = connect(mapStateToProps, {
   };
 
   const cardPressed = (roomId) => {
-    navigation.navigate("HotelScreen", {roomId});
-  }
+    navigation.navigate("HotelScreen", { roomId });
+  };
 
   return (
     <ImageBackground
