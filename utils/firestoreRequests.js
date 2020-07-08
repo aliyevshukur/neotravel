@@ -1,18 +1,16 @@
 import fb from "../firebaseConfig.js";
 
 // Get room of passed hotels
-export const fetchRoomsOfHotelsFB = async (hotelIds) => {
-  const result = [];
+export const fetchHotelsOfRoomsFB = async (hotelIDs) => {
+  const resultHotels = [];
 
-  const roomsRef = fb.db.collection("rooms").where("hotelID", "in", hotelIds);
-  const allRooms = await roomsRef.get();
+  const hotelsRef = fb.db
+    .collection("hotels")
+    .where("__name__", "in", hotelIDs);
+  const allRooms = await hotelsRef.get();
   allRooms.docs.forEach((doc) => {
-    const room = {
-      id: doc.id,
-      ...doc.data(),
-    };
-    result.push(room);
+    resultHotels.push({ id: doc.id, ...doc.data() });
   });
 
-  return result;
+  return resultHotels;
 };

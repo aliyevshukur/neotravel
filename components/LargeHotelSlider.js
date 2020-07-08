@@ -21,12 +21,15 @@ export const LargeHotelSlider = ({ hotels, bgColor, style }) => {
         data={hotels}
         renderItem={({ item }) => (
           <HotelLarge
-            cardInfo={{
+            cardInfo={{ 
               imgUrl:
-                "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-              price: "2500",
-              name: "River Side",
-              rating: "4.5",
+                item.images[0],
+              price: item.price,
+              name: item.hotelName,
+              rating: item.hotelRating,
+              description: item.description,
+              pricing: item.pricing,
+              currency: item.currency,
             }}
             style={styles.hotelLargeStyle}
             key={item.id}

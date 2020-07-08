@@ -1,46 +1,41 @@
-import { fetchRoomsOfHotelsFB } from "./firestoreRequests";
+import { fetchHotelsOfRoomsFB } from "./firestoreRequests";
 
-export const findRecommendedHotels = async (hotels, count = 5) => {
-  if (hotels.length === 0) {
+export const findRecommendedRooms = async (rooms, count = 5) => {
+  if (rooms.length === 0) {
     return [];
   }
 
   // Pick random hotels to recommend :-)
-  const pickedIDs = [];
+  const hotelIDS = [];
+  const pickedRooms = [];
 
-  for (let i = 0; i < count; i++) {
-    const index = Math.floor(Math.random() * hotels.length);
-    if (pickedIDs.indexOf(hotels[index]?.id) === -1) {
-      pickedIDs.push(hotels[index]?.id);
+  for (let i = 0; i < count; i++) { 
+    const index = Math.floor(Math.random() * rooms.length);
+    if (hotelIDS.indexOf(rooms[index].id) === -1) {
+      hotelIDS.push(rooms[index].hotelID);
+      pickedRooms.push(rooms[index]);
     } else {
       count--;
     }
   }
 
   // Fetch rooms of choosen hotels
-  const roomsOfHotels = await fetchRoomsOfHotelsFB(pickedIDs);
+  const hotelsOfRooms = await fetchHotelsOfRoomsFB(hotelIDS);
 
   // Match rooms' ID and hotels' ID. Add matched hotel name to final data
-  const finalData = roomsOfHotels.map((room) => {
-    const [hotelName, hotelRating, hotelCity] = findHotelName(hotels, room.hotelID);
-    return {
-      hotelName,
-      hotelRating,
-      hotelCity,
-      ...room,
-    };
+  const finalData = [];
+  hotelsOfRooms.forEach((hotel) => {
+    pickedRooms.forEach((room) => {
+      if (room.hotelID === hotel.id) {
+        finalData.push({
+          hotelName: hotel.name,
+          hotelRating: hotel.rating,
+          hotelCity: hotel.city,
+          ...room,
+        });
+      }
+    });
   });
 
   return finalData;
-};
-
-// Add hotel name to final data
-const findHotelName = (hotels, hotelID) => {
-  let hotelData = [];
-  hotels.forEach((hotel) => {
-    if (hotel.id === hotelID) {
-      hotelData = [hotel.name, hotel.rating, hotel.city];
-    }
-  });
-  return hotelData;
 };

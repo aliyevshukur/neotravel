@@ -5,7 +5,7 @@
       "appearances": {
         "default": {
           "mapping": {
-            "paddingHorizontal": 43
+            "paddingHorizontal": 23
           },
           "variantGroups": {
             "status": {
