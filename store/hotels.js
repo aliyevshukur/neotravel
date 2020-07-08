@@ -18,8 +18,6 @@ export const getSearchResult = (state) => state[MODULE_NAME].searchResult;
 const initialState = {
   hotelList: [],
   roomList: [],
-  recommendedHotels: [],
-  hotelsOnDiscount: [],
   searchResult: [],
 };
 
@@ -167,7 +165,12 @@ export const searchRoomsFB = (place, guests, date) => async (dispatch) => {
     searchResult = searchedRooms.docs.map((doc) => {
       return {
         id: doc.id,
-        marker: hotelData[doc.data().hotelID].marker,
+        hotelID: hotelData[doc.data().hotelID].id,
+        marker: {
+          latitudeDelta: 0.04,
+          longitudeDelta: 0.05,
+          ...hotelData[doc.data().hotelID].marker,
+        },
         hotelName: hotelData[doc.data().hotelID].name,
         hotelRating: hotelData[doc.data().hotelID].rating,
         ...doc.data(),
@@ -175,11 +178,16 @@ export const searchRoomsFB = (place, guests, date) => async (dispatch) => {
     });
 
     if (searchResult.length !== 0) {
+      console.log("searchResultHotels", searchResult);
+
       dispatch(setSearchRoomResults(searchResult));
+      return searchResult;
     } else {
       dispatch(setSearchRoomResults([]));
+      return [];
     }
   } else {
     dispatch(setSearchRoomResults([]));
+    return [];
   }
 };

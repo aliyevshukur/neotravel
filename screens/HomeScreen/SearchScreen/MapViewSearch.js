@@ -18,13 +18,11 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
-  console.log("hotels", hotels);
 
   return (
     <View>
       <MapView style={styles.map} initialRegion={hotels[0].marker}>
         {hotels.map((marker) => {
-          console.log(marker.marker);
           const priceLength = marker.price.length;
           let width = 84;
           let height = 40;
@@ -33,6 +31,8 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
             <Marker
               key={marker.id}
               coordinate={marker.marker}
+              latitudeDelta={0.04}
+              longitudeDelta={0.05}
               //   title={marker.title}
               //   description={marker.description}
             >
