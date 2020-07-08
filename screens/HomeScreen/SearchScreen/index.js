@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
+import { useSelector } from "react-redux";
 
 import COLORS from "../../../styles/colors";
 
 import { ListViewSearch } from "./ListViewSearch";
 import { MapViewSearch } from "./MapViewSearch";
 import { PrimarySearch, FilterRow } from "../../SearchScreen/components";
+import { CustomText } from "../../../components";
 
 export const hotels = [
   {
@@ -40,8 +42,13 @@ export const hotels = [
   },
 ];
 
-export const HomeSearchScreen = ({ navigation }) => {
+export const HomeSearchScreen = ({ route, navigation }) => {
+  const theme = useSelector((state) => state.themeReducer).theme;
+
   const [listType, setListType] = useState("map");
+  const { searchResult, searchValues } = route.params;
+  console.log("Search", route.params);
+
   const texts = {
     navRight: "Filter",
     navLeft: {
@@ -49,9 +56,39 @@ export const HomeSearchScreen = ({ navigation }) => {
       list: "List",
     },
   };
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   return (
-    <View style={styles.container}>
-      <PrimarySearch />
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+      }}
+    >
+      {/* <PrimarySearch /> */}
+      <View style={styles.searchLabel}>
+        <CustomText>
+          {`${searchValues.place} ${searchValues.guests} guests ${
+            monthNames[searchValues.dateRange.startDate.getMonth()]
+          } ${searchValues.dateRange.startDate.getDate()} - ${
+            monthNames[searchValues.dateRange.endDate.getMonth()]
+          } ${searchValues.dateRange.endDate.getDate()}`}
+        </CustomText>
+      </View>
       <FilterRow
         onDirectToFilter={() =>
           navigation.navigate("Filter", { backScreen: "HomeSearchScreen" })
@@ -64,13 +101,19 @@ export const HomeSearchScreen = ({ navigation }) => {
         }
       />
 
-      <View style={styles.listContainer}>
-        {listType === "list" ? (
-          <ListViewSearch navigation={navigation} hotels={hotels} />
-        ) : (
-          <MapViewSearch navigation={navigation} hotels={hotels} />
-        )}
-      </View>
+      {searchResult.length !== 0 ? (
+        <View style={styles.listContainer}>
+          {listType === "list" ? (
+            <ListViewSearch navigation={navigation} hotels={searchResult} />
+          ) : (
+            <MapViewSearch navigation={navigation} hotels={searchResult} />
+          )}
+        </View>
+      ) : (
+        <View style={styles.notFound}>
+          <CustomText>No results found</CustomText>
+        </View>
+      )}
     </View>
   );
 };
@@ -116,5 +159,14 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     marginLeft: 18,
+  },
+  notFound: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  searchLabel: {
+    paddingBottom: 10,
   },
 });

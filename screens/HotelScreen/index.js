@@ -32,6 +32,7 @@ const screenW = Dimensions.get("window").width;
 export const HotelScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   dispatch(setTabVisibility(false));
+  const theme = useSelector(state => state.themeReducer).theme;
 
   const {roomId} = route.params;
 
@@ -98,7 +99,7 @@ export const HotelScreen = ({ navigation, route }) => {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
       {isGallery ? (
         <Gallery
           style={styles.gallery}
@@ -167,7 +168,9 @@ export const HotelScreen = ({ navigation, route }) => {
         </View>
       </TouchableOpacity>
       <View style={styles.titleHolder}>
-        <CustomText style={styles.titleText}>{hotelInfo.name}</CustomText>
+        <CustomText style={{...styles.titleText, color: theme=="light" ? COLORS.blackText : COLORS.white}}
+        >{hotelInfo.name}
+        </CustomText>
         <Rating style={styles.rating} value={hotelInfo.rating} />
       </View>
       <View style={styles.mapHolder}>
@@ -194,7 +197,7 @@ export const HotelScreen = ({ navigation, route }) => {
         <IconWbg
           style={{ ...styles.btnLocation, elevation: isGallery ? 0 : 5 }}
         />
-        <CustomText style={styles.textLocation}>
+        <CustomText style={{...styles.textLocation, color: theme=="light" ? COLORS.grayDark : COLORS.gray}}>
           {hotelInfo.location}
         </CustomText>
       </View>
@@ -203,7 +206,7 @@ export const HotelScreen = ({ navigation, route }) => {
           style={{ ...styles.btnLocation, elevation: isGallery ? 0 : 5 }}
           iconName={"walking"}
         />
-        <CustomText style={styles.textLocation}>
+        <CustomText style={{...styles.textLocation, color: theme=="light" ? COLORS.grayDark : COLORS.gray}}>
           {hotelInfo.distance}
         </CustomText>
       </View>

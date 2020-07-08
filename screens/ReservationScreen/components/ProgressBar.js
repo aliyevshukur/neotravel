@@ -1,9 +1,19 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View} from "react-native";
+import {useSelector} from 'react-redux';
 
 import COLORS from "../../../styles/colors";
+import { CustomText } from "../../../components";
+
 
 export const ProgressBar = ({ activeNumber, style }) => {
+
+  const theme = useSelector(state => state.themeReducer).theme;
+  const activeBg = theme=="light" ? COLORS.lightProgress : COLORS.darkProgress,
+  passiveBg = theme=="light" ? COLORS.bgcLight : COLORS.bgcDark,
+  passiveNumber= theme=="light" ? COLORS.grayDark : COLORS.gray,
+  passiveLabel= theme=="light" ? COLORS.gray : COLORS.grayDark;
+
   // Returns n number of circles with corresponding labels from 1 to n
   const renderCircles = (n = 3) => {
     // Array of JSX elements
@@ -21,16 +31,16 @@ export const ProgressBar = ({ activeNumber, style }) => {
       const isActive = activeNumber >= i;
       const activeCircleStyle = {
         marginRight: i != n ? 24 : 0,
-        backgroundColor: !isActive ? COLORS.offWhite : COLORS.grayLight,
+        backgroundColor: !isActive ? activeBg : passiveBg,
       };
-      const activeLineStyle = { color: isActive ? "#FF619F" : COLORS.gray };
+      const activeLineStyle = { color: isActive ? "#FF619F" : passiveNumber };
       const activeLabelStyle = {
-        backgroundColor: isActive ? "#FF619F" : COLORS.gray,
+        backgroundColor: isActive ? "#FF619F" : passiveLabel,
       };
 
       circles.push(
         <View style={[styles.circle, { ...activeCircleStyle }]} key={i}>
-          <Text style={[styles.label, { ...activeLineStyle }]}>{i}</Text>
+          <CustomText style={{...styles.label, ...activeLineStyle }}>{i}</CustomText>
           {i != n && <View style={[styles.line, { ...activeLabelStyle }]} />}
         </View>
       );
@@ -58,7 +68,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "relative",
     opacity: 1,
-    elevation: 10,
+    elevation: 5,
   },
   line: {
     width: 24,
@@ -68,7 +78,7 @@ const styles = StyleSheet.create({
     right: -24,
   },
   label: {
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
     fontSize: 18,
   },
 });

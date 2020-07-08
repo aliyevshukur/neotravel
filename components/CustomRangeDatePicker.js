@@ -1,15 +1,26 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
-import { Layout, RangeDatepicker,Datepicker, styled } from "@ui-kitten/components";
+import {
+  Layout,
+  RangeDatepicker,
+  Datepicker,
+  styled,
+} from "@ui-kitten/components";
 
-export const CustomRangeDatepicker = ({ title, placeholder, min, style }) => {
-  const [range, setRange] = useState({});
+export const CustomRangeDatepicker = ({
+  title,
+  placeholder,
+  min,
+  style,
+  onSelect,
+  rangeValue,
+}) => {
 
   return (
     <Layout style={styles.container} level="1">
       <RangeDatepicker
-        range={range}
-        onSelect={(nextRange) => setRange(nextRange)}
+        range={rangeValue}
+        onSelect={(nextRange) => onSelect(nextRange)}
         title={() => title}
         placeholder={placeholder}
         min={min}
