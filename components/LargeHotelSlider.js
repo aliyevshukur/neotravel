@@ -1,19 +1,26 @@
 import React from "react";
 import { FlatList, View, StyleSheet, Dimensions } from "react-native";
-import {useSelector} from 'react-redux';
+import { useSelector, connect } from "react-redux";
 
 import COLORS from "../styles/colors";
 import { HotelLarge } from "./cards/HotelLarge";
 
-export const LargeHotelSlider = ({ hotels, bgColor, style }) => {
+// const mapStateToProps = state => ({
+//   favorite:
+// })
 
-  const theme = useSelector(state => state.themeReducer).theme;
+export const LargeHotelSlider = ({ hotels, bgColor, style, addHotel }) => {
+  const theme = useSelector((state) => state.themeReducer).theme;
 
   return (
     <View
       style={[
         styles.catalogueVertical,
-        { backgroundColor: COLORS[bgColor] || (theme=="light" ? COLORS.bgcLight: COLORS.bgcDark)},
+        {
+          backgroundColor:
+            COLORS[bgColor] ||
+            (theme == "light" ? COLORS.bgcLight : COLORS.bgcDark),
+        },
         { ...style },
       ]}
     >
@@ -21,9 +28,8 @@ export const LargeHotelSlider = ({ hotels, bgColor, style }) => {
         data={hotels}
         renderItem={({ item }) => (
           <HotelLarge
-            cardInfo={{ 
-              imgUrl:
-                item.images[0],
+            cardInfo={{
+              imgUrl: item.images[0],
               price: item.price,
               name: item.hotelName,
               rating: item.hotelRating,

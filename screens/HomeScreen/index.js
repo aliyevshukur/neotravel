@@ -170,9 +170,9 @@ export const HomePage = connect(mapStateToProps, {
             <CustomText style={styles.catalogueName}>
               {texts.catalogueName}
             </CustomText>
-            {recommendedHotels.length != 0 ? (
+            {recommendedRooms.length != 0 ? (
               <FlatList
-                data={recommendedHotels}
+                data={recommendedRooms}
                 horizontal={true}
                 renderItem={({ item }) => {
                   return (

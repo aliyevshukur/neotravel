@@ -11,15 +11,20 @@ import {
   reducer as hotelsReducer,
   MODULE_NAME as hotelsModuleName,
 } from "./hotels";
+import {
+  reducer as favoritesReducer,
+  MODULE_NAME as favoriteModuleName,
+} from "./favorites";
 
-import {reducer as navReducer} from './navReducer';
-import {reducer as themeReducer} from './theme';
+import { reducer as navReducer } from "./navReducer";
+import { reducer as themeReducer } from "./theme";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   [hotelsModuleName]: hotelsReducer,
   navReducer,
   themeReducer,
+  [favoriteModuleName]: favoritesReducer,
 });
 
 const persistConfig = {

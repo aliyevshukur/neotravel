@@ -83,9 +83,9 @@ export const HomeSearchScreen = ({ route, navigation }) => {
       <View style={styles.searchLabel}>
         <CustomText>
           {`${searchValues.place} ${searchValues.guests} guests ${
-            monthNames[searchValues.dateRange.startDate.getMonth()]
+            monthNames[searchValues?.dateRange?.startDate.getMonth()]
           } ${searchValues.dateRange.startDate.getDate()} - ${
-            monthNames[searchValues.dateRange.endDate.getMonth()]
+            monthNames[searchValues?.dateRange?.endDate.getMonth()]
           } ${searchValues.dateRange.endDate.getDate()}`}
         </CustomText>
       </View>

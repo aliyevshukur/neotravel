@@ -155,7 +155,7 @@ export const searchRoomsFB = (place, guests, date) => async (dispatch) => {
     hotelData[doc.id] = doc.data();
     hotelIDs.push(doc.id);
   });
-
+  console.log("hotelId - " + hotelId);
   if (hotelIDs.length !== 0) {
     let searchResult = [];
     const roomsRef = fb.db
@@ -173,7 +173,7 @@ export const searchRoomsFB = (place, guests, date) => async (dispatch) => {
         ...doc.data(),
       };
     });
-
+    console.log("searchResult - " + searchResult);
     if (searchResult.length !== 0) {
       dispatch(setSearchRoomResults(searchResult));
     } else {
