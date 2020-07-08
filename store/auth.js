@@ -92,6 +92,8 @@ export const getUserInfo = () => async (dispatch) => {
   try {
     const userName = fb.auth.currentUser.displayName;
     const userId = fb.auth.currentUser.uid;
+    const profilePhoto = fb.auth.currentUser.photoURL;
+    dispatch(setUserProfilePhoto(profilePhoto));
     dispatch(setUserName(userName));
     dispatch(setUserId(userId));
   } catch (error) {
@@ -102,6 +104,14 @@ export const getUserInfo = () => async (dispatch) => {
 export const uploadProfilePhoto = (profilePhoto) => (dispatch) => {
   try {
     dispatch(setUserProfilePhoto(profilePhoto));
+  } catch (error) {
+    Alert.alert(error.message);
+  }
+};
+
+export const updateUserName = (userName) => (dispatch) => {
+  try {
+    dispatch(setUserName(userName));
   } catch (error) {
     Alert.alert(error.message);
   }

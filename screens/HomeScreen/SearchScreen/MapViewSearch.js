@@ -23,6 +23,10 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
     <View>
       <MapView style={styles.map} initialRegion={hotels[0].marker}>
         {hotels.map((marker) => {
+          const priceLength = marker.price.length;
+          let width = 84;
+          let height = 40;
+          let fontSize = 17;
           return (
             <Marker
               key={marker.id}
@@ -33,7 +37,16 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
               //   description={marker.description}
             >
               <CustomButton
-                style={styles.markerBtn}
+                style={[
+                  styles.markerBtn,
+                  priceLength < 8
+                    ? { width: width, height: height, fontSize: fontSize }
+                    : {
+                        width: (width * (10 + priceLength / 2.9)) / 10,
+                        height: height,
+                        fontSize: 17,
+                      },
+                ]}
                 title={`$${marker.price}+`}
               />
               <Callout
@@ -75,9 +88,9 @@ const styles = StyleSheet.create({
     // alignItems: "flex-end",
   },
   markerBtn: {
-    width: 84,
-    height: 35,
-    fontSize: 17,
+    // width: 120,
+    // height: 40,
+    fontSize: 3,
     borderRadius: 40,
   },
   smallHotelCard: {

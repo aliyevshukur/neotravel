@@ -1,11 +1,15 @@
 import React from "react";
-import { StyleSheet, Text, Image, View, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  View,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native";
 
-import { shadow } from "../../styles/commonStyles";
 import { CustomText } from "../../components";
 import COLORS from "../../styles/colors";
 import fb from "../../firebaseConfig";
-
 import {useSelector} from 'react-redux';
 
 export const UserScreenHeader = ({ profilePicture, fullName, userName }) => {
@@ -13,14 +17,24 @@ export const UserScreenHeader = ({ profilePicture, fullName, userName }) => {
 
 const theme = useSelector(state => state.themeReducer).theme;
 
-  return (
+  return profilePicture ? (
     <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
       <Image
         style={styles.profilePicture}
-        source={{ uri: fb?.auth?.currentUser?.photoURL }}
+        source={
+          fb?.auth?.currentUser?.photoURL
+            ? { uri: profilePicture }
+            : profilePicture
+        }
       />
       <CustomText style={styles.userName}>{fullName}</CustomText>
     </View>
+  ) : (
+    <ActivityIndicator
+      color={COLORS.gradientPink}
+      size="small"
+      style={{ alignItems: "center", justifyContent: "center" }}
+    />
   );
 };
 
@@ -41,6 +55,8 @@ const styles = StyleSheet.create({
   profilePicture: {
     borderRadius: 50,
     marginRight: 33,
+    borderWidth: 0.5,
+    borderColor: COLORS.blackText,
     width: 60,
     height: 60,
   },
