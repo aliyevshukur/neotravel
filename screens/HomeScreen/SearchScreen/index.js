@@ -13,32 +13,32 @@ export const hotels = [
   {
     id: "1",
     latlng: { latitude: 37.77725, longitude: -122.4124 },
-    price: "375",
+    price: "375560",
   },
   {
     id: "2",
     latlng: { latitude: 37.78825, longitude: -122.4324 },
-    price: "265",
+    price: "265126",
   },
   {
     id: "3",
     latlng: { latitude: 37.79925, longitude: -122.4224 },
-    price: "175",
+    price: "175098",
   },
   {
     id: "4",
-    latlng: { latitude: 37.77725, longitude: -122.4124 },
-    price: "375",
+    latlng: { latitude: 37.80725, longitude: -122.4124 },
+    price: "375457",
   },
   {
     id: "5",
-    latlng: { latitude: 37.78825, longitude: -122.4324 },
-    price: "265",
+    latlng: { latitude: 37.81825, longitude: -122.4324 },
+    price: "265231",
   },
   {
     id: "6",
-    latlng: { latitude: 37.79925, longitude: -122.4224 },
-    price: "175",
+    latlng: { latitude: 37.82925, longitude: -122.4224 },
+    price: "13565344.89",
   },
 ];
 
