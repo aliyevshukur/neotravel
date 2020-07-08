@@ -26,7 +26,6 @@ export const HotelMedium = ({ cardInfo, onPress, style }) => {
 
   const imageURL =
     item.imgUrl.slice(0, item.imgUrl.indexOf("?")) + "?w=1.0&q=5";
-  console.log(imageURL);
 
   const [loaded, setLoaded] = useState(false);
 

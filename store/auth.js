@@ -103,7 +103,6 @@ export const getUserInfo = () => async (dispatch) => {
 
 export const uploadProfilePhoto = (profilePhoto) => (dispatch) => {
   try {
-    console.log("photo uploadedd!");
     dispatch(setUserProfilePhoto(profilePhoto));
   } catch (error) {
     Alert.alert(error.message);
