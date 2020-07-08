@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
+import {useSelector} from 'react-redux';
+
 import {
   Layout,
   RangeDatepicker,
   Datepicker,
   styled,
 } from "@ui-kitten/components";
+import COLORS from "../styles/colors";
 
 export const CustomRangeDatepicker = ({
   title,
@@ -16,8 +19,11 @@ export const CustomRangeDatepicker = ({
   rangeValue,
 }) => {
 
+  const theme = useSelector(state => state.themeReducer).theme;
+
+
   return (
-    <Layout style={styles.container} level="1">
+    <Layout style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}} level="1">
       <RangeDatepicker
         range={rangeValue}
         onSelect={(nextRange) => onSelect(nextRange)}
@@ -33,5 +39,6 @@ export const CustomRangeDatepicker = ({
 const styles = StyleSheet.create({
   container: {
     // minHeight: 360,
+    backgroundColor: COLORS.bgcLight,
   },
 });
