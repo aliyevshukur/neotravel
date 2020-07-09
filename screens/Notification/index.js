@@ -6,6 +6,8 @@ import {
   StatusBar,
   Dimensions,
 } from "react-native";
+import {useSelector} from 'react-redux';
+
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
@@ -23,9 +25,15 @@ const notifications = [
   },
 ];
 
+
 export const NotificationScreen = ({ navigation }) => {
+  const theme = useSelector(state => state.themeReducer).theme;
+  const searchRoomHandler = () => {
+    navigation.navigate("SearchStack");
+  }
+
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
       <View style={styles.imageWrapper}>
         <ImageBackground source={image} style={styles.image}>
           <View style={styles.contentWrapper}>
@@ -36,7 +44,7 @@ export const NotificationScreen = ({ navigation }) => {
               Nov 12 - 24{" "}
             </CustomText>
             <CustomButton
-              onPress={() => navigation.navigate("SearchStack")}
+              onPress={searchRoomHandler}
               title="Search a room"
               style={styles.searchBtn}
             />

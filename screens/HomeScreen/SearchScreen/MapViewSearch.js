@@ -21,29 +21,53 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
 
   return (
     <View>
-      <MapView style={styles.map} initialRegion={initialRegion}>
-        {hotels.map((marker) => (
-          <Marker
-            key={marker.id}
-            coordinate={marker.latlng}
-            //   title={marker.title}
-            //   description={marker.description}
-          >
-            <CustomButton
-              style={styles.markerBtn}
-              title={`$${marker.price}+`}
-            />
-            <Callout
-              onPress={() => navigation.navigate({ name: "HotelScreen" })}
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          ...hotels[0].marker,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      >
+        {hotels.map((marker) => {
+          const priceLength = marker.maxPrice.length;
+          let width = 84;
+          let height = 40;
+          let fontSize = 17;
+          return (
+            <Marker
+              key={marker.id}
+              coordinate={marker.marker}
+              latitudeDelta={0.04}
+              longitudeDelta={0.05}
+              //   title={marker.title}
+              //   description={marker.description}
             >
-              <View style={styles.markerCallView}>
-                <CustomText style={{ color: COLORS.gradientOrange }}>
-                  {texts.markerCalloutName}
-                </CustomText>
-              </View>
-            </Callout>
-          </Marker>
-        ))}
+              <CustomButton
+                style={[
+                  styles.markerBtn,
+                  priceLength < 8
+                    ? { width: width, height: height, fontSize: fontSize }
+                    : {
+                        width: (width * (10 + priceLength / 2.9)) / 10,
+                        height: height,
+                        fontSize: 17,
+                      },
+                ]}
+                title={`$${marker.maxPrice}+`}
+              />
+              <Callout
+                onPress={() => navigation.navigate({ name: "HotelScreen" })}
+              >
+                <View style={styles.markerCallView}>
+                  <CustomText style={{ color: COLORS.gradientOrange }}>
+                    {texts.markerCalloutName}
+                  </CustomText>
+                </View>
+              </Callout>
+            </Marker>
+          );
+        })}
       </MapView>
       <SmallCardSlider
         hotels={hotels}
@@ -71,9 +95,9 @@ const styles = StyleSheet.create({
     // alignItems: "flex-end",
   },
   markerBtn: {
-    width: 84,
-    height: 35,
-    fontSize: 17,
+    // width: 120,
+    // height: 40,
+    fontSize: 3,
     borderRadius: 40,
   },
   smallHotelCard: {

@@ -8,13 +8,14 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { connect } from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
+import { setTabVisibility } from "../../store/navReducer";
 
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
-
-import { useSelector, useDispatch } from "react-redux";
-import { setTabVisibility } from "../../store/navReducer";
+import { HotelMedium } from "../../components/cards/HotelMedium";
+import { findRecommendedRooms } from "../../utils/getRecommededHotels";
+import { EmptyListComponent } from "./EmptyListComponent";
 
 import {
   CustomText,
@@ -24,50 +25,58 @@ import {
   CustomRangeDatepicker,
 } from "../../components";
 import {
-  getHotelListFB,
-  getHotelList,
-  getHotelsOnDiscount,
-  getRecommendedHotels,
+  getRoomListFB,
+  getRoomList,
+  searchHotelsFB,
+  getSearchResult,
 } from "../../store/hotels";
-import { HotelMedium } from "../../components/cards/HotelMedium";
-import { findRecommendedHotels } from "../../utils/getRecommededHotels";
-import { EmptyListComponent } from "./EmptyListComponent";
 
 const mapStateToProps = (state) => ({
-  hotelList: getHotelList(state),
-  recommendedHotels: getRecommendedHotels(state),
-  hotelsOnDiscount: getHotelsOnDiscount(state),
+  roomList: getRoomList(state),
+  searchResult: getSearchResult(state),
 });
 
 export const HomePage = connect(mapStateToProps, {
-  getHotelListFB,
+  getRoomListFB,
+  searchHotelsFB,
 })((props) => {
-  const { navigation, getHotelListFB, hotelList } = props;
+  const {
+    navigation,
+    getRoomListFB,
+    roomList,
+    searchHotelsFB,
+    searchResult,
+  } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
     catalogueName: "Recommended",
   };
-  const [recommendedHotels, setRecommendedHotels] = useState([]);
+  const [recommendedRooms, setRecommendedRooms] = useState([]);
   const [fieldValues, setFieldValues] = useState({
     place: "",
-    date: "",
+    guests: "",
+    dateRange: {},
   });
 
+  const theme = useSelector((state) => state.themeReducer).theme;
   const dispatch = useDispatch();
   dispatch(setTabVisibility(true));
 
   useEffect(() => {
-    fetchHotelsData();
-    findRecommendedHotelsData();
+    fetchRoomsData();
   }, []);
 
-  const fetchHotelsData = async () => {
-    const response = await getHotelListFB();
+  useEffect(() => {
+    findRecommendedHotelsData();
+  }, [roomList]);
+
+  const fetchRoomsData = async () => {
+    const response = await getRoomListFB();
   };
 
   const findRecommendedHotelsData = async () => {
-    const data = await findRecommendedHotels(hotelList, 3);
-    setRecommendedHotels(data);
+    const data = await findRecommendedRooms(roomList, 3);
+    setRecommendedRooms(data);
   };
 
   const onFieldChange = (name, value) => {
@@ -77,20 +86,33 @@ export const HomePage = connect(mapStateToProps, {
     });
   };
 
-  const onFormSubmit = () => {
-    for (key in fieldValues) {
-      if (fieldValues[key].trim() === "") {
-        Alert.alert(`Field ${fieldValues[key]} is empty`);
+  const onFormSubmit = async () => {
+    for (const key in fieldValues) {
+      if (key === "dateRange") {
+        if (Object.keys(fieldValues[key]).length === 0) {
+          Alert.alert(`Field ${key} is empty`);
+          return;
+        }
+      } else if (fieldValues[key].trim() === "") {
+        Alert.alert(`Field ${key} is empty`);
         return;
       }
     }
 
-    const dateValues = fieldValues.date.split("/");
-    const isDateValid = dateValues[0];
+    const formattedPlace =
+      fieldValues.place.charAt(0).toUpperCase() +
+      fieldValues.place.slice(1, fieldValues.place.length).toLowerCase();
 
-    if (!isDateValid) {
-      return;
-    }
+    const formattedGuests = +fieldValues.guests;
+
+    const response = await searchHotelsFB(formattedPlace, formattedGuests);
+
+    navigation.navigate("HomeSearchScreen", {
+      place: fieldValues.place,
+      guests: fieldValues.guests,
+      startDate: fieldValues.dateRange.startDate,
+      endDate: fieldValues.dateRange.endDate,
+    });
   };
 
   const cardPressed = (roomId) => {
@@ -110,38 +132,36 @@ export const HomePage = connect(mapStateToProps, {
               {texts.description}
             </CustomText>
           </View>
-          <View style={styles.searchArea}>
+          <View
+            style={{
+              ...styles.searchArea,
+              backgroundColor:
+                theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+            }}
+          >
             <View style={styles.placeRow}>
               <CustomInput
-                long={true}
+                // long={true}
                 isSearch={false}
                 isCross={false}
                 placeholder="Place"
-                dark={true}
-                textStyle={{ color: COLORS.white }}
                 onChangeText={(value) => onFieldChange("place", value)}
               />
-            </View>
-            <View style={styles.searchBottom}>
-              {/* <CustomInput
-                long={false}
-                isSearch={false}
-                isCross={false}
-                placeholder="Date"
+              <CustomPicker
                 dark={true}
-                onChangeText={(value) => onFieldChange("date", value)}
+                title="Guests"
+                onValueChange={(value) => onFieldChange("guests", value)}
+                pickerValue={fieldValues.guests}
               />
-              <CustomPicker dark={true} title="Nights" /> */}
-
-              <CustomPicker dark={true} title="Guests" />
-
-              <View style={styles.datepickerWrapper}>
-                <CustomRangeDatepicker
-                  placeholder={"Pick date"}
-                  min={new Date()}
-                  style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 50 }}
-                />
-              </View>
+            </View>
+            <View style={styles.datepickerWrapper}>
+              <CustomRangeDatepicker
+                placeholder={"Pick date"}
+                min={new Date()}
+                style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 0 }}
+                onSelect={(value) => onFieldChange("dateRange", value)}
+                rangeValue={fieldValues.dateRange}
+              />
             </View>
             <CustomButton
               style={{
@@ -151,37 +171,35 @@ export const HomePage = connect(mapStateToProps, {
                 marginTop: 30,
               }}
               title="Search a room"
-              onPress={() => navigation.navigate("HomeSearchScreen")}
+              onPress={onFormSubmit}
             />
           </View>
           <View style={styles.catalogue}>
             <CustomText style={styles.catalogueName}>
               {texts.catalogueName}
             </CustomText>
-            {recommendedHotels.length != 0 ? (
-              <FlatList
-                data={recommendedHotels}
-                horizontal={true}
-                renderItem={({ item }) => {
-                  return (
-                    <HotelMedium
-                      cardInfo={{
-                        imgUrl: item.images[0],
-                        price: item.price,
-                        name: item.hotelName,
-                        rating: item.hotelRating,
-                        currency: item.currency,
-                        place: item.hotelCity,
-                      }}
-                      style={styles.mediumHotelCard}
-                      onPress={() => cardPressed(item?.id)}
-                    />
-                  );
-                }}
-                keyExtractor={(item) => item?.id}
-                ListEmptyComponent={EmptyListComponent}
-              />
-            ) : null}
+            <FlatList
+              data={recommendedRooms}
+              horizontal={true}
+              renderItem={({ item }) => {
+                return (
+                  <HotelMedium
+                    cardInfo={{
+                      imgUrl: item.images[0],
+                      price: item.price,
+                      name: item.hotelName,
+                      rating: item.hotelRating,
+                      currency: item.currency,
+                      place: item.hotelCity,
+                    }}
+                    style={styles.mediumHotelCard}
+                    onPress={() => cardPressed(item?.id)}
+                  />
+                );
+              }}
+              keyExtractor={(item) => item?.id}
+              ListEmptyComponent={EmptyListComponent}
+            />
           </View>
         </View>
       </ScrollView>
@@ -221,8 +239,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   placeRow: {
+    width: "90%",
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 15,
   },
@@ -232,6 +251,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   catalogue: {
+    width: "100%",
     backgroundColor: COLORS.homeScreenCatalogueBackground,
     height: "100%",
   },
@@ -251,14 +271,9 @@ const styles = StyleSheet.create({
   mediumHotelCard: {
     marginLeft: 18,
   },
-  searchBottom: {
-    width: "100%",
-    paddingHorizontal: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
   datepickerWrapper: {
-    marginTop: 12,
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "flex-start",
   },
 });

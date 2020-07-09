@@ -7,20 +7,20 @@ import COLORS from "../styles/colors";
 export const CustomPicker = ({
   title = "Guests",
   pickerValue,
-  setPickerValue,
   pickerArray = [
     { label: "1", value: "1" },
     { label: "2", value: "2" },
     { label: "3", value: "3" },
     { label: "4", value: "4" },
   ],
+  onValueChange,
 }) => {
   return (
     <View style={styles.pickerContainer}>
       <Picker
         mode="dropdown"
         selectedValue={pickerValue}
-        onValueChange={(itemValue) => setPickerValue(itemValue)}
+        onValueChange={(value) => onValueChange(value)}
         style={styles.picker}
         itemStyle={{ color: "green" }}
       >
@@ -36,7 +36,7 @@ export const CustomPicker = ({
 
 const styles = StyleSheet.create({
   picker: {
-    width: 180,
+    width: 115,
     height: 54.5,
     marginLeft: 15,
     color: COLORS.grayDark,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   pickerContainer: {
-    width: 180,
+    width: 115,
     height: 54.5,
     flexDirection: "row",
     alignItems: "center",

@@ -8,11 +8,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import {useSelector} from 'react-redux';
+
 import search from "../assets/images/inputComponents/search.png";
 import cross from "../assets/images/inputComponents/times.png";
 import rectangle from "../assets/images/inputComponents/rectangle.png";
 import longRectangle from "../assets/images/inputComponents/longRectangle.png";
 import darkRectangle from "../assets/images/inputComponents/darkRectangle.png";
+import COLORS from "../styles/colors";
+import { CustomSvg } from "./cards/CustomSvg";
+
 
 export const CustomInput = ({
   style,
@@ -29,6 +34,11 @@ export const CustomInput = ({
   textStyle,
   ...rest
 }) => {
+
+  const theme = useSelector(state => state.themeReducer).theme;
+
+
+
   const crossBtnHandler = () => {
     onChangeText("");
   };
@@ -47,7 +57,7 @@ export const CustomInput = ({
     >
       {isSearch && (
         <TouchableOpacity>
-          <Image source={search} style={styles.search} />
+          <CustomSvg name={"search"} style={styles.search} />
         </TouchableOpacity>
       )}
       <TextInput
@@ -55,7 +65,7 @@ export const CustomInput = ({
         value={value}
         onChangeText={(value) => onChangeText(value)}
         onTouchStart={onTouchStart}
-        style={[styles.textInput, { ...textStyle }]}
+        style={[styles.textInput, { ...textStyle, color: theme=="light" ? COLORS.blackText : COLORS.white }]}
         placeholder={placeholder}
         placeholderTextColor="#616167"
         keyboardType={keyboardType}
@@ -66,7 +76,7 @@ export const CustomInput = ({
           style={styles.crossTouchArea}
           onPress={crossBtnHandler}
         >
-          <Image source={cross} style={styles.cross} />
+          <CustomSvg name={"times"} style={styles.cross} />
         </TouchableOpacity>
       )}
     </View>
@@ -90,11 +100,15 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     left: 1,
+    color: COLORS.gray,
+    opacity: 0.5,
   },
   cross: {
-    width: 11,
-    height: 11,
+    width: 14,
+    height: 14,
     right: 3,
+    color: COLORS.gray,
+    opacity: 0.5,
   },
   textInput: {
     width: "85%",

@@ -1,18 +1,31 @@
 import React, { useState } from "react";
-import { StyleSheet, View, TouchableOpacity, FlatList, Dimensions, BackHandler} from "react-native";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+  BackHandler,
+} from "react-native";
 
-
-import {useSelector, useDispatch} from 'react-redux';
-import {setTabVisibility} from '../../store/navReducer';
+import { useSelector, useDispatch, connect } from "react-redux";
+import { setTabVisibility } from "../../store/navReducer";
 
 import { CustomSvg, CustomText } from "../../components";
 import { CustomButton } from "../../components/CustomButton";
 import COLORS from "../../styles/colors";
 import { ToggleButton } from "../../components/ToggleButton";
 import { SelectAlert } from "./SelectAlert";
+import { getSearchResult, setFilteredResult } from "../../store/hotels";
 
-export const FilterScreen = ({ navigation, route }) => {
-  const theme = useSelector(state => state.themeReducer).theme;
+const mapStateToProps = (state) => ({
+  searchResult: getSearchResult(state),
+});
+
+export const FilterScreen = connect(mapStateToProps, {
+  setFilteredResult,
+})(({ navigation, route, searchResult, setFilteredResult }) => {
+  const theme = useSelector((state) => state.themeReducer).theme;
   const dispatch = useDispatch();
   dispatch(setTabVisibility(false));
   const DATA = {
@@ -39,7 +52,17 @@ export const FilterScreen = ({ navigation, route }) => {
     type: {
       fieldId: "type",
       name: "Type",
-      selectables: ["Hotel", "Motel", "Hostel", "Inn"],
+      selectables: [
+        "Hotel",
+        "Sporthotel",
+        "Hotel Healthy & Spa",
+        "Bed & Breakfast",
+        "Obst- und Weinbauernhof",
+        "Beachside Resort",
+        "Resort",
+        "Inn",
+        "Serviced Apartments",
+      ],
     },
     breakfast: {
       fieldId: "breakfast",
@@ -74,12 +97,12 @@ export const FilterScreen = ({ navigation, route }) => {
   const backHandler = () => {
     navigation.navigate(route.params.backScreen);
     dispatch(setTabVisibility(true));
-  }
+  };
   BackHandler.addEventListener("hardwareBackPress", function () {
     //hardware back Button actions could be handled here
     dispatch(setTabVisibility(true));
     navigation.navigate(route.params.backScreen);
-    return true
+    return true;
   });
 
   const resetHandler = () => {
@@ -88,11 +111,69 @@ export const FilterScreen = ({ navigation, route }) => {
 
   const applyHandler = () => {
     // Take filter values from userChoices state
+    const result = filterResult(searchResult);
+
+    setFilteredResult(result);
+    navigation.navigate("HomeSearchScreen");
   };
 
+  const filterResult = (searchResult) => {
+    const {
+      budget,
+      rating,
+      reviewScore,
+      type,
+      breakfast = false,
+      deals = false,
+      available = false,
+    } = userChoices;
+
+    const result = [];
+    searchResult.forEach((room) => {
+      // console.log(searchResult);
+      // console.log(room.price.slice(1, 5) <= budget);
+
+      const priceCondition = budget ? room.price >= budget.slice(1, 5) : true;
+      const ratingCondition = rating
+        ? room.hotelRating >= rating?.slice(0, rating.length - 1)
+        : true;
+      const reviewCondition = reviewScore
+        ? room.reviewScore >= reviewScore.slice(0, rating.length - 1)
+        : true;
+      const typeCondition = type ? room.hotelType === type : true;
+      const breakfastCondition = breakfast ? room.breakfast === true : true;
+      // TODO check if room is available
+      const availableCondition = true;
+      const isOnDeal = deals ? findIfonDeals(room.id) : true;
+
+      if (
+        priceCondition &&
+        ratingCondition &&
+        reviewCondition &&
+        typeCondition &&
+        breakfastCondition &&
+        availableCondition
+        // isOnDeal
+      ) {
+        result.push(room);
+      }
+    });
+
+    return result;
+  };
+
+  const findIfonDeals = (id) => {
+    //TODO check if it is on Deals
+    return true;
+  };
 
   return (
-    <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark }}>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+      }}
+    >
       {modal ? (
         <SelectAlert
           selectInfo={{
@@ -107,31 +188,59 @@ export const FilterScreen = ({ navigation, route }) => {
       ) : null}
       <View style={styles.header}>
         <View style={styles.titleHolder}>
-          <TouchableOpacity
-            style={styles.backBtn}
-            onPress={backHandler}
-          >
-            <CustomSvg name={"chevronLeft"}
-            style={{...styles.chevronLeft, color: theme=="light"? COLORS.blackText : COLORS.white}}
+          <TouchableOpacity style={styles.backBtn} onPress={backHandler}>
+            <CustomSvg
+              name={"chevronLeft"}
+              style={{
+                ...styles.chevronLeft,
+                color: theme == "light" ? COLORS.blackText : COLORS.white,
+              }}
             />
           </TouchableOpacity>
           <CustomText
-          style={{...styles.titleText, color: theme=="light"? COLORS.blackText : COLORS.white}}
-          >Filter</CustomText>
+            style={{
+              ...styles.titleText,
+              color: theme == "light" ? COLORS.blackText : COLORS.white,
+            }}
+          >
+            Filter
+          </CustomText>
         </View>
         <TouchableOpacity
-        style={{...styles.resetBtn, backgroundColor: theme=="light"? COLORS.bgcLight : COLORS.bgcDark}}
-        onPress={resetHandler}>
-          <CustomText style={{...styles.resetText, color: theme=="light"? COLORS.grayDark : COLORS.gray }}>Reset</CustomText>
+          style={{
+            ...styles.resetBtn,
+            backgroundColor:
+              theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+          }}
+          onPress={resetHandler}
+        >
+          <CustomText
+            style={{
+              ...styles.resetText,
+              color: theme == "light" ? COLORS.grayDark : COLORS.gray,
+            }}
+          >
+            Reset
+          </CustomText>
         </TouchableOpacity>
       </View>
-      <View style={{...styles.horizontalLine, backgroundColor: theme=="light"? COLORS.offWhite : COLORS.grayDark}}/>
+      <View
+        style={{
+          ...styles.horizontalLine,
+          backgroundColor: theme == "light" ? COLORS.offWhite : COLORS.grayDark,
+        }}
+      />
       <View style={styles.main}>
         <FlatList
           data={Object.values(DATA)}
           renderItem={({ item }) => (
             <View style={styles.filterItem}>
-              <CustomText style={{...styles.filterItemTitle, color: theme=="light"? COLORS.blackText : COLORS.gray}}>
+              <CustomText
+                style={{
+                  ...styles.filterItemTitle,
+                  color: theme == "light" ? COLORS.blackText : COLORS.gray,
+                }}
+              >
                 {item.name}
               </CustomText>
               {item.selectables ? (
@@ -139,13 +248,21 @@ export const FilterScreen = ({ navigation, route }) => {
                   style={styles.selectTouch}
                   onPress={() => selectHandler(item.fieldId)}
                 >
-                  <CustomText style={{...styles.selectText, color: theme=="light"? COLORS.grayDark : COLORS.gray}}>
+                  <CustomText
+                    style={{
+                      ...styles.selectText,
+                      color: theme == "light" ? COLORS.grayDark : COLORS.gray,
+                    }}
+                  >
                     {userChoices[item.fieldId] || "Select"}
                   </CustomText>
                   {userChoices[item.fieldId] ? null : (
                     <CustomSvg
                       name={"chevronRight"}
-                      style={{...styles.chevronRight, color: theme=="light"? COLORS.grayDark : COLORS.gray}}
+                      style={{
+                        ...styles.chevronRight,
+                        color: theme == "light" ? COLORS.grayDark : COLORS.gray,
+                      }}
                     />
                   )}
                 </TouchableOpacity>
@@ -160,11 +277,15 @@ export const FilterScreen = ({ navigation, route }) => {
         />
       </View>
       <View style={styles.applyHolder}>
-        <CustomButton title={"Apply"} onPress={applyHandler} style={styles.applyBtn}/>
+        <CustomButton
+          title={"Apply"}
+          onPress={applyHandler}
+          style={styles.applyBtn}
+        />
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -232,7 +353,7 @@ const styles = StyleSheet.create({
   },
   main: {
     width: "100%",
-    maxHeight: Dimensions.get('window').height*0.68,
+    maxHeight: Dimensions.get("window").height * 0.68,
     paddingBottom: 24,
   },
   filterItem: {
@@ -280,5 +401,5 @@ const styles = StyleSheet.create({
     width: "90%",
     fontSize: 24,
     fontFamily: "NunitoBold",
-  }
+  },
 });

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, StyleSheet, Text } from "react-native";
+import { View, Image, StyleSheet, Text, Dimensions } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import visaLogo from "../../../assets/images/ReservationScreen/visa-logo.png";
@@ -40,8 +40,9 @@ export const CreditCard = ({ cardNumber, name, CVV }) => {
 const styles = StyleSheet.create({
   creditCard: {
     justifyContent: "space-between",
-    height: 198,
-    width: 339,
+    height: Dimensions.get('window').height*0.26,
+    maxHeight: 210,
+    width: Dimensions.get('window').width*0.9,
     borderRadius: 15,
     padding: 25,
     position: "relative",
