@@ -17,6 +17,7 @@ import {
 } from "../../screens";
 import { CustomSvg } from "../../components";
 import COLORS from "../../styles/colors";
+import { useSelector } from "react-redux";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -50,17 +51,28 @@ const navScreens = [
 const screenWidth = Dimensions.get("window").width;
 
 export const AccountStack = ({ route, navigation }) => {
+  const theme = useSelector((state) => state.themeReducer).theme;
+
   return (
     <Navigator
       initialRouteName="user"
       screenOptions={{
         headerTitleAlign: "left",
-        headerTitleStyle: styles.titleText,
+        headerTitleStyle: {
+          ...styles.titleText,
+          color: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+        },
         headerStyle: styles.header,
         headerLeft: () => (
           <TouchableNativeFeedback onPress={() => navigation.navigate("user")}>
             <View style={styles.backBtn}>
-              <CustomSvg name={"chevronLeft"} style={styles.chevronLeft} />
+              <CustomSvg
+                name={"chevronLeft"}
+                style={{
+                  ...styles.chevronLeft,
+                  color: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+                }}
+              />
             </View>
           </TouchableNativeFeedback>
         ),
@@ -125,7 +137,6 @@ const styles = StyleSheet.create({
   chevronLeft: {
     height: "100%",
     width: "100%",
-    color: COLORS.offWhite,
   },
   titleText: {
     marginLeft: 24,
@@ -133,7 +144,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontStyle: "normal",
     lineHeight: 38,
-    color: COLORS.offWhite,
     textTransform: "capitalize",
   },
 });

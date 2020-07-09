@@ -7,6 +7,8 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
+import { useSelector } from "react-redux";
+
 import { CustomText, CustomSvg } from "../../components";
 import COLORS from "../../styles/colors";
 import { LinearGradient } from "expo-linear-gradient";
@@ -15,6 +17,7 @@ import { PaymentItem } from "./PaymentItem";
 const screenWidth = Dimensions.get("window").width;
 
 export const PaymentsScreen = () => {
+  const theme = useSelector((state) => state.themeReducer).theme;
   const DATA = [
     {
       hotelName: "Fairmont Baku",
@@ -37,13 +40,23 @@ export const PaymentsScreen = () => {
   ];
 
   return (
-    <View style={styles.container}>
-      <View style={styles.main}>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+      }}
+    >
+      <View
+        style={{
+          ...styles.main,
+          backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+        }}
+      >
         <FlatList
           style={styles.paymentList}
           data={DATA}
           renderItem={({ item, index }) => (
-            <PaymentItem key={index} paymentInfo={item} />
+            <PaymentItem theme={theme} key={index} paymentInfo={item} />
           )}
           ListFooterComponent={<View style={{ margin: 20 }} />}
         />
