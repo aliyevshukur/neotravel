@@ -28,7 +28,7 @@ import {
 import {
   getRoomListFB,
   getRoomList,
-  searchRoomsFB,
+  searchHotelsFB,
   getSearchResult,
 } from "../../store/hotels";
 
@@ -39,13 +39,13 @@ const mapStateToProps = (state) => ({
 
 export const HomePage = connect(mapStateToProps, {
   getRoomListFB,
-  searchRoomsFB,
+  searchHotelsFB,
 })((props) => {
   const {
     navigation,
     getRoomListFB,
     roomList,
-    searchRoomsFB,
+    searchHotelsFB,
     searchResult,
   } = props;
   const texts = {
@@ -87,7 +87,7 @@ export const HomePage = connect(mapStateToProps, {
     });
   };
 
-  const onFormSubmit = () => {
+  const onFormSubmit = async () => {
     for (const key in fieldValues) {
       if (key === "dateRange") {
         if (Object.keys(fieldValues[key]).length === 0) {
@@ -106,14 +106,13 @@ export const HomePage = connect(mapStateToProps, {
 
     const formattedGuests = +fieldValues.guests;
 
-    searchRoomsFB(formattedPlace, formattedGuests).then((result) => {
-      navigation.navigate("HomeSearchScreen", {
-        searchResult: result,
-        place: fieldValues.place,
-        guests: fieldValues.guests,
-        startDate: fieldValues.dateRange.startDate,
-        endDate: fieldValues.dateRange.endDate,
-      });
+    const response = await searchHotelsFB(formattedPlace, formattedGuests);
+    
+    navigation.navigate("HomeSearchScreen", {
+      place: fieldValues.place,
+      guests: fieldValues.guests,
+      startDate: fieldValues.dateRange.startDate,
+      endDate: fieldValues.dateRange.endDate,
     });
   };
 
