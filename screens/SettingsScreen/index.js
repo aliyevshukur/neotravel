@@ -47,9 +47,7 @@ export const SettingsPage = connect(mapStateToProps, {
     const [surname, setSurname] = useState(userName.split(" ")[1]);
     const [isModalShown, setIsModalShown] = useState(false);
 
-    
-    const theme = useSelector(state => state.themeReducer).theme;
-
+    const theme = useSelector((state) => state.themeReducer).theme;
 
     //Save Handler that set name and surname as userName of user
     const saveHandler = async () => {
@@ -61,7 +59,7 @@ export const SettingsPage = connect(mapStateToProps, {
         .then(() => {
           updateUserName(fb?.auth?.currentUser?.displayName);
         })
-        .then(() => navigation.navigate({ name: "UserScreen" }));
+        .then(() => navigation.navigate({ name: "user" }));
     };
 
     //Handler that opens camera or gallery depending on case and upload image to FireStore and Redux
@@ -97,8 +95,12 @@ export const SettingsPage = connect(mapStateToProps, {
     };
 
     return (
-      <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
-        <CustomText style={styles.header}>Settings</CustomText>
+      <View
+        style={{
+          ...styles.container,
+          backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+        }}
+      >
         <View style={styles.profileContainer}>
           {isUploading ? (
             <TouchableOpacity
@@ -173,5 +175,6 @@ const styles = StyleSheet.create({
   profileContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
+    paddingTop: 10,
   },
 });

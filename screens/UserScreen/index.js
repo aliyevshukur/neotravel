@@ -57,11 +57,11 @@ export const UserScreen = connect(mapStateToProps, {
         label: "Help",
         onPressItem: "help",
       },
-      {
-        icon: "piggyBank",
-        label: "Promotions",
-        onPressItem: "promotions",
-      },
+      // {
+      //   icon: "piggyBank",
+      //   label: "Promotions",
+      //   onPressItem: "promotions",
+      // },
       {
         icon: "setting",
         label: "Settings",

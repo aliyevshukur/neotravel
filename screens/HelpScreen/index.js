@@ -1,9 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
 
 import { QandACard } from "./QandACard";
-
+import COLORS from "../../styles/colors";
 const FAQData = [
   {
     question: "Why did you launch a new site?",
@@ -29,12 +30,19 @@ const FAQData = [
 ];
 
 export const HelpScreen = () => {
+  const theme = useSelector((state) => state.themeReducer).theme;
+
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+      }}
+    >
       <FlatList
         contentContainerStyle={{ margin: 0, padding: 0 }}
         data={FAQData}
-        renderItem={({ item }) => <QandACard item={item} />}
+        renderItem={({ item }) => <QandACard theme={theme} item={item} />}
       />
     </View>
   );
