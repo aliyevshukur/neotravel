@@ -1,10 +1,12 @@
 import fb from "../firebaseConfig";
+import { getMaxRoomPrice } from "../utils/getMaxRoomPrice";
 
 // ACTIONS
 const SET_HOTEL_LIST = "SET_HOTEL_LIST";
 const SET_ROOM_LIST = "SET_ROOM_LIST";
 const SET_HOTELS_ON_DISCOUNT = "SET_HOTELS_ON_DISCOUNT";
-const SET_SEARCH_ROOM_RESULT = "SET_SEARCH_ROOM_RESULT";
+const SET_SEARCH_HOTEL_RESULT = "SET_SEARCH_HOTEL_RESULT";
+const SET_FILTERED_RESULT = "SET_FILTERED_RESULT";
 
 export const MODULE_NAME = "hotels";
 export const getHotelList = (state) => state[MODULE_NAME].hotelList;
@@ -13,12 +15,16 @@ export const getRecommendedHotels = (state) =>
 export const getHotelsOnDiscount = (state) =>
   state[MODULE_NAME].hotelsOnDiscount;
 export const getRoomList = (state) => state[MODULE_NAME].roomList;
-export const getSearchResult = (state) => state[MODULE_NAME].searchResult;
+export const getSearchResult = (state) =>
+  state[MODULE_NAME].search.searchResult;
 
 const initialState = {
   hotelList: [],
   roomList: [],
-  searchResult: [],
+  search: {
+    lastSearchFields: {},
+    searchResult: [],
+  },
 };
 
 // REDUCER
@@ -39,10 +45,13 @@ export const reducer = (state = initialState, { type, payload }) => {
         ...state,
         hotelsOnDiscount: payload,
       };
-    case SET_SEARCH_ROOM_RESULT:
+    case SET_SEARCH_HOTEL_RESULT:
       return {
         ...state,
-        searchResult: payload,
+        search: {
+          ...state.search,
+          searchResult: payload,
+        },
       };
     default:
       return state;
@@ -64,10 +73,17 @@ export const setRoomList = (payload) => ({
   payload,
 });
 
-export const setSearchRoomResults = (payload) => ({
-  type: SET_SEARCH_ROOM_RESULT,
+export const setSearchHotelResults = (payload) => ({
+  type: SET_SEARCH_HOTEL_RESULT,
   payload,
 });
+
+export const setFilteredResult = (payload) => {
+  return {
+    type: SET_FILTERED_RESULT,
+    payload,
+  };
+};
 
 // MIDDLEWARES
 export const getHotelListFB = () => async (dispatch) => {
@@ -143,51 +159,49 @@ export const getRoomListFB = () => async (dispatch) => {
   } catch (error) {}
 };
 
-export const searchRoomsFB = (place, guests, date) => async (dispatch) => {
-  const hotelData = {};
+export const searchHotelsFB = (place, guests, date) => async (dispatch) => {
+  const hotelData = [];
   const hotelIDs = [];
 
+  // Set searched hotelData and hotelIDs
   const hotelsRef = fb.db.collection("hotels").where("city", "==", place);
-  const searchedHotels = await hotelsRef.get();
-  searchedHotels.forEach((doc) => {
-    hotelData[doc.id] = doc.data();
+  const searchedHotelsSnap = await hotelsRef.get();
+  searchedHotelsSnap.forEach((doc) => {
+    hotelData.push({ id: doc.id, ...doc.data() });
     hotelIDs.push(doc.id);
   });
 
   if (hotelIDs.length !== 0) {
-    let searchResult = [];
+    // Filter out rooms of searched hotels
     const roomsRef = fb.db
       .collection("rooms")
       .where("hotelID", "in", hotelIDs)
       .where("maxGuests", ">=", guests);
-    const searchedRooms = await roomsRef.get();
-
-    searchResult = searchedRooms.docs.map((doc) => {
+    const searchedRoomsSnap = await roomsRef.get();
+    const searchedHotelRooms = searchedRoomsSnap.docs.map((doc) => {
       return {
         id: doc.id,
-        hotelID: hotelData[doc.data().hotelID].id,
-        marker: {
-          latitudeDelta: 0.04,
-          longitudeDelta: 0.05,
-          ...hotelData[doc.data().hotelID].marker,
-        },
-        hotelName: hotelData[doc.data().hotelID].name,
-        hotelRating: hotelData[doc.data().hotelID].rating,
         ...doc.data(),
       };
     });
 
-    if (searchResult.length !== 0) {
-      console.log("searchResultHotels", searchResult);
+    // Combine results to find final data
+    const finalData = hotelData.map((hotel) => {
+      const maxPrice = getMaxRoomPrice(searchedHotelRooms, hotel.id);
+      return {
+        id: hotel.id,
+        maxPrice,
+        ...hotel,
+      };
+    });
+    console.log("finalData", finalData);
 
-      dispatch(setSearchRoomResults(searchResult));
-      return searchResult;
+    if (finalData.length !== 0) {
+      dispatch(setSearchHotelResults(finalData));
     } else {
-      dispatch(setSearchRoomResults([]));
-      return [];
+      dispatch(setSearchHotelResults([]));
     }
   } else {
-    dispatch(setSearchRoomResults([]));
-    return [];
+    dispatch(setSearchHotelResults([]));
   }
 };

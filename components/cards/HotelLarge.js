@@ -22,7 +22,6 @@ export const HotelLarge = ({
         value.length <= length ? value : value.substring(0, length) + end)
       : null;
   };
-  console.log(cardInfo);
   return (
     <TouchableOpacity
       style={[styles.container, { ...style }]}
@@ -55,13 +54,10 @@ export const HotelLarge = ({
       {isMinimal ? null : (
         <View style={styles.cardInfo}>
           <CustomText style={styles.loaction}>
-            {makeItShort(item.location, 30) || "~"}
-          </CustomText>
-          <CustomText style={styles.description}>
-            {makeItShort(item.description, 25) || "~"}
+            {makeItShort(item.city, 30) || "~"}
           </CustomText>
           <CustomText style={styles.pricing}>
-            {item.pricing ? "Prepaid" : "No prepayment"}
+            {makeItShort(item.street, 25) || "~"}
           </CustomText>
           <CustomText style={styles.price}>
             {makeItShort(item.currency, 3) || "$"} {item.price || "~"}
