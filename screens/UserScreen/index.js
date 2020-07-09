@@ -53,32 +53,32 @@ export const UserScreen = connect(mapStateToProps, {
       {
         icon: "heartFull", //dont edit icon names
         label: "Your Favorites",
-        onPressItem: "Favorites",
+        onPressItem: "favorites",
       },
       {
         icon: "creditCard",
         label: "Payment",
-        onPressItem: "Favorites",
+        onPressItem: "payments",
       },
       {
         icon: "lifeRing",
         label: "Help",
-        onPressItem: "Favorites",
+        onPressItem: "help",
       },
       {
         icon: "piggyBank",
         label: "Promotions",
-        onPressItem: "Favorites",
+        onPressItem: "promotions",
       },
       {
         icon: "setting",
         label: "Settings",
-        onPressItem: "SettingsPage",
+        onPressItem: "settings",
       },
       {
         icon: "signOut",
         label: "Sign out",
-        onPressItem: "Favorites",
+        onPressItem: "favorites",
       },
     ];
 

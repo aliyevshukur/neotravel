@@ -68,7 +68,6 @@ export const SettingsPage = connect(mapStateToProps, { uploadProfilePhoto })(
 
     return (
       <View style={styles.container}>
-        <CustomText style={styles.header}>Settings</CustomText>
         <View style={styles.profileContainer}>
           <TouchableOpacity
             onLongPress={() => {

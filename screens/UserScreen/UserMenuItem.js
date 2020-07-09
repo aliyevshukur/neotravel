@@ -10,7 +10,11 @@ export const UserMenuItem = connect(null, { logOut })(
     return (
       <TouchableOpacity
         onPress={() => {
-          label == "Sign out" ? logOut() : navigation.navigate(onPressItem);
+          label == "Sign out"
+            ? logOut()
+            : navigation.navigate("AccountStack", {
+                screen: onPressItem,
+              });
         }}
       >
         <View style={styles.container}>
