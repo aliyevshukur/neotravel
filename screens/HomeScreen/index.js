@@ -8,7 +8,8 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { connect } from "react-redux";
+import { connect, useSelector, useDispatch} from "react-redux";
+import { setTabVisibility } from "../../store/navReducer";
 
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
@@ -16,8 +17,6 @@ import { HotelMedium } from "../../components/cards/HotelMedium";
 import { findRecommendedRooms } from "../../utils/getRecommededHotels";
 import { EmptyListComponent } from "./EmptyListComponent";
 
-import { useSelector, useDispatch } from "react-redux";
-import { setTabVisibility } from "../../store/navReducer";
 
 import {
   CustomText,
@@ -60,6 +59,7 @@ export const HomePage = connect(mapStateToProps, {
     dateRange: {},
   });
 
+  const theme = useSelector(state => state.themeReducer).theme;
   const dispatch = useDispatch();
   dispatch(setTabVisibility(true));
 
@@ -133,31 +133,29 @@ export const HomePage = connect(mapStateToProps, {
               {texts.description}
             </CustomText>
           </View>
-          <View style={styles.searchArea}>
+          <View style={{...styles.searchArea, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
             <View style={styles.placeRow}>
               <CustomInput
-                long={true}
+                // long={true}
                 isSearch={false}
                 isCross={false}
                 placeholder="Place"
                 onChangeText={(value) => onFieldChange("place", value)}
               />
-            </View>
-            <View style={styles.searchBottom}>
-              <View style={styles.datepickerWrapper}>
-                <CustomRangeDatepicker
-                  placeholder={"Pick date"}
-                  min={new Date()}
-                  style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 0 }}
-                  onSelect={(value) => onFieldChange("dateRange", value)}
-                  rangeValue={fieldValues.dateRange}
-                />
-              </View>
               <CustomPicker
                 dark={true}
                 title="Guests"
                 onValueChange={(value) => onFieldChange("guests", value)}
                 pickerValue={fieldValues.guests}
+              />
+            </View>
+            <View style={styles.datepickerWrapper}>
+              <CustomRangeDatepicker
+                placeholder={"Pick date"}
+                min={new Date()}
+                style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 0 }}
+                onSelect={(value) => onFieldChange("dateRange", value)}
+                rangeValue={fieldValues.dateRange}
               />
             </View>
             <CustomButton
@@ -236,8 +234,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   placeRow: {
+    width: "90%",
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 15,
   },
@@ -267,14 +266,9 @@ const styles = StyleSheet.create({
   mediumHotelCard: {
     marginLeft: 18,
   },
-  searchBottom: {
-    width: "100%",
-    paddingHorizontal: 16,
-    flexDirection: "row",
-    alignItems: "center",
-  },
   datepickerWrapper: {
-    marginTop: 15,
-    marginLeft: 15,
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "flex-start",
   },
 });

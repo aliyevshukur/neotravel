@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, TouchableOpacity, Animated } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-export const ToggleButton = ({ setValue, reset }) => {
+export const ToggleButton = ({value, setValue, reset }) => {
   const [animation, setAnimation] = useState(new Animated.Value(0));
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(value);
 
   const toggleBtn = () => {
     Animated.timing(animation, {
       toValue: toggle ? 36 : 0,
       duration: 600,
     }).start(setToggle((v) => !v));
-    setValue((v) => !v);
+    setValue(toggle);
   };
 
   useEffect(() => {

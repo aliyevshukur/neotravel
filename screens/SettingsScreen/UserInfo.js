@@ -1,5 +1,8 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import {setTheme} from '../../store/theme'
+
 import {
   CustomText,
   CustomInput,
@@ -15,6 +18,16 @@ export const UserInfo = ({
   setSurname,
   saveHandler,
 }) => {
+
+  const dispatch = useDispatch();
+    const theme = useSelector(state => state.themeReducer).theme;
+    
+    const darkHandler = (value) => {
+      value ? dispatch(setTheme("dark")) : dispatch(setTheme("light"))
+    }
+
+
+
   return (
     <View style={styles.userInfo}>
       <CustomText style={styles.label}>Name</CustomText>
@@ -36,8 +49,8 @@ export const UserInfo = ({
         onChangeText={setSurname}
       />
       <View style={styles.darkModeContainer}>
-        <CustomText style={styles.darkModeText}>Dark mode</CustomText>
-        <ToggleButton setValue={() => {}} />
+        <CustomText style={{...styles.darkModeText, color: theme=="light" ? COLORS.blackText : COLORS.gray}}>Dark mode</CustomText>
+        <ToggleButton value={!(theme=="light")}  setValue={(value) => {darkHandler(value)}} />
       </View>
       <CustomButton
         style={styles.btn}
