@@ -59,7 +59,11 @@ export const NotificationScreen = ({ navigation }) => {
         data={notifications}
         renderItem={({ item, index }) => {
           return (
-            <NotfCard item={item} isLast={notifications.length - 1 === index} />
+            <NotfCard
+              key={index}
+              item={item}
+              isLast={notifications.length - 1 === index}
+            />
           );
         }}
       />
