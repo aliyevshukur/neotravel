@@ -10,8 +10,8 @@
           "variantGroups": {
             "status": {
               "basic": {
-                "borderColor": "#DFDEDE",
-                "backgroundColor": "#FFFFFF",
+                "borderColor": "#CBCBCB",
+                "backgroundColor": "#E3E6EC",
                 "textColor": "#616167",
                 "state": {
                   "active": {

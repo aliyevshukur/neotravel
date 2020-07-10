@@ -29,6 +29,8 @@ import {
   getRoomList,
   searchHotelsFB,
   getSearchResult,
+  getLastSearchFieldValues,
+  setLastSearchFieldValues,
 } from "../../store/hotels";
 
 const mapStateToProps = (state) => ({
@@ -39,6 +41,7 @@ const mapStateToProps = (state) => ({
 export const HomePage = connect(mapStateToProps, {
   getRoomListFB,
   searchHotelsFB,
+  setLastSearchFieldValues,
 })((props) => {
   const {
     navigation,
@@ -46,6 +49,7 @@ export const HomePage = connect(mapStateToProps, {
     roomList,
     searchHotelsFB,
     searchResult,
+    setLastSearchFieldValues,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
@@ -105,7 +109,16 @@ export const HomePage = connect(mapStateToProps, {
 
     const formattedGuests = +fieldValues.guests;
 
-    const response = await searchHotelsFB(formattedPlace, formattedGuests);
+    setLastSearchFieldValues({
+      place: formattedPlace,
+      guests: formattedGuests,
+      dateRange: fieldValues.dateRange,
+    });
+    const response = await searchHotelsFB(
+      formattedPlace,
+      formattedGuests,
+      fieldValues.dateRange
+    );
 
     navigation.navigate("HomeSearchScreen", {
       place: fieldValues.place,

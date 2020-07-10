@@ -14,3 +14,18 @@ export const fetchHotelsOfRoomsFB = async (hotelIDs) => {
 
   return resultHotels;
 };
+
+// Found out if hotel has room has any room with passed price
+export const filterByPriceFB = async (hotelID, price) => {
+  let isExists = false;
+  const roomsRef = fb.db
+    .collection("rooms")
+    .where("hotelID", "==", hotelID)
+    .where("price", ">=", price);
+  const roomsData = await roomsRef.get().then((doc) => {
+    if (doc.exists) {
+      isExists = true;
+    }
+  });
+  return isExists;
+};
