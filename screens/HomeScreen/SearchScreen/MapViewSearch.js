@@ -57,7 +57,9 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
                 title={`$${marker.minPrice}+`}
               />
               <Callout
-                onPress={() => navigation.navigate({ name: "HotelScreen" })}
+                onPress={() =>
+                  navigation.navigate("HotelScreen", { hotelInfo: marker })
+                }
               >
                 <View style={styles.markerCallView}>
                   <CustomText style={{ color: COLORS.gradientOrange }}>
@@ -72,6 +74,9 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
       <SmallCardSlider
         hotels={hotels}
         style={[styles.catalogueHorizontalMap, bottomListStyle]}
+        onItemPress={(hotelInfo) =>
+          navigation.navigate("HotelScreen", { hotelInfo })
+        }
       />
     </View>
   );

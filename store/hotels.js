@@ -234,8 +234,6 @@ export const searchHotelsFB = (place, guests, dateRange) => async (
     // Combine results to find final data
     const finalData = hotelData.map((hotel) => {
       const minPrice = getMinRoomPrice(searchedHotelRooms, hotel.id);
-      console.log(minPrice,"==============================");
-      console.log("==============================");
       
       const isAvailable = isHotelAvailable(
         searchedHotelRooms,
