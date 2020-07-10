@@ -15,29 +15,17 @@ const mapStateToProps = (state) => ({
 export const Favorites = connect(mapStateToProps, { addHotel, deleteHotel })(
   ({ navigation, addHotel, deleteHotel, hotels, favorites }) => {
     const theme = useSelector((state) => state.themeReducer).theme;
-    console.log(hotels);
+
     const filteredHotels = hotels.filter((item) => {
       return favorites.includes(item.id);
     });
-    console.log(filteredHotels);
+
     const goBackHandler = () => {
       navigation.goBack();
     };
 
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.backBtn} onPress={goBackHandler}>
-            <CustomSvg
-              name={"chevronLeft"}
-              style={{
-                ...styles.chevronLeft,
-                color: theme == "light" ? COLORS.blackText : COLORS.white,
-              }}
-            />
-          </TouchableOpacity>
-          <CustomText style={styles.headerTxt}>Favorites</CustomText>
-        </View>
         <View style={styles.favoriteCards}>
           <LargeHotelSlider
             hotels={filteredHotels}
