@@ -32,6 +32,8 @@ import {
   getLastSearchFieldValues,
   setLastSearchFieldValues,
 } from "../../store/hotels";
+import { updateFavoriteList } from "../../store/favorites";
+import { selectUserId } from "../../store/auth";
 
 const mapStateToProps = (state) => ({
   roomList: getRoomList(state),
@@ -40,6 +42,7 @@ const mapStateToProps = (state) => ({
 
 export const HomePage = connect(mapStateToProps, {
   getRoomListFB,
+  updateFavoriteList,
   searchHotelsFB,
   setLastSearchFieldValues,
 })((props) => {
@@ -49,6 +52,7 @@ export const HomePage = connect(mapStateToProps, {
     roomList,
     searchHotelsFB,
     searchResult,
+    updateFavoriteList,
     setLastSearchFieldValues,
   } = props;
   const texts = {
@@ -65,9 +69,10 @@ export const HomePage = connect(mapStateToProps, {
   const theme = useSelector((state) => state.themeReducer).theme;
   const dispatch = useDispatch();
   dispatch(setTabVisibility(true));
-
+  const id = useSelector(selectUserId);
   useEffect(() => {
     fetchRoomsData();
+    updateFavoriteList(id, false);
   }, []);
 
   useEffect(() => {

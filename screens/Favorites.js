@@ -1,26 +1,58 @@
 import React from "react";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { connect, useSelector } from "react-redux";
 
-import { CustomText, LargeHotelSlider } from "../components";
+import { CustomText, LargeHotelSlider, CustomSvg } from "../components";
 import COLORS from "../styles/colors";
-import { hotels } from "./HomeScreen/SearchScreen";
-import { LinearGradient } from "react-native-svg";
+import { getRoomList, getHotelList } from "../store/hotels";
+import { addHotel, deleteHotel, selectFavorites } from "../store/favorites";
 
-const screenWidth = Dimensions.get("window").width;
+const mapStateToProps = (state) => ({
+  hotels: getHotelList(state),
+  favorites: selectFavorites(state),
+});
 
-export const Favorites = () => {
-  return (
-    <View style={styles.container}>
-      <View>
-        <LargeHotelSlider
-          hotels={hotels}
-          bgColor={"transparent"}
-          style={{ marginTop: 0 }}
-        />
+export const Favorites = connect(mapStateToProps, { addHotel, deleteHotel })(
+  ({ navigation, addHotel, deleteHotel, hotels, favorites }) => {
+    const theme = useSelector((state) => state.themeReducer).theme;
+    console.log(hotels);
+    const filteredHotels = hotels.filter((item) => {
+      return favorites.includes(item.id);
+    });
+    console.log(filteredHotels);
+    const goBackHandler = () => {
+      navigation.goBack();
+    };
+
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backBtn} onPress={goBackHandler}>
+            <CustomSvg
+              name={"chevronLeft"}
+              style={{
+                ...styles.chevronLeft,
+                color: theme == "light" ? COLORS.blackText : COLORS.white,
+              }}
+            />
+          </TouchableOpacity>
+          <CustomText style={styles.headerTxt}>Favorites</CustomText>
+        </View>
+        <View style={styles.favoriteCards}>
+          <LargeHotelSlider
+            hotels={filteredHotels}
+            bgColor={"transparent"}
+            style={{
+              height: "100%",
+              paddingBottom: "13%",
+              marginTop: 0,
+            }}
+          />
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -28,30 +60,48 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     // alignItems: "center",
     // justifyContent: "center",
+    paddingBottom: "5%",
   },
   header: {
-    width: "100%",
-    paddingTop: 50,
+    flexDirection: "row",
+    // justifyContent: "flex-start",
+    // elevation: 2,
+    // justifyContent: "center",
+    alignItems: "center",
+    // justifyContent: "center",
+    // backgroundColor: "black",
+    paddingTop: "10%",
+    paddingBottom: "2%",
   },
 
   headerTxt: {
     fontSize: 28,
     color: COLORS.gradientPink,
+    marginTop: "5%",
+    marginLeft: "25%",
+    // marginTop: "10%",
     // top: "10%",
     // marginBottom: "5%",
   },
-  // favoriteCards: {
-  //   height: "85%",
-  // },
-  gradientHeader: {
-    position: "absolute",
-    top: -880,
-    left: -(1000 - screenWidth) / 2,
-    width: 1000,
-    height: 1000,
-    borderBottomLeftRadius: 1000,
-    borderBottomRightRadius: 1000,
-    elevation: 5,
-    zIndex: -1,
+  favoriteCards: {
+    // flex: 1,
+    // height: "120%",
+    // backgroundColor: "black",
+  },
+  chevronLeft: {
+    height: "100%",
+    width: "100%",
+    color: COLORS.blackText,
+    marginTop: 15,
+  },
+  backBtn: {
+    marginLeft: 19,
+    // marginRight: "20%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 11,
+    height: 22,
+    width: 22,
+    marginTop: "1%",
   },
 });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
@@ -6,67 +6,105 @@ import COLORS from "../../styles/colors";
 import { CustomText } from "../CustomText";
 import { Rating } from "./Rating";
 import { CustomSvg } from "./CustomSvg";
+import { connect } from "react-redux";
+import {
+  addHotel,
+  selectFavorites,
+  deleteHotel,
+  updateFavoriteList,
+} from "../../store/favorites";
+import fb from "../../firebaseConfig";
 
-export const HotelLarge = ({
-  cardInfo,
-  isLiked,
-  isMinimal,
-  onPress,
-  onLikePress,
-  style,
-}) => {
-  const item = cardInfo || {};
-  const makeItShort = (value, length, end = " ...") => {
-    return value
-      ? ((value = value.toString()),
-        value.length <= length ? value : value.substring(0, length) + end)
-      : null;
-  };
-  return (
-    <TouchableOpacity
-      style={[styles.container, { ...style }]}
-      onPress={onPress}
-    >
-      <LinearGradient
-        colors={[
-          "rgba(0, 0, 0, 0)",
-          "rgba(0, 0, 0, 0.3)",
-          "rgba(0, 0, 0, 0.7)",
-        ]}
-        style={styles.gradient}
+const mapStateToProps = (state) => ({
+  favorites: selectFavorites(state),
+});
+
+export const HotelLarge = connect(mapStateToProps, {
+  addHotel,
+  deleteHotel,
+  updateFavoriteList,
+})(
+  ({
+    cardInfo,
+    isMinimal,
+    onPress,
+    onLikePress,
+    style,
+    addHotel,
+    deleteHotel,
+    favorites,
+    updateFavoriteList,
+  }) => {
+    const item = cardInfo || {};
+    const [isLiked, setIsLiked] = useState(cardInfo.isLiked);
+
+    useEffect(() => {
+      setIsLiked(favorites.includes(cardInfo.id));
+    }, [favorites]);
+
+    const makeItShort = (value, length, end = " ...") => {
+      return value
+        ? ((value = value.toString()),
+          value.length <= length ? value : value.substring(0, length) + end)
+        : null;
+    };
+    return (
+      <TouchableOpacity
+        style={[styles.container, { ...style }]}
+        onPress={onPress}
       >
-        <Image
-          resizeMode={"cover"}
-          style={styles.bgImg}
-          source={{ uri: item.imgUrl }}
-        />
-        <TouchableOpacity style={styles.heartHolder} onPress={onLikePress}>
-          <CustomSvg
-            name={isLiked ? "heartFull" : "heartEmpty"}
-            style={styles.heart}
+        <LinearGradient
+          colors={[
+            "rgba(0, 0, 0, 0)",
+            "rgba(0, 0, 0, 0.3)",
+            "rgba(0, 0, 0, 0.7)",
+          ]}
+          style={styles.gradient}
+        >
+          <Image
+            resizeMode={"cover"}
+            style={styles.bgImg}
+            source={{ uri: item.imgUrl }}
           />
-        </TouchableOpacity>
-        <CustomText style={styles.name}>
-          {makeItShort(item.name, 40) || "~"}
-        </CustomText>
-        <Rating style={styles.rating} value={item.rating} />
-      </LinearGradient>
-      {isMinimal ? null : (
-        <View style={styles.cardInfo}>
-          <CustomText style={styles.loaction}>
-            {makeItShort(item.city, 30) || "~"}
+          <TouchableOpacity
+            style={styles.heartHolder}
+            onPress={() => {
+              isLiked ? deleteHotel(item.id) : addHotel(item.hotelID);
+              const id = fb?.auth?.currentUser?.uid;
+              setIsLiked((value) => !value);
+              updateFavoriteList(id, true);
+            }}
+          >
+            <CustomSvg
+              name={isLiked ? "heartFull" : "heartEmpty"}
+              style={styles.heart}
+            />
+          </TouchableOpacity>
+          <CustomText style={styles.name}>
+            {makeItShort(item.name, 40) || "~"}
           </CustomText>
-          <CustomText style={styles.pricing}>
-            {makeItShort(item.street, 25) || "~"}
-          </CustomText>
-          <CustomText style={styles.price}>
-            {makeItShort(item.currency, 3) || "$"} {item.price || "~"}
-          </CustomText>
-        </View>
-      )}
-    </TouchableOpacity>
-  );
-};
+          <Rating style={styles.rating} value={item.rating} />
+        </LinearGradient>
+        {isMinimal ? null : (
+          <View style={styles.cardInfo}>
+            <CustomText style={styles.loaction}>
+              {makeItShort(item.location, 30) || "~"}
+            </CustomText>
+            <CustomText style={styles.description}>
+              {makeItShort(item.description, 25) || "~"}
+            </CustomText>
+            <CustomText style={styles.pricing}>
+              {item.pricing ? "Prepaid" : "No prepayment"}
+            </CustomText>
+            <CustomText style={styles.price}>
+              {makeItShort(item.currency, 3) || "$"} {item.price || "~"}
+            </CustomText>
+          </View>
+        )}
+      </TouchableOpacity>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   touchable: {
