@@ -30,6 +30,7 @@ export const LargeHotelSlider = connect(mapStateToProps)(
           data={hotels}
           renderItem={({ item }) => {
             const isLiked = favorites.includes(item.id);
+            console.log(item.price + " " + item.name + " " + item.images[0]);
             return (
               <HotelLarge
                 cardInfo={{
