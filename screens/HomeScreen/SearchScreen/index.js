@@ -50,7 +50,7 @@ const mapStateToProps = (state) => ({
 export const HomeSearchScreen = connect(mapStateToProps)(
   ({ route, navigation, searchResult }) => {
     const theme = useSelector((state) => state.themeReducer).theme;
-
+    console.log(searchResult);
     const [listType, setListType] = useState("map");
     const { place, guests, startDate, endDate } = route.params;
 
