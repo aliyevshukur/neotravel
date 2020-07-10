@@ -14,12 +14,14 @@ import {
 
 import {reducer as navReducer} from './navReducer';
 import {reducer as themeReducer} from './theme';
+import { reducer as reservationReducer} from './reservation';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   [hotelsModuleName]: hotelsReducer,
   navReducer,
   themeReducer,
+  reservationReducer,
 });
 
 const persistConfig = {

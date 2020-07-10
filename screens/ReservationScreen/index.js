@@ -9,7 +9,11 @@ import {
   Platform,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from "react-native";
+import fb from "../../firebaseConfig";
+
+
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { CustomButton, CustomText, CustomSvg } from "../../components";
@@ -18,12 +22,70 @@ import { ReservationContent } from "./components/ReservationContent";
 import COLORS from "../../styles/colors";
 
 
-import {useSelector} from 'react-redux';
+import { connect, useSelector} from "react-redux";
+import {
+  selectReserveData,
+  selectCompleted,
+  setReservedFb,
+  setRoomAndUserID,
+  setReserveInfo,
+  setCustomerInfo,
+  setCardInfo,
+  setCompletedRoomInfo,
+  setCompletedHotelInfo,
+  setCompletedUserInfo,
+  setCompletedReserveInfo,
+} from '../../store/reservation';
 
-export function ReservationScreen() {
+const mapStateToProps = (state) => ({
+  reservation: selectReserveData(state),
+  completedValues: selectCompleted(state),
+});
+
+
+
+export const ReservationScreen = connect(mapStateToProps, {
+  setReservedFb,
+  setRoomAndUserID,
+  setReserveInfo,
+  setCustomerInfo,
+  setCardInfo,
+  setCompletedRoomInfo,
+  setCompletedHotelInfo,
+  setCompletedUserInfo,
+  setCompletedReserveInfo,
+})(({
+  navigation,
+  route,
+  reservation,
+  completedValues,
+  setReservedFb,
+  setRoomAndUserID,
+  setReserveInfo,
+  setCustomerInfo,
+  setCardInfo,
+  setCompletedRoomInfo,
+  setCompletedHotelInfo,
+  setCompletedUserInfo,
+  setCompletedReserveInfo,
+}) => {
+
+  const currentUserId = fb.auth.currentUser.uid;
+  
+  // const route = {
+  //   params: {
+  //     roomId: "0a9lrJ8egawN5SRcXvgU",
+  //   }
+  // }
+
   const [stageNumber, setStageNumber] = useState(1);
   const [buttonTitle, setButtonTitle] = useState("");
   const [isKeyboardAvoidEnabled, setIsKeyboardAvoidEnabled] = useState(false);
+
+  const [reserveFormValues, setReserveFormValues] = useState({
+    guests: "",
+    dateRange: {},
+  });
 
   const [userFormValues, setUserFormValues] = useState({
     firstName: "",
@@ -37,6 +99,7 @@ export function ReservationScreen() {
 
   const [cardFormValues, setCardFromValues] = useState({
     cardNumber: "",
+    expiry: "",
     CVV: null,
     name: "",
   });
@@ -45,12 +108,22 @@ export function ReservationScreen() {
 
 
   const goBackHandler = () => {
-    setStageNumber(stageNumber -1)
+    if (stageNumber === 1) {
+      navigation.goBack();
+
+    } else setStageNumber(stageNumber -1);
   }
 
+  
+  const handleReserveFieldChange = (name, value) => {
+    setReserveFormValues({
+      ...reserveFormValues,
+      [name]: value,
+    });
+  };
   const handleUserFieldChange = (name, value) => {
     setUserFormValues({
-      ...cardFormValues,
+      ...userFormValues,
       [name]: value,
     });
   };
@@ -63,6 +136,13 @@ export function ReservationScreen() {
     if ((name === "cardNumber" || name === "CVV") && isNaN(value)) {
       return;
     }
+    if(name=="expiry" && value.length==2) {
+      setCardFromValues({
+        ...cardFormValues,
+        [name]: value+ "/",
+      });
+      return;
+    }
 
     setCardFromValues({
       ...cardFormValues,
@@ -71,24 +151,191 @@ export function ReservationScreen() {
   };
 
   const handleButtonPress = () => {
-    if (stageNumber === 3) console.log("not last one");
-    else setStageNumber(stageNumber + 1);
+    switch (stageNumber) {
+      case 1:
+        if(reserveFormValues.guests && reserveFormValues.dateRange.startDate && reserveFormValues.dateRange.endDate){
+          setReserveInfo(reserveFormValues);
+          checkMaxGuests(reserveFormValues.guests);
+        }
+        break;
+      case 2:
+        const {firstName, lastName, email, address, postCode, country, mobilePhone,} = userFormValues;
+        if(firstName&&lastName&&email&&address&&postCode&&country&&mobilePhone){
+          setStageNumber(3);
+          setCustomerInfo(userFormValues);
+        }
+        break;
+      case 3:
+        const {cardNumber, expiry, CVV, name} = cardFormValues;
+        if(cardNumber&&expiry&&CVV&&name){
+          setStageNumber(4);
+          setCardInfo(cardFormValues);
+        }
+        break;
+      case 4:
+        setReservedFb(reservation);
+        // NAVIGATION HERE
+    }
   };
+
+
+  function checkMaxGuests (guests) {
+    const docRef = fb.db.collection('rooms').doc(route?.params?.roomId);
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+          if(doc.data().maxGuests < guests) {
+            Alert.alert(
+              "Info",
+              "Selected guests is more than room capacity. You can change number of guests or search for another room.",
+              [
+                { text: "Ok", onPress: () => {} }
+              ],
+              { cancelable: true }
+            )
+          } else {
+            checkIfRoomReserved({
+              roomId: reservation.roomId,
+              startDate: new Date(reserveFormValues.dateRange.startDate).getTime(),
+              endDate: new Date(reserveFormValues.dateRange.endDate).getTime(),
+            });
+          }
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+      }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+  }
+
+  async function checkIfRoomReserved (data) {
+    let currentTime = new Date().getTime();
+    try{
+      const snapshot = await fb.db.collection('reservations').where('endDate', '>', currentTime).where('roomId', '==', data.roomId).get();
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+        setStageNumber(2);
+        setCompletedReserveInfo(reserveFormValues);
+        return;
+      }
+      snapshot.forEach(doc => {        
+        if((doc.data().startDate >= data.startDate && doc.data().startDate <= data.endDate)
+        ||
+        (doc.data().endDate >= data.startDate && doc.data().endDate <= data.endDate)
+        ||
+        (data.startDate <= doc.data().startDate && data.endDate >= doc.data().endDate)
+        ) {
+          Alert.alert(
+            "Info",
+            "This room is reserved in selected time interval, please choose different time or search for another room",
+            [
+              { text: "Ok", onPress: () => {} }
+            ],
+            { cancelable: true }
+          )
+          console.log("reserved");
+          return;
+        } else {
+          setStageNumber(2);
+          setCompletedReserveInfo(reserveFormValues);
+          return;
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  function getRestRoomDataFb (roomId) {
+    const docRef = fb.db.collection('rooms').doc(roomId);
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+          const roomData = doc.data();
+          setCompletedRoomInfo({
+            roomName: roomData.name,
+            imgUrl: roomData.images[0],
+            price: roomData.price,
+            currency: roomData.currency,
+            description: roomData.description,
+          });
+            getRestHotelDataFb(roomData.hotelID);
+            getRestUserDataFb (currentUserId, roomData.hotelID)
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such room document!");
+      }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+    
+  }
+
+  function getRestHotelDataFb (hotelId) {
+    const hotelRef = fb.db.collection('hotels').doc(hotelId);
+    hotelRef.get().then(function(doc) {
+      if (doc.exists) {
+        const hotelData = doc.data();
+        setCompletedHotelInfo({
+          hotelName: hotelData.name,
+          rating: hotelData.rating,
+        })
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such hotel document!");
+      }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+  }
+  function getRestUserDataFb (userId, hotelId) {
+    const userRef = fb.db.collection('users').doc(userId);
+    userRef.get().then(function(doc) {
+      if (doc.exists) {
+        const userData = doc.data();
+        setCompletedUserInfo({
+          isLiked: userData.favorites.includes(hotelId),
+        })
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such user document!");
+      }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+  }
+
+  useEffect(() => {
+    setRoomAndUserID({
+      userId: currentUserId,
+      roomId: route?.params?.roomId,
+      // roomId: "0a9lrJ8egawN5SRcXvgU",
+    });
+
+    getRestRoomDataFb(route?.params?.roomId);
+
+  }, [])
+
 
   useEffect(() => {
     switch (stageNumber) {
       case 1:
-        setButtonTitle("Go to Payment");
+        setButtonTitle("Go to Customer Info");
         break;
       case 2:
-        setButtonTitle("Go to Confirmation");
+        setButtonTitle("Go to Payment");
         break;
       case 3:
+        setButtonTitle("Go to Confirmation");
+        break;
+      case 4:
         setButtonTitle("Complete");
     }
   }, [stageNumber]);
 
-  // contentContainerStyle={styles.container}
+  
+
+
   return (
     <KeyboardAwareScrollView style={{width: "100%"}} >
     <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
@@ -101,16 +348,19 @@ export function ReservationScreen() {
       <View style={styles.progressBarHolder}>
         <ProgressBar activeNumber={stageNumber} style={styles.progressBar} />
       </View>
-        <View style={styles.main}>
-              <ReservationContent
-                stageNumber={stageNumber}
-                userFormValues={userFormValues}
-                cardFormValues={cardFormValues}
-                handleUserFieldChange={handleUserFieldChange}
-                handleCardFieldChange={handleCardFieldChange}
-                setIsKeyboardAvoidEnabled={setIsKeyboardAvoidEnabled}
-              />
-          </View>
+      <View style={styles.main}>
+          <ReservationContent
+            stageNumber={stageNumber}
+            reserveFormValues={reserveFormValues}
+            userFormValues={userFormValues}
+            cardFormValues={cardFormValues}
+            completePreviewValues={completedValues}
+            handleReserveFieldChange={handleReserveFieldChange}
+            handleUserFieldChange={handleUserFieldChange}
+            handleCardFieldChange={handleCardFieldChange}
+            setIsKeyboardAvoidEnabled={setIsKeyboardAvoidEnabled}
+          />
+      </View>
       <CustomButton
         title={buttonTitle}
         style={styles.button}
@@ -119,7 +369,7 @@ export function ReservationScreen() {
     </View>
     </KeyboardAwareScrollView>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -171,5 +421,6 @@ const styles = StyleSheet.create({
 
   },
   progressBar: {
+    marginBottom: 5,
   },
 });

@@ -123,7 +123,7 @@ export const HomePage = connect(mapStateToProps, {
 
   return (
     <ImageBackground
-      resizeMode="stretch"
+      resizeMode="cover"
       source={bgcImage}
       style={{ width: 463, height: "100%" }}
     >
