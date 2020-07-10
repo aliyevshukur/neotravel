@@ -32,6 +32,9 @@ import {
   searchRoomsFB,
   getSearchResult,
 } from "../../store/hotels";
+import { updateFavoriteList } from "../../store/favorites";
+import fb from "../../firebaseConfig";
+import { selectUserId } from "../../store/auth";
 
 const mapStateToProps = (state) => ({
   roomList: getRoomList(state),
@@ -41,6 +44,7 @@ const mapStateToProps = (state) => ({
 export const HomePage = connect(mapStateToProps, {
   getRoomListFB,
   searchRoomsFB,
+  updateFavoriteList,
 })((props) => {
   const {
     navigation,
@@ -48,6 +52,7 @@ export const HomePage = connect(mapStateToProps, {
     roomList,
     searchRoomsFB,
     searchResult,
+    updateFavoriteList,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
@@ -62,9 +67,11 @@ export const HomePage = connect(mapStateToProps, {
 
   const dispatch = useDispatch();
   dispatch(setTabVisibility(true));
-
+  const id = useSelector(selectUserId);
   useEffect(() => {
     fetchRoomsData();
+    // const id = fb?.auth?.currentUser?.uid;
+    updateFavoriteList(id, false);
   }, []);
 
   useEffect(() => {

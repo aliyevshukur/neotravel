@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
@@ -7,31 +7,47 @@ import { CustomText } from "../CustomText";
 import { Rating } from "./Rating";
 import { CustomSvg } from "./CustomSvg";
 import { connect } from "react-redux";
-import { addHotel, selectFavorites } from "../../store/favorites";
+import {
+  addHotel,
+  selectFavorites,
+  deleteHotel,
+  updateFavoriteList,
+} from "../../store/favorites";
+import fb from "../../firebaseConfig";
 
 const mapStateToProps = (state) => ({
   favorites: selectFavorites(state),
 });
 
-export const HotelLarge = connect(mapStateToProps, { addHotel })(
+export const HotelLarge = connect(mapStateToProps, {
+  addHotel,
+  deleteHotel,
+  updateFavoriteList,
+})(
   ({
     cardInfo,
-    isLiked,
     isMinimal,
     onPress,
     onLikePress,
     style,
     addHotel,
+    deleteHotel,
     favorites,
+    updateFavoriteList,
   }) => {
     const item = cardInfo || {};
+    const [isLiked, setIsLiked] = useState(cardInfo.isLiked);
+
+    useEffect(() => {
+      setIsLiked(favorites.includes(cardInfo.id));
+    }, [favorites]);
+
     const makeItShort = (value, length, end = " ...") => {
       return value
         ? ((value = value.toString()),
           value.length <= length ? value : value.substring(0, length) + end)
         : null;
     };
-    console.log(favorites);
     return (
       <TouchableOpacity
         style={[styles.container, { ...style }]}
@@ -52,7 +68,12 @@ export const HotelLarge = connect(mapStateToProps, { addHotel })(
           />
           <TouchableOpacity
             style={styles.heartHolder}
-            onPress={() => addHotel("12345")}
+            onPress={() => {
+              isLiked ? deleteHotel(item.id) : addHotel(item.id);
+              const id = fb?.auth?.currentUser?.uid;
+              setIsLiked((value) => !value);
+              updateFavoriteList(id, true);
+            }}
           >
             <CustomSvg
               name={isLiked ? "heartFull" : "heartEmpty"}

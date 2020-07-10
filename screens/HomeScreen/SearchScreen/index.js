@@ -47,8 +47,6 @@ export const HomeSearchScreen = ({ route, navigation }) => {
 
   const [listType, setListType] = useState("map");
   const { searchResult, place, guests, startDate, endDate } = route.params;
-  console.log("searchResult", searchResult);
-  console.log("searchResult", place, guests, endDate, startDate);
 
   const texts = {
     navRight: "Filter",

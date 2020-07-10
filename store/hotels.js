@@ -153,7 +153,6 @@ export const searchRoomsFB = (place, guests, date) => async (dispatch) => {
     hotelData[doc.id] = doc.data();
     hotelIDs.push(doc.id);
   });
-  console.log("hotelId - " + hotelId);
   if (hotelIDs.length !== 0) {
     let searchResult = [];
     const roomsRef = fb.db
@@ -165,7 +164,7 @@ export const searchRoomsFB = (place, guests, date) => async (dispatch) => {
     searchResult = searchedRooms.docs.map((doc) => {
       return {
         id: doc.id,
-        hotelID: hotelData[doc.data().hotelID].id,
+        // hotelID: doc.data().hotelID,
         marker: {
           latitudeDelta: 0.04,
           longitudeDelta: 0.05,
