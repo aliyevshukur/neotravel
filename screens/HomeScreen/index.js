@@ -33,7 +33,6 @@ import {
   setLastSearchFieldValues,
 } from "../../store/hotels";
 import { updateFavoriteList } from "../../store/favorites";
-import fb from "../../firebaseConfig";
 import { selectUserId } from "../../store/auth";
 
 const mapStateToProps = (state) => ({
@@ -73,7 +72,6 @@ export const HomePage = connect(mapStateToProps, {
   const id = useSelector(selectUserId);
   useEffect(() => {
     fetchRoomsData();
-    // const id = fb?.auth?.currentUser?.uid;
     updateFavoriteList(id, false);
   }, []);
 

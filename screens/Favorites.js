@@ -4,18 +4,18 @@ import { connect, useSelector } from "react-redux";
 
 import { CustomText, LargeHotelSlider, CustomSvg } from "../components";
 import COLORS from "../styles/colors";
-import { getRoomList } from "../store/hotels";
+import { getRoomList, getHotelList } from "../store/hotels";
 import { addHotel, deleteHotel, selectFavorites } from "../store/favorites";
 
 const mapStateToProps = (state) => ({
-  hotels: getRoomList(state),
+  hotels: getHotelList(state),
   favorites: selectFavorites(state),
 });
 
 export const Favorites = connect(mapStateToProps, { addHotel, deleteHotel })(
   ({ navigation, addHotel, deleteHotel, hotels, favorites }) => {
     const theme = useSelector((state) => state.themeReducer).theme;
-
+    console.log(hotels);
     const filteredHotels = hotels.filter((item) => {
       return favorites.includes(item.id);
     });
