@@ -1,46 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import { FlatList, View, StyleSheet, Dimensions } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, connect } from "react-redux";
 
 import COLORS from "../styles/colors";
 import { HotelLarge } from "./cards/HotelLarge";
+import { selectFavorites } from "../store/favorites";
 
-export const LargeHotelSlider = ({ hotels, bgColor, style }) => {
-  const theme = useSelector((state) => state.themeReducer).theme;
+const mapStateToProps = (state) => ({
+  favorites: selectFavorites(state),
+});
 
-  return (
-    <View
-      style={[
-        styles.catalogueVertical,
-        {
-          backgroundColor:
-            COLORS[bgColor] ||
-            (theme == "light" ? COLORS.bgcLight : COLORS.bgcDark),
-        },
-        { ...style },
-      ]}
-    >
-      <FlatList
-        data={hotels}
-        renderItem={({ item }) => (
-          <HotelLarge
-            cardInfo={{
-              imgUrl: item.images[0],
-              price: item.minPrice,
-              name: item.name,
-              rating: item.rating,
-              city: item.city,
-              street: item.street,
-              hotelID: item.id,
-            }}
-            style={styles.hotelLargeStyle}
-            key={item.id}
-          />
-        )}
-      />
-    </View>
-  );
-};
+export const LargeHotelSlider = connect(mapStateToProps)(
+  ({ hotels, bgColor, style, addHotel, favorites }) => {
+    const theme = useSelector((state) => state.themeReducer).theme;
+
+    return (
+      <View
+        style={[
+          styles.catalogueVertical,
+          {
+            backgroundColor:
+              COLORS[bgColor] ||
+              (theme == "light" ? COLORS.bgcLight : COLORS.bgcDark),
+          },
+          { ...style },
+        ]}
+      >
+        <FlatList
+          data={hotels}
+          renderItem={({ item }) => {
+            const isLiked = favorites.includes(item.id);
+            return (
+              <HotelLarge
+                cardInfo={{
+                  imgUrl: item.images[0],
+                  price: item.minPrice,
+                  name: item.name,
+                  rating: item.rating,
+                  city: item.city,
+                  street: item.street,
+                  hotelID: item.id,
+                  isLiked: favorites.includes(item.id),
+                }}
+                style={styles.hotelLargeStyle}
+                key={item.id}
+              />
+            );
+          }}
+        />
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   hotelLargeStyle: {

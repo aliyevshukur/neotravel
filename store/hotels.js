@@ -207,7 +207,6 @@ export const searchHotelsFB = (place, guests, dateRange) => async (
     hotelData.push({ id: doc.id, ...doc.data() });
     hotelIDs.push(doc.id);
   });
-
   if (hotelIDs.length !== 0) {
     // Filter out rooms of searched hotels
     const roomsRef = fb.db
