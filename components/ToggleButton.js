@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, TouchableOpacity, Animated } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-export const ToggleButton = ({value, setValue, reset }) => {
+export const ToggleButton = ({ value, setValue, reset }) => {
   const [animation, setAnimation] = useState(new Animated.Value(0));
   const [toggle, setToggle] = useState(value);
 
@@ -17,7 +17,6 @@ export const ToggleButton = ({value, setValue, reset }) => {
   useEffect(() => {
     toggleBtn();
   }, [reset]);
-
   return (
     <Animated.View style={styles.toggleBtn}>
       <LinearGradient

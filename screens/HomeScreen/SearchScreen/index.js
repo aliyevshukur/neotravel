@@ -8,7 +8,7 @@ import { ListViewSearch } from "./ListViewSearch";
 import { MapViewSearch } from "./MapViewSearch";
 import { PrimarySearch, FilterRow } from "../../SearchScreen/components";
 import { CustomText } from "../../../components";
-import { getSearchResult,} from "../../../store/hotels";
+import { getSearchResult } from "../../../store/hotels";
 
 export const hotels = [
   {
@@ -76,7 +76,6 @@ export const HomeSearchScreen = connect(mapStateToProps)(
       "November",
       "December",
     ];
-console.log("searchResult",searchResult);
 
     return (
       <View
@@ -110,15 +109,9 @@ console.log("searchResult",searchResult);
         {searchResult.length !== 0 ? (
           <View style={styles.listContainer}>
             {listType === "list" ? (
-              <ListViewSearch
-                navigation={navigation}
-                hotels={searchResult}
-              />
+              <ListViewSearch navigation={navigation} hotels={searchResult} />
             ) : (
-              <MapViewSearch
-                navigation={navigation}
-                hotels={searchResult}
-              />
+              <MapViewSearch navigation={navigation} hotels={searchResult} />
             )}
           </View>
         ) : (

@@ -1,9 +1,9 @@
-export const getMaxRoomPrice = (rooms, hotelID) => {
+export const getMinRoomPrice = (rooms, hotelID) => {
   const prices = rooms.map((room) => {
     if (room.hotelID === hotelID) {
       return room.price;
     }
   });
 
-  return String(Math.max(...prices));
+  return String(Math.min(...prices));
 };

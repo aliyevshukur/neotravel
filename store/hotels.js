@@ -1,30 +1,37 @@
 import fb from "../firebaseConfig";
-import { getMaxRoomPrice } from "../utils/getMaxRoomPrice";
+import { getMinRoomPrice } from "../utils/getMaxRoomPrice";
+import { isHotelAvailable } from "../utils/isHotelAvailable";
 
 // ACTIONS
 const SET_HOTEL_LIST = "SET_HOTEL_LIST";
 const SET_ROOM_LIST = "SET_ROOM_LIST";
-const SET_HOTELS_ON_DISCOUNT = "SET_HOTELS_ON_DISCOUNT";
+const SET_HOTELS_ON_DEALS = "SET_HOTELS_ON_DEALS";
 const SET_SEARCH_HOTEL_RESULT = "SET_SEARCH_HOTEL_RESULT";
 const SET_FILTERED_RESULT = "SET_FILTERED_RESULT";
+const SET_LAST_SEARCH_FIELD_VALUES = "SET_LAST_SEARCH_FIELD_VALUES";
+const SET_LAST_USER_CHOICES = "SET_LAST_USER_CHOICES";
 
 export const MODULE_NAME = "hotels";
 export const getHotelList = (state) => state[MODULE_NAME].hotelList;
 export const getRecommendedHotels = (state) =>
   state[MODULE_NAME].recommendedHotels;
-export const getHotelsOnDiscount = (state) =>
-  state[MODULE_NAME].hotelsOnDiscount;
+export const getHotelsOnDeals = (state) => state[MODULE_NAME].hotelsOnDeals;
 export const getRoomList = (state) => state[MODULE_NAME].roomList;
 export const getSearchResult = (state) =>
   state[MODULE_NAME].search.searchResult;
+export const getLastSearchFieldValues = (state) =>
+  state[MODULE_NAME].search.lastSearchFieldValues;
+export const getLastUserChoices = (state) => state[MODULE_NAME].lastUserChoices;
 
 const initialState = {
   hotelList: [],
   roomList: [],
   search: {
-    lastSearchFields: {},
+    lastSearchFieldValues: {},
     searchResult: [],
   },
+  lastUserChoices: {},
+  hotelsOnDeals: [],
 };
 
 // REDUCER
@@ -40,10 +47,10 @@ export const reducer = (state = initialState, { type, payload }) => {
         ...state,
         roomList: payload,
       };
-    case SET_HOTELS_ON_DISCOUNT:
+    case SET_HOTELS_ON_DEALS:
       return {
         ...state,
-        hotelsOnDiscount: payload,
+        hotelsOnDeals: payload,
       };
     case SET_SEARCH_HOTEL_RESULT:
       return {
@@ -52,6 +59,19 @@ export const reducer = (state = initialState, { type, payload }) => {
           ...state.search,
           searchResult: payload,
         },
+      };
+    case SET_LAST_SEARCH_FIELD_VALUES:
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          lastSearchFieldValues: payload,
+        },
+      };
+    case SET_LAST_USER_CHOICES:
+      return {
+        ...state,
+        lastUserChoices: payload,
       };
     default:
       return state;
@@ -64,8 +84,8 @@ export const setHotelList = (payload) => ({
   payload,
 });
 
-export const setHotelsOnDiscount = (payload) => ({
-  type: SET_HOTELS_ON_DISCOUNT,
+export const setHotelsOnDeals = (payload) => ({
+  type: SET_HOTELS_ON_DEALS,
   payload,
 });
 export const setRoomList = (payload) => ({
@@ -81,6 +101,20 @@ export const setSearchHotelResults = (payload) => ({
 export const setFilteredResult = (payload) => {
   return {
     type: SET_FILTERED_RESULT,
+    payload,
+  };
+};
+
+export const setLastSearchFieldValues = (payload) => {
+  return {
+    type: SET_LAST_SEARCH_FIELD_VALUES,
+    payload,
+  };
+};
+
+export const setLastUserChoices = (payload) => {
+  return {
+    type: SET_LAST_USER_CHOICES,
     payload,
   };
 };
@@ -107,31 +141,22 @@ export const getHotelListFB = () => async (dispatch) => {
   } catch (error) {}
 };
 
-export const getHotelsOnDiscountFB = () => (dispatch) => {
+export const getHotelsOnDealsFB = () => (dispatch) => {
   try {
     fb.db
-      .collection("hotelsOnDiscount")
+      .collection("hotelsOnDeals")
+      .doc("hotelIDs")
       .get()
-      .then((snapshot) => {
-        if (snapshot) {
-          const hotelsOnDiscount = Object.keys(snapshot.docs).map((key) => {
-            const doc = snapshot.docs[key];
-
-            return {
-              id: doc.id,
-              ...doc.data(),
-            };
-          });
-
-          dispatch(setHotelsOnDiscount(hotelsOnDiscount));
+      .then((doc) => {
+        if (doc) {
+          const hotelIDs = doc.data().IDs;
+          dispatch(setHotelsOnDeals(hotelIDs));
         } else {
-          console.log("no data");
-
-          dispatch(setHotelsOnDiscount([]));
+          dispatch(setHotelsOnDeals([]));
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log("error", error);
       });
   } catch (error) {
     console.log("error", error);
@@ -159,7 +184,9 @@ export const getRoomListFB = () => async (dispatch) => {
   } catch (error) {}
 };
 
-export const searchHotelsFB = (place, guests, date) => async (dispatch) => {
+export const searchHotelsFB = (place, guests, dateRange) => async (
+  dispatch
+) => {
   const hotelData = [];
   const hotelIDs = [];
 
@@ -185,16 +212,33 @@ export const searchHotelsFB = (place, guests, date) => async (dispatch) => {
       };
     });
 
-    // Combine results to find final data
-    const finalData = hotelData.map((hotel) => {
-      const maxPrice = getMaxRoomPrice(searchedHotelRooms, hotel.id);
+    // Get reservations
+    const reservationsRef = fb.db.collection("reservations");
+    const reservationsSnap = await reservationsRef.get();
+    const reservationsData = reservationsSnap.docs.map((doc) => {
       return {
-        id: hotel.id,
-        maxPrice,
-        ...hotel,
+        id: doc.id,
+        ...doc.data(),
       };
     });
-    console.log("finalData", finalData);
+
+    // Combine results to find final data
+    const finalData = hotelData.map((hotel) => {
+      const maxPrice = getMinRoomPrice(searchedHotelRooms, hotel.id);
+      const isAvailable = isHotelAvailable(
+        searchedHotelRooms,
+        hotel.id,
+        dateRange,
+        reservationsData
+      );
+      if (isAvailable) {
+        return {
+          id: hotel.id,
+          maxPrice,
+          ...hotel,
+        };
+      }
+    });
 
     if (finalData.length !== 0) {
       dispatch(setSearchHotelResults(finalData));

@@ -8,7 +8,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { connect, useSelector, useDispatch} from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
 import { setTabVisibility } from "../../store/navReducer";
 
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
@@ -16,7 +16,6 @@ import COLORS from "../../styles/colors";
 import { HotelMedium } from "../../components/cards/HotelMedium";
 import { findRecommendedRooms } from "../../utils/getRecommededHotels";
 import { EmptyListComponent } from "./EmptyListComponent";
-
 
 import {
   CustomText,
@@ -30,6 +29,8 @@ import {
   getRoomList,
   searchHotelsFB,
   getSearchResult,
+  getLastSearchFieldValues,
+  setLastSearchFieldValues,
 } from "../../store/hotels";
 
 const mapStateToProps = (state) => ({
@@ -40,6 +41,7 @@ const mapStateToProps = (state) => ({
 export const HomePage = connect(mapStateToProps, {
   getRoomListFB,
   searchHotelsFB,
+  setLastSearchFieldValues,
 })((props) => {
   const {
     navigation,
@@ -47,6 +49,7 @@ export const HomePage = connect(mapStateToProps, {
     roomList,
     searchHotelsFB,
     searchResult,
+    setLastSearchFieldValues,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
@@ -59,7 +62,7 @@ export const HomePage = connect(mapStateToProps, {
     dateRange: {},
   });
 
-  const theme = useSelector(state => state.themeReducer).theme;
+  const theme = useSelector((state) => state.themeReducer).theme;
   const dispatch = useDispatch();
   dispatch(setTabVisibility(true));
 
@@ -106,8 +109,17 @@ export const HomePage = connect(mapStateToProps, {
 
     const formattedGuests = +fieldValues.guests;
 
-    const response = await searchHotelsFB(formattedPlace, formattedGuests);
-    
+    setLastSearchFieldValues({
+      place: formattedPlace,
+      guests: formattedGuests,
+      dateRange: fieldValues.dateRange,
+    });
+    const response = await searchHotelsFB(
+      formattedPlace,
+      formattedGuests,
+      fieldValues.dateRange
+    );
+
     navigation.navigate("HomeSearchScreen", {
       place: fieldValues.place,
       guests: fieldValues.guests,
@@ -133,7 +145,13 @@ export const HomePage = connect(mapStateToProps, {
               {texts.description}
             </CustomText>
           </View>
-          <View style={{...styles.searchArea, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
+          <View
+            style={{
+              ...styles.searchArea,
+              backgroundColor:
+                theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+            }}
+          >
             <View style={styles.placeRow}>
               <CustomInput
                 // long={true}
