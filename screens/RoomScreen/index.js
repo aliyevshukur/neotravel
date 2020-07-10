@@ -66,7 +66,7 @@ export const RoomScreen = ({navigation, route}) => {
   };
   const selectHandler = (id) => {
     const index = DATA.findIndex((item) => item.id == id);
-    navigation.navigate("ReservationScreen");
+    navigation.navigate("ReservationScreen", { roomId: "0a9lrJ8egawN5SRcXvgU" });
   };
 
   return (

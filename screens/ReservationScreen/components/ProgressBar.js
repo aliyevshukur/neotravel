@@ -15,7 +15,7 @@ export const ProgressBar = ({ activeNumber, style }) => {
   passiveLabel= theme=="light" ? COLORS.gray : COLORS.grayDark;
 
   // Returns n number of circles with corresponding labels from 1 to n
-  const renderCircles = (n = 3) => {
+  const renderCircles = (n = 4) => {
     // Array of JSX elements
     let circles = [];
     let circleStyle;
@@ -49,7 +49,7 @@ export const ProgressBar = ({ activeNumber, style }) => {
     return circles;
   };
 
-  return <View style={[styles.container, style]}>{renderCircles(3)}</View>;
+  return <View style={[styles.container, style]}>{renderCircles(4)}</View>;
 };
 
 const styles = StyleSheet.create({
