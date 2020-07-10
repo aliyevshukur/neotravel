@@ -38,13 +38,12 @@ import { selectUserId } from "../../store/auth";
 
 const mapStateToProps = (state) => ({
   hotelList: getHotelList(state),
-  searchResult: getSearchResult(state),
+  // searchResult: getSearchResult(state),
   recommendedHotels: getRecommendedHotels(state),
 });
 
 export const HomePage = connect(mapStateToProps, {
   getHotelListFB,
-  getRoomListFB,
   updateFavoriteList,
   searchHotelsFB,
   setLastSearchFieldValues,
@@ -55,7 +54,7 @@ export const HomePage = connect(mapStateToProps, {
     getHotelListFB,
     hotelList,
     searchHotelsFB,
-    searchResult,
+    // searchResult,
     updateFavoriteList,
     setLastSearchFieldValues,
     setRecommendedHotels,
@@ -78,10 +77,9 @@ export const HomePage = connect(mapStateToProps, {
   const id = useSelector(selectUserId);
   useEffect(() => {
     // fetchHotelsData();
-    // getHotelListFB();
+    getHotelListFB();
     // findRecommendedHotelsData();
-    // console.log(hotelList);
-    fetchRoomsData();
+    console.log(hotelList);
     updateFavoriteList(id, false);
   }, []);
 
