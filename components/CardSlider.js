@@ -10,6 +10,8 @@ export const CardSlider = ({
   containerStyle,
   title = "any",
 }) => {
+  console.log("hotelList", hotelsList);
+
   return (
     <View style={[containerStyle, styles.container]}>
       <CustomText weight="bold" style={[styles.title, titleStyle]}>
@@ -23,12 +25,14 @@ export const CardSlider = ({
         horizontal={true}
         renderItem={({ item }) => (
           <HotelMedium
-            cardInfo={{
-              imgUrl:
-                "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-              price: "2500",
-              name: "River Side",
-            }}
+            cardInfo={
+              {
+                // imgUrl:
+                //   item.images[0],
+                // price: item.minPrice,
+                // name: item.name,
+              }
+            }
             style={styles.mediumHotelCard}
             key={item.id}
           />

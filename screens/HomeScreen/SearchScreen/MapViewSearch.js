@@ -30,7 +30,7 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
         }}
       >
         {hotels.map((marker) => {
-          const priceLength = marker.maxPrice.length;
+          const priceLength = marker.minPrice.length;
           let width = 84;
           let height = 40;
           let fontSize = 17;
@@ -54,7 +54,7 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
                         fontSize: 17,
                       },
                 ]}
-                title={`$${marker.maxPrice}+`}
+                title={`$${marker.minPrice}+`}
               />
               <Callout
                 onPress={() => navigation.navigate({ name: "HotelScreen" })}

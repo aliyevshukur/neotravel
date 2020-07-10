@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
-import {useSelector} from 'react-redux';
+import { useSelector, connect } from "react-redux";
 
 import COLORS from "../../styles/colors";
 import { CustomInput, LargeHotelSlider } from "../../components";
@@ -12,10 +12,14 @@ import { FilterRow } from "./components";
 import { MapViewSearch } from "../HomeScreen/SearchScreen/MapViewSearch";
 import { ListViewSearch } from "../HomeScreen/SearchScreen/ListViewSearch";
 import { hotels } from "../HomeScreen/SearchScreen";
+import { getRecommendedHotels } from "../../store/hotels";
 
-export const SearchInitial = ({ navigation }) => {
+const mapStateToProps = (state) => ({
+  recommendedHotels: getRecommendedHotels(state)
+})
 
-  const theme = useSelector(state => state.themeReducer).theme;
+export const SearchInitial = connect(mapStateToProps)(({ navigation, recommendedHotels}) => {
+  const theme = useSelector((state) => state.themeReducer).theme;
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -29,9 +33,15 @@ export const SearchInitial = ({ navigation }) => {
       setIsOnSearch(false);
     }
   };
+console.log(recommendedHotels);
 
   return (
-    <AppLayout style={{...styles.container,  backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
+    <AppLayout
+      style={{
+        ...styles.container,
+        backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+      }}
+    >
       <CustomInput
         returnKeyType="go"
         onSubmitEditing={() => submitSearchHandler()}
@@ -47,10 +57,14 @@ export const SearchInitial = ({ navigation }) => {
             title="recommended"
             titleStyle={styles.recommendedTitleStyle}
             containerStyle={styles.recommendedContainerStyle}
+            hotelsList={recommendedHotels}
           />
           <CardSlider
             title="deals"
-            titleStyle={{...styles.dealsTitleStyle, color: theme=="light" ? COLORS.blackText : COLORS.white}}
+            titleStyle={{
+              ...styles.dealsTitleStyle,
+              color: theme == "light" ? COLORS.blackText : COLORS.white,
+            }}
             containerStyle={styles.dealsContainerStyle}
           />
         </ScrollView>
@@ -87,7 +101,7 @@ export const SearchInitial = ({ navigation }) => {
       )}
     </AppLayout>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
