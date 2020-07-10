@@ -1,7 +1,8 @@
 export const getMinRoomPrice = (rooms, hotelID) => {
-  const prices = rooms.map((room) => {
+  const prices = [];
+  rooms.forEach((room) => {
     if (room.hotelID === hotelID) {
-      return room.price;
+      prices.push(room.price);
     }
   });
 

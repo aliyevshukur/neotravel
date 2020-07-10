@@ -38,7 +38,7 @@ import { selectUserId } from "../../store/auth";
 
 const mapStateToProps = (state) => ({
   hotelList: getHotelList(state),
-  // searchResult: getSearchResult(state),
+  searchResult: getSearchResult(state),
   recommendedHotels: getRecommendedHotels(state),
 });
 
@@ -79,7 +79,7 @@ export const HomePage = connect(mapStateToProps, {
     // fetchHotelsData();
     getHotelListFB();
     // findRecommendedHotelsData();
-    console.log(hotelList);
+    // console.log(hotelList);
     updateFavoriteList(id, false);
   }, []);
 
@@ -87,7 +87,7 @@ export const HomePage = connect(mapStateToProps, {
 
   const findRecommendedHotelsData = async () => {
     const data = await findRecommendedHotels(hotelList, 3);
-    console.log("data", data);
+    // console.log("data", data);
 
     setRecommendedHotels(data);
   };

@@ -27,7 +27,6 @@ export const findRecommendedHotels = async (hotels, count = 5) => {
   const finalData = [];
   pickedHotels.forEach((hotel) => {
     roomsOfHotels.forEach((room) => {
-      console.log(hotel.id, room.hotelID);
       if (hotel.id === room.hotelID) {
         finalData.push({
           minPrice: getMinRoomPrice(roomsOfHotels, hotel.id),
