@@ -11,17 +11,30 @@ import {
   reducer as hotelsReducer,
   MODULE_NAME as hotelsModuleName,
 } from "./hotels";
+import {
+  reducer as favoritesReducer,
+  MODULE_NAME as favoriteModuleName,
+} from "./favorites";
 
+<<<<<<< HEAD
 import {reducer as navReducer} from './navReducer';
 import {reducer as themeReducer} from './theme';
 import { reducer as reservationReducer} from './reservation';
+=======
+import { reducer as navReducer } from "./navReducer";
+import { reducer as themeReducer } from "./theme";
+>>>>>>> master
 
 const rootReducer = combineReducers({
   auth: authReducer,
   [hotelsModuleName]: hotelsReducer,
   navReducer,
   themeReducer,
+<<<<<<< HEAD
   reservationReducer,
+=======
+  [favoriteModuleName]: favoritesReducer,
+>>>>>>> master
 });
 
 const persistConfig = {
@@ -29,13 +42,13 @@ const persistConfig = {
   storage: AsyncStorage,
 };
 
-// const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = createStore(
-  rootReducer,
+  persistedReducer,
   composeWithDevTools(applyMiddleware(thunk))
 );
 
-// export const persistor = persistStore(store);
+export const persistor = persistStore(store);
 
 export default store;

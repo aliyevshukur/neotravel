@@ -24,7 +24,6 @@ import store, { persistor } from "./store";
 import { default as mapping } from "./mapping.json";
 import { ReservationScreen } from "./screens";
 
-
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   if (!loaded) {
@@ -39,15 +38,14 @@ export default function App() {
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
       <Provider store={store}>
-        {/* <PersistGate loading={null} persistor={persistor}> */}
+        <PersistGate loading={null} persistor={persistor}>
           <StatusBar
             // hidden={true}
             backgroundColor={"rgba(0,0,0,0.4)"}
             translucent={true}
           />
-
           <RootNav />
-        {/* </PersistGate> */}
+        </PersistGate>
       </Provider>
     </ApplicationProvider>
   );

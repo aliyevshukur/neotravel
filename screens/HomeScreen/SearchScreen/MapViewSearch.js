@@ -21,9 +21,16 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
 
   return (
     <View>
-      <MapView style={styles.map} initialRegion={hotels[0].marker}>
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          ...hotels[0].marker,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      >
         {hotels.map((marker) => {
-          const priceLength = marker.price.length;
+          const priceLength = marker.minPrice.length;
           let width = 84;
           let height = 40;
           let fontSize = 17;
@@ -47,7 +54,7 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
                         fontSize: 17,
                       },
                 ]}
-                title={`$${marker.price}+`}
+                title={`$${marker.minPrice}+`}
               />
               <Callout
                 onPress={() => navigation.navigate({ name: "HotelScreen" })}

@@ -8,15 +8,14 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { connect, useSelector, useDispatch} from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
 import { setTabVisibility } from "../../store/navReducer";
 
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
 import { HotelMedium } from "../../components/cards/HotelMedium";
-import { findRecommendedRooms } from "../../utils/getRecommededHotels";
+import { findRecommendedHotels } from "../../utils/getRecommededHotels";
 import { EmptyListComponent } from "./EmptyListComponent";
-
 
 import {
   CustomText,
@@ -26,58 +25,71 @@ import {
   CustomRangeDatepicker,
 } from "../../components";
 import {
-  getRoomListFB,
-  getRoomList,
-  searchRoomsFB,
+  getHotelListFB,
+  getHotelList,
+  searchHotelsFB,
   getSearchResult,
+  setRecommendedHotels,
+  getRecommendedHotels,
+  setLastSearchFieldValues,
 } from "../../store/hotels";
+import { updateFavoriteList } from "../../store/favorites";
+import { selectUserId } from "../../store/auth";
 
 const mapStateToProps = (state) => ({
-  roomList: getRoomList(state),
+  hotelList: getHotelList(state),
   searchResult: getSearchResult(state),
+  recommendedHotels: getRecommendedHotels(state),
 });
 
 export const HomePage = connect(mapStateToProps, {
-  getRoomListFB,
-  searchRoomsFB,
+  getHotelListFB,
+  updateFavoriteList,
+  searchHotelsFB,
+  setLastSearchFieldValues,
+  setRecommendedHotels,
 })((props) => {
   const {
     navigation,
-    getRoomListFB,
-    roomList,
-    searchRoomsFB,
-    searchResult,
+    getHotelListFB,
+    hotelList,
+    searchHotelsFB,
+    // searchResult,
+    updateFavoriteList,
+    setLastSearchFieldValues,
+    setRecommendedHotels,
+    recommendedHotels,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
     catalogueName: "Recommended",
   };
-  const [recommendedRooms, setRecommendedRooms] = useState([]);
+  // const [recommendedRooms, setRecommendedRooms] = useState([]);
   const [fieldValues, setFieldValues] = useState({
     place: "",
     guests: "",
     dateRange: {},
   });
 
-  const theme = useSelector(state => state.themeReducer).theme;
+  const theme = useSelector((state) => state.themeReducer).theme;
   const dispatch = useDispatch();
   dispatch(setTabVisibility(true));
-
+  const id = useSelector(selectUserId);
   useEffect(() => {
-    fetchRoomsData();
+    // fetchHotelsData();
+    getHotelListFB();
+    // findRecommendedHotelsData();
+    // console.log(hotelList);
+    updateFavoriteList(id, false);
   }, []);
 
-  useEffect(() => {
-    findRecommendedHotelsData();
-  }, [roomList]);
-
-  const fetchRoomsData = async () => {
-    const response = await getRoomListFB();
-  };
+  const fetchHotelsData = async () => {};
 
   const findRecommendedHotelsData = async () => {
-    const data = await findRecommendedRooms(roomList, 3);
-    setRecommendedRooms(data);
+    const data = await findRecommendedHotels(hotelList, 3);
+    // console.log("data", data);
+
+    setRecommendedHotels(data);
   };
 
   const onFieldChange = (name, value) => {
@@ -87,7 +99,7 @@ export const HomePage = connect(mapStateToProps, {
     });
   };
 
-  const onFormSubmit = () => {
+  const onFormSubmit = async () => {
     for (const key in fieldValues) {
       if (key === "dateRange") {
         if (Object.keys(fieldValues[key]).length === 0) {
@@ -106,14 +118,22 @@ export const HomePage = connect(mapStateToProps, {
 
     const formattedGuests = +fieldValues.guests;
 
-    searchRoomsFB(formattedPlace, formattedGuests).then((result) => {
-      navigation.navigate("HomeSearchScreen", {
-        searchResult: result,
-        place: fieldValues.place,
-        guests: fieldValues.guests,
-        startDate: fieldValues.dateRange.startDate,
-        endDate: fieldValues.dateRange.endDate,
-      });
+    setLastSearchFieldValues({
+      place: formattedPlace,
+      guests: formattedGuests,
+      dateRange: fieldValues.dateRange,
+    });
+    const response = await searchHotelsFB(
+      formattedPlace,
+      formattedGuests,
+      fieldValues.dateRange
+    );
+
+    navigation.navigate("HomeSearchScreen", {
+      place: fieldValues.place,
+      guests: fieldValues.guests,
+      startDate: fieldValues.dateRange.startDate,
+      endDate: fieldValues.dateRange.endDate,
     });
   };
 
@@ -134,7 +154,13 @@ export const HomePage = connect(mapStateToProps, {
               {texts.description}
             </CustomText>
           </View>
-          <View style={{...styles.searchArea, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
+          <View
+            style={{
+              ...styles.searchArea,
+              backgroundColor:
+                theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+            }}
+          >
             <View style={styles.placeRow}>
               <CustomInput
                 // long={true}
@@ -175,18 +201,18 @@ export const HomePage = connect(mapStateToProps, {
               {texts.catalogueName}
             </CustomText>
             <FlatList
-              data={recommendedRooms}
+              data={recommendedHotels}
               horizontal={true}
               renderItem={({ item }) => {
                 return (
                   <HotelMedium
                     cardInfo={{
                       imgUrl: item.images[0],
-                      price: item.price,
-                      name: item.hotelName,
-                      rating: item.hotelRating,
+                      price: item.minPrice,
+                      name: item.name,
+                      rating: item.rating,
                       currency: item.currency,
-                      place: item.hotelCity,
+                      place: item.city,
                     }}
                     style={styles.mediumHotelCard}
                     onPress={() => cardPressed(item?.id)}

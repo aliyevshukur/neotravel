@@ -26,9 +26,9 @@ export const SmallCardSlider = ({
           <HotelSmall
             cardInfo={{
               imgUrl: item.images[0],
-              price: item.price,
-              name: item.hotelName,
-              rating: item.hotelRating,
+              price: item.minPrice,
+              name: item.name,
+              rating: item.rating,
             }}
             style={styles.smallHotelCard}
             key={item.id}

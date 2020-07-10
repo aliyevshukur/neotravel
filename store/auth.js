@@ -80,6 +80,12 @@ export const sign = (email, password, isSignIn, userName = "John") => async (
         fb.auth.currentUser.updateProfile({
           displayName: userName,
         });
+        fb.db.collection("users").doc(fb.auth.currentUser.uid).set({
+          id: fb.auth.currentUser.uid,
+          name: userName,
+          favorites: [],
+          email: email,
+        });
         dispatch(setStatus(true));
       });
     }

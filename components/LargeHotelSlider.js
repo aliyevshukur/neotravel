@@ -1,51 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import { FlatList, View, StyleSheet, Dimensions } from "react-native";
-import {useSelector} from 'react-redux';
+import { useSelector, connect } from "react-redux";
 
 import COLORS from "../styles/colors";
 import { HotelLarge } from "./cards/HotelLarge";
+import { selectFavorites } from "../store/favorites";
 
-export const LargeHotelSlider = ({ hotels, bgColor, style }) => {
+const mapStateToProps = (state) => ({
+  favorites: selectFavorites(state),
+});
 
-  const theme = useSelector(state => state.themeReducer).theme;
+export const LargeHotelSlider = connect(mapStateToProps)(
+  ({ hotels, bgColor, style, addHotel, favorites }) => {
+    const theme = useSelector((state) => state.themeReducer).theme;
 
-  return (
-    <View
-      style={[
-        styles.catalogueVertical,
-        { backgroundColor: COLORS[bgColor] || (theme=="light" ? COLORS.bgcLight: COLORS.bgcDark)},
-        { ...style },
-      ]}
-    >
-      <FlatList
-        data={hotels}
-        renderItem={({ item }) => (
-          <HotelLarge
-            cardInfo={{ 
-              imgUrl:
-                item.images[0],
-              price: item.price,
-              name: item.hotelName,
-              rating: item.hotelRating,
-              description: item.description,
-              pricing: item.pricing,
-              currency: item.currency,
-              hotelID: item.hotelID,
-            }}
-            style={styles.hotelLargeStyle}
-            key={item.id}
-          />
-        )}
-      />
-    </View>
-  );
-};
+    return (
+      <View
+        style={[
+          styles.catalogueVertical,
+          {
+            backgroundColor:
+              COLORS[bgColor] ||
+              (theme == "light" ? COLORS.bgcLight : COLORS.bgcDark),
+          },
+          { ...style },
+        ]}
+      >
+        <FlatList
+          data={hotels}
+          renderItem={({ item }) => {
+            const isLiked = favorites.includes(item.id);
+            console.log(item.price + " " + item.name + " " + item.images[0]);
+            return (
+              <HotelLarge
+                cardInfo={{
+                  imgUrl: item.images[0],
+                  price: item.minPrice,
+                  name: item.name,
+                  rating: item.rating,
+                  city: item.city,
+                  street: item.street,
+                  hotelID: item.id,
+                  isLiked: favorites.includes(item.id),
+                }}
+                style={styles.hotelLargeStyle}
+                key={item.id}
+              />
+            );
+          }}
+        />
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   hotelLargeStyle: {
     marginLeft: 20,
     marginRight: 18,
     marginTop: "5%",
+    marginBottom: 100,
     width: "90%",
   },
   catalogueVertical: {

@@ -12,3 +12,4 @@ export { SettingsPage } from "./SettingsScreen";
 export { NotificationScreen } from "./Notification";
 export { HotelScreen } from "./HotelScreen";
 export { PaymentsScreen } from "./PaymentsScreen";
+export { HelpScreen } from "./HelpScreen";
