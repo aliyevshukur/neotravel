@@ -1,6 +1,7 @@
 import React from "react";
-
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useSelector } from "react-redux";
+
 import {
   NotificationScreen,
   SecondScreen,
@@ -15,9 +16,7 @@ import { SearchStack } from "../SearchStack";
 import COLORS from "../../styles/colors";
 import { SearchInitial } from "../../screens/SearchScreen/SearchInitial";
 import { Dimensions } from "react-native";
-
-
-import {useSelector} from 'react-redux';
+import { AccountStack } from "../AccountStack";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -37,27 +36,25 @@ const TabItems = [
     component: NotificationScreen,
     icon: "bell",
   },
+
   {
-    name: "UserScreen",
-    component: UserScreen,
+    name: "AccountStack",
+    component: AccountStack,
     icon: "user",
   },
 ];
 
 export const BottomTabNav = () => {
-
-  const tabStatus = useSelector(state => state.navReducer);
-  const theme = useSelector(state => state.themeReducer).theme;
+  const tabStatus = useSelector((state) => state.navReducer);
+  const theme = useSelector((state) => state.themeReducer).theme;
 
   return (
     <Navigator
       tabBarOptions={{
         showLabel: false,
         style: {
-          // marginTop: 5,
-          // marginLeft: 5,
-          // marginRight: 5,
-          backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark,
+          marginTop: 5,
+          backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
           height: Dimensions.get("window").height / 10,
         },
       }}
@@ -69,7 +66,7 @@ export const BottomTabNav = () => {
           name={name}
           component={component}
           options={{
-            tabBarVisible: tabStatus.status,
+            unmountOnBlur: true,
             tabBarIcon: ({ focused }) => {
               return (
                 <TabBarIcon icon={icon} isActive={focused ? true : false} />
