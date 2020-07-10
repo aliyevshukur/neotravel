@@ -16,25 +16,17 @@ import {
   MODULE_NAME as favoriteModuleName,
 } from "./favorites";
 
-<<<<<<< HEAD
 import {reducer as navReducer} from './navReducer';
 import {reducer as themeReducer} from './theme';
 import { reducer as reservationReducer} from './reservation';
-=======
-import { reducer as navReducer } from "./navReducer";
-import { reducer as themeReducer } from "./theme";
->>>>>>> master
 
 const rootReducer = combineReducers({
   auth: authReducer,
   [hotelsModuleName]: hotelsReducer,
   navReducer,
   themeReducer,
-<<<<<<< HEAD
   reservationReducer,
-=======
   [favoriteModuleName]: favoritesReducer,
->>>>>>> master
 });
 
 const persistConfig = {
