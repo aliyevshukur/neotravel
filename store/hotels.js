@@ -1,10 +1,11 @@
 import fb from "../firebaseConfig";
-import { getMinRoomPrice } from "../utils/getMaxRoomPrice";
+import { getMinRoomPrice } from "../utils/getMinRoomPrice";
 import { isHotelAvailable } from "../utils/isHotelAvailable";
 
 // ACTIONS
 const SET_HOTEL_LIST = "SET_HOTEL_LIST";
 const SET_ROOM_LIST = "SET_ROOM_LIST";
+const SET_RECOMMENDED_HOTELS = "SET_RECOMMENDED_HOTELS";
 const SET_HOTELS_ON_DEALS = "SET_HOTELS_ON_DEALS";
 const SET_SEARCH_HOTEL_RESULT = "SET_SEARCH_HOTEL_RESULT";
 const SET_FILTERED_RESULT = "SET_FILTERED_RESULT";
@@ -26,6 +27,7 @@ export const getLastUserChoices = (state) => state[MODULE_NAME].lastUserChoices;
 const initialState = {
   hotelList: [],
   roomList: [],
+  recommendedHotels: [],
   search: {
     lastSearchFieldValues: {},
     searchResult: [],
@@ -73,6 +75,11 @@ export const reducer = (state = initialState, { type, payload }) => {
         ...state,
         lastUserChoices: payload,
       };
+    case SET_RECOMMENDED_HOTELS:
+      return {
+        ...state,
+        recommendedHotels: payload,
+      };
     default:
       return state;
   }
@@ -83,7 +90,10 @@ export const setHotelList = (payload) => ({
   type: SET_HOTEL_LIST,
   payload,
 });
-
+export const setRecommendedHotels = (payload) => ({
+  type: SET_RECOMMENDED_HOTELS,
+  payload,
+});
 export const setHotelsOnDeals = (payload) => ({
   type: SET_HOTELS_ON_DEALS,
   payload,
@@ -223,7 +233,10 @@ export const searchHotelsFB = (place, guests, dateRange) => async (
 
     // Combine results to find final data
     const finalData = hotelData.map((hotel) => {
-      const maxPrice = getMinRoomPrice(searchedHotelRooms, hotel.id);
+      const minPrice = getMinRoomPrice(searchedHotelRooms, hotel.id);
+      console.log(minPrice,"==============================");
+      console.log("==============================");
+      
       const isAvailable = isHotelAvailable(
         searchedHotelRooms,
         hotel.id,
@@ -233,7 +246,7 @@ export const searchHotelsFB = (place, guests, dateRange) => async (
       if (isAvailable) {
         return {
           id: hotel.id,
-          maxPrice,
+          minPrice,
           ...hotel,
         };
       }

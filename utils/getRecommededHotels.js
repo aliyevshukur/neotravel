@@ -1,37 +1,37 @@
-import { fetchHotelsOfRoomsFB } from "./firestoreRequests";
+import { fetchRoomsOfHotelsFB } from "./firestoreRequests";
+import { getMinRoomPrice } from "../utils/getMinRoomPrice";
 
-export const findRecommendedRooms = async (rooms, count = 5) => {
-  if (rooms.length === 0) {
+export const findRecommendedHotels = async (hotels, count = 5) => {
+  if (hotels.length === 0) {
     return [];
   }
 
   // Pick random hotels to recommend :-)
   const hotelIDS = [];
-  const pickedRooms = [];
+  const pickedHotels = [];
 
-  for (let i = 0; i < count; i++) { 
-    const index = Math.floor(Math.random() * rooms.length);
-    if (hotelIDS.indexOf(rooms[index].id) === -1) {
-      hotelIDS.push(rooms[index].hotelID);
-      pickedRooms.push(rooms[index]);
+  for (let i = 0; i < count; i++) {
+    const index = Math.floor(Math.random() * hotels.length);
+    if (hotelIDS.indexOf(hotels[index].id) === -1) {
+      hotelIDS.push(hotels[index].id);
+      pickedHotels.push(hotels[index]);
     } else {
       count--;
     }
   }
 
   // Fetch rooms of choosen hotels
-  const hotelsOfRooms = await fetchHotelsOfRoomsFB(hotelIDS);
+  const roomsOfHotels = await fetchRoomsOfHotelsFB(hotelIDS);
 
-  // Match rooms' ID and hotels' ID. Add matched hotel name to final data
+  // Match rooms' ID and hotels' ID. Add mix hotel and room data
   const finalData = [];
-  hotelsOfRooms.forEach((hotel) => {
-    pickedRooms.forEach((room) => {
-      if (room.hotelID === hotel.id) {
+  pickedHotels.forEach((hotel) => {
+    roomsOfHotels.forEach((room) => {
+      if (hotel.id === room.hotelID) {
         finalData.push({
-          hotelName: hotel.name,
-          hotelRating: hotel.rating,
-          hotelCity: hotel.city,
-          ...room,
+          minPrice: getMinRoomPrice(roomsOfHotels, hotel.id),
+          currency: room.currency,
+          ...hotel,
         });
       }
     });

@@ -14,7 +14,7 @@ import { setTabVisibility } from "../../store/navReducer";
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
 import { HotelMedium } from "../../components/cards/HotelMedium";
-import { findRecommendedRooms } from "../../utils/getRecommededHotels";
+import { findRecommendedHotels } from "../../utils/getRecommededHotels";
 import { EmptyListComponent } from "./EmptyListComponent";
 
 import {
@@ -25,41 +25,46 @@ import {
   CustomRangeDatepicker,
 } from "../../components";
 import {
-  getRoomListFB,
-  getRoomList,
+  getHotelListFB,
+  getHotelList,
   searchHotelsFB,
   getSearchResult,
-  getLastSearchFieldValues,
+  setRecommendedHotels,
+  getRecommendedHotels,
   setLastSearchFieldValues,
 } from "../../store/hotels";
 import { updateFavoriteList } from "../../store/favorites";
 import { selectUserId } from "../../store/auth";
 
 const mapStateToProps = (state) => ({
-  roomList: getRoomList(state),
+  hotelList: getHotelList(state),
   searchResult: getSearchResult(state),
+  recommendedHotels: getRecommendedHotels(state),
 });
 
 export const HomePage = connect(mapStateToProps, {
-  getRoomListFB,
+  getHotelListFB,
   updateFavoriteList,
   searchHotelsFB,
   setLastSearchFieldValues,
+  setRecommendedHotels,
 })((props) => {
   const {
     navigation,
-    getRoomListFB,
-    roomList,
+    getHotelListFB,
+    hotelList,
     searchHotelsFB,
-    searchResult,
+    // searchResult,
     updateFavoriteList,
     setLastSearchFieldValues,
+    setRecommendedHotels,
+    recommendedHotels,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
     catalogueName: "Recommended",
   };
-  const [recommendedRooms, setRecommendedRooms] = useState([]);
+  // const [recommendedRooms, setRecommendedRooms] = useState([]);
   const [fieldValues, setFieldValues] = useState({
     place: "",
     guests: "",
@@ -71,21 +76,20 @@ export const HomePage = connect(mapStateToProps, {
   dispatch(setTabVisibility(true));
   const id = useSelector(selectUserId);
   useEffect(() => {
-    fetchRoomsData();
+    // fetchHotelsData();
+    getHotelListFB();
+    // findRecommendedHotelsData();
+    // console.log(hotelList);
     updateFavoriteList(id, false);
   }, []);
 
-  useEffect(() => {
-    findRecommendedHotelsData();
-  }, [roomList]);
-
-  const fetchRoomsData = async () => {
-    const response = await getRoomListFB();
-  };
+  const fetchHotelsData = async () => {};
 
   const findRecommendedHotelsData = async () => {
-    const data = await findRecommendedRooms(roomList, 3);
-    setRecommendedRooms(data);
+    const data = await findRecommendedHotels(hotelList, 3);
+    // console.log("data", data);
+
+    setRecommendedHotels(data);
   };
 
   const onFieldChange = (name, value) => {
@@ -197,18 +201,18 @@ export const HomePage = connect(mapStateToProps, {
               {texts.catalogueName}
             </CustomText>
             <FlatList
-              data={recommendedRooms}
+              data={recommendedHotels}
               horizontal={true}
               renderItem={({ item }) => {
                 return (
                   <HotelMedium
                     cardInfo={{
                       imgUrl: item.images[0],
-                      price: item.price,
-                      name: item.hotelName,
-                      rating: item.hotelRating,
+                      price: item.minPrice,
+                      name: item.name,
+                      rating: item.rating,
                       currency: item.currency,
-                      place: item.hotelCity,
+                      place: item.city,
                     }}
                     style={styles.mediumHotelCard}
                     onPress={() => cardPressed(item?.id)}

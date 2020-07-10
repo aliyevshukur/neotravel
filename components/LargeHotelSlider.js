@@ -35,16 +35,12 @@ export const LargeHotelSlider = connect(mapStateToProps)(
               <HotelLarge
                 cardInfo={{
                   imgUrl: item.images[0],
-                  price: item.maxPrice,
+                  price: item.minPrice,
                   name: item.name,
                   rating: item.rating,
-                  description: item.description,
-                  location: item.city,
-                  description: item.street,
-                  pricing: item.pricing,
-                  currency: item.currency,
-                  hotelID: item.hotelID,
-                  id: item.id,
+                  city: item.city,
+                  street: item.street,
+                  hotelID: item.id,
                   isLiked: favorites.includes(item.id),
                 }}
                 style={styles.hotelLargeStyle}
