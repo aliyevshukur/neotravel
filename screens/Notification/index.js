@@ -6,6 +6,8 @@ import {
   StatusBar,
   Dimensions,
 } from "react-native";
+import {useSelector} from 'react-redux';
+
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
@@ -23,19 +25,11 @@ const notifications = [
   },
 ];
 
-import {useDispatch, useSelector} from 'react-redux';
-import {setTheme} from '../../store/theme'
-export const NotificationScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const theme = useSelector(state => state.themeReducer).theme;
 
+export const NotificationScreen = ({ navigation }) => {
+  const theme = useSelector(state => state.themeReducer).theme;
   const searchRoomHandler = () => {
-    // navigation.navigate("SearchStack");
-    if(theme=="light") {
-      dispatch(setTheme("dark"));
-    } else {
-      dispatch(setTheme("light"));
-    }
+    navigation.navigate("SearchStack");
   }
 
   return (
@@ -65,7 +59,11 @@ export const NotificationScreen = ({ navigation }) => {
         data={notifications}
         renderItem={({ item, index }) => {
           return (
-            <NotfCard item={item} isLast={notifications.length - 1 === index} />
+            <NotfCard
+              key={index}
+              item={item}
+              isLast={notifications.length - 1 === index}
+            />
           );
         }}
       />

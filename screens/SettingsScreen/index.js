@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 
 import {
   uploadProfilePhoto,
@@ -47,6 +47,8 @@ export const SettingsPage = connect(mapStateToProps, {
     const [surname, setSurname] = useState(userName.split(" ")[1]);
     const [isModalShown, setIsModalShown] = useState(false);
 
+    const theme = useSelector((state) => state.themeReducer).theme;
+
     //Save Handler that set name and surname as userName of user
     const saveHandler = async () => {
       const changedUserName = name.concat(" ", surname);
@@ -57,7 +59,7 @@ export const SettingsPage = connect(mapStateToProps, {
         .then(() => {
           updateUserName(fb?.auth?.currentUser?.displayName);
         })
-        .then(() => navigation.navigate({ name: "UserScreen" }));
+        .then(() => navigation.navigate({ name: "user" }));
     };
 
     //Handler that opens camera or gallery depending on case and upload image to FireStore and Redux
@@ -93,8 +95,12 @@ export const SettingsPage = connect(mapStateToProps, {
     };
 
     return (
-      <View style={styles.container}>
-        <CustomText style={styles.header}>Settings</CustomText>
+      <View
+        style={{
+          ...styles.container,
+          backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+        }}
+      >
         <View style={styles.profileContainer}>
           {isUploading ? (
             <TouchableOpacity
@@ -147,7 +153,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.bgcLight,
   },
   img: {
     width: Dimensions.get("window").height / 6,
@@ -169,5 +175,6 @@ const styles = StyleSheet.create({
   profileContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
+    paddingTop: 10,
   },
 });

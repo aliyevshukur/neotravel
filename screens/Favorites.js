@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     paddingTop: "10%",
     paddingBottom: "2%",
   },
+
   headerTxt: {
     fontSize: 28,
     color: COLORS.gradientPink,

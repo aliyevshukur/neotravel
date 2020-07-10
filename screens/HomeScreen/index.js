@@ -8,16 +8,14 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { connect } from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
+import { setTabVisibility } from "../../store/navReducer";
 
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
 import { HotelMedium } from "../../components/cards/HotelMedium";
 import { findRecommendedRooms } from "../../utils/getRecommededHotels";
 import { EmptyListComponent } from "./EmptyListComponent";
-
-import { useSelector, useDispatch } from "react-redux";
-import { setTabVisibility } from "../../store/navReducer";
 
 import {
   CustomText,
@@ -29,8 +27,10 @@ import {
 import {
   getRoomListFB,
   getRoomList,
-  searchRoomsFB,
+  searchHotelsFB,
   getSearchResult,
+  getLastSearchFieldValues,
+  setLastSearchFieldValues,
 } from "../../store/hotels";
 import { updateFavoriteList } from "../../store/favorites";
 import fb from "../../firebaseConfig";
@@ -43,16 +43,18 @@ const mapStateToProps = (state) => ({
 
 export const HomePage = connect(mapStateToProps, {
   getRoomListFB,
-  searchRoomsFB,
   updateFavoriteList,
+  searchHotelsFB,
+  setLastSearchFieldValues,
 })((props) => {
   const {
     navigation,
     getRoomListFB,
     roomList,
-    searchRoomsFB,
+    searchHotelsFB,
     searchResult,
     updateFavoriteList,
+    setLastSearchFieldValues,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
@@ -65,6 +67,7 @@ export const HomePage = connect(mapStateToProps, {
     dateRange: {},
   });
 
+  const theme = useSelector((state) => state.themeReducer).theme;
   const dispatch = useDispatch();
   dispatch(setTabVisibility(true));
   const id = useSelector(selectUserId);
@@ -94,7 +97,7 @@ export const HomePage = connect(mapStateToProps, {
     });
   };
 
-  const onFormSubmit = () => {
+  const onFormSubmit = async () => {
     for (const key in fieldValues) {
       if (key === "dateRange") {
         if (Object.keys(fieldValues[key]).length === 0) {
@@ -113,14 +116,22 @@ export const HomePage = connect(mapStateToProps, {
 
     const formattedGuests = +fieldValues.guests;
 
-    searchRoomsFB(formattedPlace, formattedGuests).then((result) => {
-      navigation.navigate("HomeSearchScreen", {
-        searchResult: result,
-        place: fieldValues.place,
-        guests: fieldValues.guests,
-        startDate: fieldValues.dateRange.startDate,
-        endDate: fieldValues.dateRange.endDate,
-      });
+    setLastSearchFieldValues({
+      place: formattedPlace,
+      guests: formattedGuests,
+      dateRange: fieldValues.dateRange,
+    });
+    const response = await searchHotelsFB(
+      formattedPlace,
+      formattedGuests,
+      fieldValues.dateRange
+    );
+
+    navigation.navigate("HomeSearchScreen", {
+      place: fieldValues.place,
+      guests: fieldValues.guests,
+      startDate: fieldValues.dateRange.startDate,
+      endDate: fieldValues.dateRange.endDate,
     });
   };
 
@@ -141,31 +152,35 @@ export const HomePage = connect(mapStateToProps, {
               {texts.description}
             </CustomText>
           </View>
-          <View style={styles.searchArea}>
+          <View
+            style={{
+              ...styles.searchArea,
+              backgroundColor:
+                theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+            }}
+          >
             <View style={styles.placeRow}>
               <CustomInput
-                long={true}
+                // long={true}
                 isSearch={false}
                 isCross={false}
                 placeholder="Place"
                 onChangeText={(value) => onFieldChange("place", value)}
               />
-            </View>
-            <View style={styles.searchBottom}>
-              <View style={styles.datepickerWrapper}>
-                <CustomRangeDatepicker
-                  placeholder={"Pick date"}
-                  min={new Date()}
-                  style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 0 }}
-                  onSelect={(value) => onFieldChange("dateRange", value)}
-                  rangeValue={fieldValues.dateRange}
-                />
-              </View>
               <CustomPicker
                 dark={true}
                 title="Guests"
                 onValueChange={(value) => onFieldChange("guests", value)}
                 pickerValue={fieldValues.guests}
+              />
+            </View>
+            <View style={styles.datepickerWrapper}>
+              <CustomRangeDatepicker
+                placeholder={"Pick date"}
+                min={new Date()}
+                style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 0 }}
+                onSelect={(value) => onFieldChange("dateRange", value)}
+                rangeValue={fieldValues.dateRange}
               />
             </View>
             <CustomButton
@@ -244,8 +259,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   placeRow: {
+    width: "90%",
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 15,
   },
@@ -275,14 +291,9 @@ const styles = StyleSheet.create({
   mediumHotelCard: {
     marginLeft: 18,
   },
-  searchBottom: {
-    width: "100%",
-    paddingHorizontal: 16,
-    flexDirection: "row",
-    alignItems: "center",
-  },
   datepickerWrapper: {
-    marginTop: 15,
-    marginLeft: 15,
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "flex-start",
   },
 });
