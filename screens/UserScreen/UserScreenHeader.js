@@ -10,15 +10,20 @@ import {
 import { CustomText } from "../../components";
 import COLORS from "../../styles/colors";
 import fb from "../../firebaseConfig";
-import {useSelector} from 'react-redux';
+import { useSelector } from "react-redux";
 
 export const UserScreenHeader = ({ profilePicture, fullName, userName }) => {
   // const isPicture = fb.auth.currentUser.photoURL !== null;
 
-const theme = useSelector(state => state.themeReducer).theme;
+  const theme = useSelector((state) => state.themeReducer).theme;
 
   return profilePicture ? (
-    <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+      }}
+    >
       <Image
         style={styles.profilePicture}
         source={
@@ -27,7 +32,16 @@ const theme = useSelector(state => state.themeReducer).theme;
             : profilePicture
         }
       />
-      <CustomText style={styles.userName}>{fullName}</CustomText>
+      <CustomText
+        style={[
+          styles.userName,
+          theme == "light"
+            ? { color: COLORS.blackText }
+            : { color: COLORS.offWhite },
+        ]}
+      >
+        {fullName}
+      </CustomText>
     </View>
   ) : (
     <ActivityIndicator
@@ -63,6 +77,5 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 22,
     fontFamily: "NunitoBold",
-    color: COLORS.blackText,
   },
 });

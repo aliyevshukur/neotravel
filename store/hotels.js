@@ -159,7 +159,6 @@ export const getHotelsOnDealsFB = () => (dispatch) => {
       .get()
       .then((doc) => {
         if (doc) {
-          const hotelIDs = doc.data().IDs;
           dispatch(setHotelsOnDeals(hotelIDs));
         } else {
           dispatch(setHotelsOnDeals([]));
@@ -234,9 +233,7 @@ export const searchHotelsFB = (place, guests, dateRange) => async (
     // Combine results to find final data
     const finalData = hotelData.map((hotel) => {
       const minPrice = getMinRoomPrice(searchedHotelRooms, hotel.id);
-      console.log(minPrice,"==============================");
-      console.log("==============================");
-      
+
       const isAvailable = isHotelAvailable(
         searchedHotelRooms,
         hotel.id,
