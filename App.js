@@ -22,6 +22,7 @@ import { StatusBar } from "react-native";
 import { loadFonts } from "./styles/fonts";
 import store, { persistor } from "./store";
 import { default as mapping } from "./mapping.json";
+import { ReservationScreen } from "./screens";
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);

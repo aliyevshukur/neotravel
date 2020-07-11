@@ -5,6 +5,7 @@ import caretDown from "../assets/images/inputComponents/caret-down.png";
 import COLORS from "../styles/colors";
 
 export const CustomPicker = ({
+  pickerWidth = 115,
   title = "Guests",
   pickerValue,
   pickerArray = [
@@ -16,12 +17,12 @@ export const CustomPicker = ({
   onValueChange,
 }) => {
   return (
-    <View style={styles.pickerContainer}>
+    <View style={{...styles.pickerContainer, width: pickerWidth}}>
       <Picker
         mode="dropdown"
         selectedValue={pickerValue}
         onValueChange={(value) => onValueChange(value)}
-        style={styles.picker}
+        style={{...styles.picker, width: pickerWidth}}
         itemStyle={{ color: "green" }}
       >
         <Picker.Item label={title} itemStyle={{ color: COLORS.grayDark }} />
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     height: 54.5,
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 10,
+    // marginLeft: 10,
     borderRadius: 50,
     elevation: 2,
     marginTop: 10,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -6,12 +6,13 @@ import {
   Text,
   SafeAreaView,
   Dimensions,
+  Alert,
 } from "react-native";
 import { Header } from "@react-navigation/stack";
 import {useSelector} from 'react-redux';
 
 import COLORS from "../../../styles/colors";
-import { CustomInput, CustomText } from "../../../components";
+import { CustomInput, CustomPicker, CustomRangeDatepicker, CustomText } from "../../../components";
 import { CreditCard } from "./CreditCard";
 import { HotelLarge } from "../../../components/cards/HotelLarge";
 import { CustomSvg } from "../../../components/cards/CustomSvg";
@@ -19,8 +20,11 @@ import { CustomSvg } from "../../../components/cards/CustomSvg";
 export const ReservationContent = (props) => {
   const {
     stageNumber,
+    reserveFormValues,
     userFormValues,
     cardFormValues,
+    completePreviewValues,
+    handleReserveFieldChange,
     handleUserFieldChange,
     handleCardFieldChange,
     setIsKeyboardAvoidEnabled,
@@ -42,6 +46,17 @@ export const ReservationContent = (props) => {
     { name: "country", placeHolder: "Country" },
     { name: "mobilePhone", placeHolder: "Mobile Phone" },
   ];
+  const monthNames = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+  const startDateRaw = new Date(completePreviewValues?.startDate);
+  const endDateRaw = new Date(completePreviewValues?.endDate);
+  const startDate = `${startDateRaw.getDate()}` + " " + `${monthNames[startDateRaw.getMonth()]}` + " " + `${startDateRaw.getFullYear()}`;
+  const endDate = `${endDateRaw.getDate()}` + " " + `${monthNames[endDateRaw.getMonth()]}` + " " + `${endDateRaw.getFullYear()}`;
+  const nightCount = `${endDateRaw.getDate() - startDateRaw.getDate()}`;
+
+
 
   // Enable KeyboardAvoidingView if user clicked spesific field
   const handleInputTouch = (form, name) => {
@@ -57,8 +72,40 @@ export const ReservationContent = (props) => {
     setIsKeyboardAvoidEnabled(isEnabled);
   };
 
+
+  const handleInfoCircle = () => {
+    Alert.alert(
+      "Detailed Info",
+      `${completePreviewValues.description}`,
+      [
+        { text: "Ok", onPress: () => {} }
+      ],
+      { cancelable: true }
+    )
+  }
+
+
   switch (stageNumber) {
-    case 1:
+    case 1: 
+      return (
+        <View style={styles.reservForm}>
+          <CustomPicker
+          dark={true}
+          title="Guests"
+          onValueChange={(value) => handleReserveFieldChange("guests", value)}
+          pickerValue={reserveFormValues.guests}
+          pickerWidth={"100%"}
+          />
+          <CustomRangeDatepicker
+          placeholder={"Pick date"}
+          min={new Date()}
+          style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 0}}
+          onSelect={(value) => handleReserveFieldChange("dateRange", value)}
+          rangeValue={reserveFormValues.dateRange}
+          />
+        </View>
+      )
+    case 2:
       return (
         <>
           {formFields.map((input, index) => (
@@ -70,13 +117,13 @@ export const ReservationContent = (props) => {
               long={true}
               placeholder={input.placeHolder}
               value={userFormValues[input.name]}
-              onChangeText={() => handleUserFieldChange(input.name)}
+              onChangeText={(value) => handleUserFieldChange(input.name, value)}
               onTouchStart={() => handleInputTouch("user", input.name)}
             />
           ))}
         </>
       );
-    case 2:
+    case 3:
       return (
         <View style={styles.cardContainer}>
           <CreditCard
@@ -89,7 +136,6 @@ export const ReservationContent = (props) => {
               isSearch={false}
               style={styles.inputCheckout}
               isCross={false}
-              // long={true}
               placeholder={"CardNumber"}
               value={cardFormValues.cardNumber}
               onChangeText={(value) =>
@@ -104,11 +150,11 @@ export const ReservationContent = (props) => {
                 isCross={false}
                 style={styles.inputExpiry}
                 placeholder={"Expiry"}
-                value={cardFormValues.CVV}
-                onChangeText={(value) => handleCardFieldChange("CVV", value)}
-                maxLength={3}
+                value={cardFormValues.expiry}
+                onChangeText={(value) => handleCardFieldChange("expiry", value)}
+                maxLength={5}
                 keyboardType={"numeric"}
-                onTouchStart={() => handleInputTouch("card", "CVV")}
+                onTouchStart={() => handleInputTouch("card", "expiry")}
               />
               <CustomInput
                 isSearch={false}
@@ -126,7 +172,6 @@ export const ReservationContent = (props) => {
               isSearch={false}
               isCross={false}
               style={styles.inputCheckout}
-              // long={true}
               placeholder={"Name"}
               value={cardFormValues.name}
               onChangeText={(value) => handleCardFieldChange("name", value)}
@@ -152,28 +197,31 @@ export const ReservationContent = (props) => {
           </View>
         </View>
       );
-    case 3:
+    case 4:
       return (
         <View style={styles.checkout3}>
           <HotelLarge
             isMinimal={true}
             style={{width: "90%"}}
+            isLiked={completePreviewValues.isLiked}
             cardInfo={{
-              imgUrl: "https://images.unsplash.com/photo-1540541338287-41700207dee6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=10"
+              name: completePreviewValues.hotelName,
+              rating: completePreviewValues.rating,
+              imgUrl: completePreviewValues.imgUrl,
             }}
           />
           <View style={styles.orderDescription}>
-            <CustomText style={{...styles.orderText, color: orderColor}}>2 People</CustomText>
-            <CustomText style={{...styles.orderText, color: orderColor}}>Standart King Room</CustomText>
-            <CustomText style={{...styles.orderText, color: orderColor}}>2 nights</CustomText>
-            <CustomText style={{...styles.orderText, color: orderColor}}>Jan 18 2019 to Jan 20 2019</CustomText>
+            <CustomText style={{...styles.orderText, color: orderColor}}>{completePreviewValues.guests} {completePreviewValues.guests>1 ? "People" : "Person"}</CustomText>
+            <CustomText style={{...styles.orderText, color: orderColor}}>{completePreviewValues?.roomName || "~"}</CustomText>
+            <CustomText style={{...styles.orderText, color: orderColor}}>{nightCount} {nightCount>1 ? "nights" : "night"}</CustomText>
+            <CustomText style={{...styles.orderText, color: orderColor}}>{startDate || "time"} to {endDate || "time"}</CustomText>
           </View>
           <View style={styles.lineWrapper}>
             <View style={{...styles.line, color: infoColor}} />
           </View>
           <View style={styles.costHolder}>
-            <CustomText style={{...styles.cost, color: costColor}}>$1350</CustomText>
-            <TouchableOpacity style={styles.infoBtn}>
+            <CustomText style={{...styles.cost, color: costColor}}>{completePreviewValues?.currency || "$"} {completePreviewValues?.price || "~"}</CustomText>
+            <TouchableOpacity style={styles.infoBtn} onPress={handleInfoCircle}>
               <CustomSvg name={"infoCircle"} style={{width: "100%", height: "100%", color: infoColor}}/>
             </TouchableOpacity>
           </View> 
@@ -189,11 +237,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
-  // userForm: {
-  //   width: "100%",
-  //   justifyContent: "flex-end",
-  //   alignItems: "center",
-  // },
+  reservForm: {
+    width: "90%",
+    height: 150,
+    justifyContent: "space-between",
+  },
   cardForm: {
     marginTop: 5,
     width: "100%",
@@ -250,6 +298,7 @@ const styles = StyleSheet.create({
   cost: {
     fontSize: 32,
     color: COLORS.blackText,
+    fontFamily: "NunitoBold"
   },
   infoBtn: {
     width: 30,
