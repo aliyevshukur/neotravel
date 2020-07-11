@@ -36,7 +36,7 @@ export const HotelLarge = connect(mapStateToProps, {
     updateFavoriteList,
   }) => {
     const item = cardInfo || {};
-    const [isLiked, setIsLiked] = useState(true);
+    const [isLiked, setIsLiked] = useState(cardInfo.isLiked);
 
     useEffect(() => {
       setIsLiked(favorites.includes(cardInfo.hotelID));

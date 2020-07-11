@@ -72,9 +72,6 @@ export const UserScreen = connect(mapStateToProps, {
       },
     ];
 
-    const profilePicture = fb.auth?.currentUser?.photoURL
-      ? fb.auth.currentUser.photoURL
-      : require("../../assets/images/UserScreen/profile-picture.png");
     useEffect(() => {
       getUserInfo();
     }, []);
