@@ -90,10 +90,14 @@ export const setHotelList = (payload) => ({
   type: SET_HOTEL_LIST,
   payload,
 });
-export const setRecommendedHotels = (payload) => ({
-  type: SET_RECOMMENDED_HOTELS,
-  payload,
-});
+export const setRecommendedHotels = (payload) => {
+  console.log("PAYLOAD", payload);
+
+  return {
+    type: SET_RECOMMENDED_HOTELS,
+    payload,
+  };
+};
 export const setHotelsOnDeals = (payload) => ({
   type: SET_HOTELS_ON_DEALS,
   payload,
@@ -193,9 +197,10 @@ export const getRoomListFB = () => async (dispatch) => {
   } catch (error) {}
 };
 
-export const searchHotelsFB = (place, guests, dateRange) => async (
+export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
   dispatch
 ) => {
+
   const hotelData = [];
   const hotelIDs = [];
 

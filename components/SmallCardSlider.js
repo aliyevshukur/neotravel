@@ -11,6 +11,7 @@ export const SmallCardSlider = ({
   hotels,
   title,
   transparent = false,
+  onItemPress
 }) => {
   const theme = useSelector(state => state.themeReducer).theme;
 
@@ -32,6 +33,7 @@ export const SmallCardSlider = ({
             }}
             style={styles.smallHotelCard}
             key={item.id}
+            onPress={() => onItemPress(item)}
           />
         )}
       />

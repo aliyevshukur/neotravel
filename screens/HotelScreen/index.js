@@ -32,28 +32,7 @@ export const HotelScreen = ({ navigation, route }) => {
   dispatch(setTabVisibility(false));
   const theme = useSelector((state) => state.themeReducer).theme;
 
-  const { roomId } = route?.params;
-
-  const hotelInfo = {
-    name: "Mountain Resort",
-    rating: "4.5",
-    liked: true,
-    marker: {
-      latitude: 37.78825,
-      longitude: -122.4324,
-      latitudeDelta: 0.0043,
-      longitudeDelta: 0.0034,
-    },
-    location: "Waikiki, HI 123456, Honolulu",
-    distance: "3.2 km from centre",
-    images: [
-      "http://i.imgur.com/XP2BE7q.jpg",
-      "http://i.imgur.com/5nltiUd.jpg",
-      "http://i.imgur.com/6vOahbP.jpg",
-      "http://i.imgur.com/kj5VXtG.jpg",
-      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-    ],
-  };
+  const { hotelInfo } = route?.params;
 
   const [isGallery, setGallery] = useState(false);
   const [isLiked, setLiked] = useState(hotelInfo.liked);
@@ -185,7 +164,14 @@ export const HotelScreen = ({ navigation, route }) => {
         <View style={styles.mapPreloader}>
           <CustomText style={styles.mapLoading}>Map is loading..</CustomText>
         </View>
-        <MapView initialRegion={hotelInfo.marker} style={styles.mapStyle}>
+        <MapView
+          initialRegion={{
+            ...hotelInfo.marker,
+            latitudeDelta: 0.0043,
+            longitudeDelta: 0.0034,
+          }}
+          style={styles.mapStyle}
+        >
           <Marker coordinate={hotelInfo.marker}>
             <LinearGradient
               start={[0, 0]}

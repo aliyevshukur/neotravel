@@ -23,7 +23,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
 const TabItems = [
   {
     name: "HomePageStack",
-    component: HomePageStack,
+    component: HomePageStack, 
     icon: "home",
   },
   {

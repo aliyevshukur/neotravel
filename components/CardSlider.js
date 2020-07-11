@@ -6,10 +6,11 @@ import { HotelMedium } from "./cards/HotelMedium";
 
 export const CardSlider = ({
   titleStyle,
-  hotelsList = [{ id: "1" }, { id: "2" }, { id: "3" }],
+  hotelsList,
   containerStyle,
   title = "any",
 }) => {
+  // console.log("DATAAA", hotelsList);
 
   return (
     <View style={[containerStyle, styles.container]}>
@@ -24,14 +25,13 @@ export const CardSlider = ({
         horizontal={true}
         renderItem={({ item }) => (
           <HotelMedium
-            cardInfo={
-              {
-                // imgUrl:
-                //   item.images[0],
-                // price: item.minPrice,
-                // name: item.name,
-              }
-            }
+            cardInfo={{
+              imgUrl: item.images[0],
+              price: item.minPrice,
+              name: item.name,
+              rating: item.rating,
+              place: item.city,
+            }}
             style={styles.mediumHotelCard}
             key={item.id}
           />
