@@ -31,6 +31,7 @@ export const findRecommendedHotels = async (hotels, count = 5) => {
       ...hotel,
     });
   });
+  console.log("FINAL DATA", finalData);
 
   return finalData;
 };

@@ -11,7 +11,7 @@ const mapStateToProps = (state) => ({
 });
 
 export const LargeHotelSlider = connect(mapStateToProps)(
-  ({ hotels, bgColor, style, addHotel, favorites }) => {
+  ({ hotels, bgColor, style, addHotel, favorites, onItemPress }) => {
     const theme = useSelector((state) => state.themeReducer).theme;
 
     return (
@@ -44,6 +44,7 @@ export const LargeHotelSlider = connect(mapStateToProps)(
                   isLiked: favorites.includes(item.id),
                 }}
                 style={styles.hotelLargeStyle}
+                onPress={() => onItemPress(item)}
                 key={item.id}
               />
             );

@@ -135,8 +135,8 @@ export const HomePage = connect(mapStateToProps, {
     });
   };
 
-  const cardPressed = (roomId) => {
-    navigation.navigate("HotelScreen", { roomId });
+  const cardPressed = (item) => {
+    navigation.navigate("HotelScreen", { hotelInfo: item });
   };
 
   return (
@@ -213,7 +213,7 @@ export const HomePage = connect(mapStateToProps, {
                       place: item.city,
                     }}
                     style={styles.mediumHotelCard}
-                    onPress={() => cardPressed(item?.id)}
+                    onPress={() => cardPressed(item)}
                   />
                 );
               }}
