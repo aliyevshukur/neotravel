@@ -163,7 +163,6 @@ export const getHotelsOnDealsFB = () => (dispatch) => {
       .get()
       .then((doc) => {
         if (doc) {
-          const hotelIDs = doc.data().IDs;
           dispatch(setHotelsOnDeals(hotelIDs));
         } else {
           dispatch(setHotelsOnDeals([]));

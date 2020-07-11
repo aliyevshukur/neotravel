@@ -19,7 +19,8 @@ import {
 import fb from "../../firebaseConfig";
 
 import { CustomText } from "../../components";
-import profileDefault from "../../assets/images/profileDefault.png";
+import profileDefaultNormal from "../../assets/images/UserScreen/profilePhotoNormal.png";
+import profileDefaultDark from "../../assets/images/UserScreen/profilePhotoDark.png";
 import { uploadImg } from "../../utils/imageUpload";
 import { getCameraPermissions } from "../../utils/getCameraPermission";
 import { ImagePickerModal } from "./ImagePickerModal";
@@ -111,7 +112,13 @@ export const SettingsPage = connect(mapStateToProps, {
             >
               <Image
                 style={styles.img}
-                source={profilePhoto ? { uri: profilePhoto } : profileDefault}
+                source={
+                  profilePhoto
+                    ? { uri: profilePhoto }
+                    : theme == "light"
+                    ? profileDefaultNormal
+                    : profileDefaultDark
+                }
               />
             </TouchableOpacity>
           ) : isModalShown ? (
@@ -156,21 +163,21 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.bgcLight,
   },
   img: {
-    width: Dimensions.get("window").height / 6,
-    height: Dimensions.get("window").height / 6,
+    width: Dimensions.get("window").height / 7,
+    height: Dimensions.get("window").height / 7,
     backgroundColor: COLORS.white,
     borderColor: COLORS.blackText,
     borderWidth: 0.5,
-    borderRadius: Dimensions.get("window").height / 12,
+    borderRadius: Dimensions.get("window").height / 14,
     marginBottom: "10%",
   },
   indicator: {
-    width: Dimensions.get("window").height / 6,
-    height: Dimensions.get("window").height / 6,
+    width: Dimensions.get("window").height / 7,
+    height: Dimensions.get("window").height / 7,
     backgroundColor: COLORS.white,
     borderColor: COLORS.blackText,
     borderWidth: 0.5,
-    borderRadius: Dimensions.get("window").height / 12,
+    borderRadius: Dimensions.get("window").height / 14,
   },
   profileContainer: {
     flexDirection: "row",

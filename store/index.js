@@ -16,9 +16,9 @@ import {
   MODULE_NAME as favoriteModuleName,
 } from "./favorites";
 
-import {reducer as navReducer} from './navReducer';
-import {reducer as themeReducer} from './theme';
-import { reducer as reservationReducer} from './reservation';
+import { reducer as navReducer } from "./navReducer";
+import { reducer as themeReducer } from "./theme";
+import { reducer as reservationReducer } from "./reservation";
 
 const rootReducer = combineReducers({
   auth: authReducer,
