@@ -69,7 +69,6 @@ export const HomePage = connect(mapStateToProps, {
     guests: "",
     dateRange: {},
   });
-  console.log("recommendedHotels", recommendedHotels);
 
   const theme = useSelector((state) => state.themeReducer).theme;
   const dispatch = useDispatch();
@@ -77,14 +76,18 @@ export const HomePage = connect(mapStateToProps, {
   const id = useSelector(selectUserId);
   useEffect(() => {
     getHotelListFB();
-    setRecommendedHotelsData();
+    if (recommendedHotels.length === 0) {
+      setRecommendedHotelsData();
+    }
     updateFavoriteList(id, false);
-  }, []);  
+  }, []);
 
+  const setRecommendedHotelsData = () => {
+    findRecommendedHotels(hotelList, 3).then((data) => {
+      console.log("DATAAA", data);
 
-  const setRecommendedHotelsData = async () => {
-    const data = await findRecommendedHotels(hotelList, 3);
-    setRecommendedHotels(data);
+      setRecommendedHotels(data);
+    });
   };
 
   const onFieldChange = (name, value) => {
