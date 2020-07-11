@@ -130,10 +130,7 @@ export const SearchInitial = connect(mapStateToProps, {
               backScreen="initial"
               navigation={navigation}
               onDirectToFilter={() =>
-                navigation.navigate("HomePageStack", {
-                  screen: "Filter",
-                  backScreen: "initial",
-                })
+                navigation.navigate("Filter", { backScreen: "initial" })
               }
               listType={listType}
               onViewTypeChange={() =>
