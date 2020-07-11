@@ -26,14 +26,9 @@ export const findRecommendedHotels = async (hotels, count = 5) => {
   // Match rooms' ID and hotels' ID. Add mix hotel and room data
   const finalData = [];
   pickedHotels.forEach((hotel) => {
-    roomsOfHotels.forEach((room) => {
-      if (hotel.id === room.hotelID) {
-        finalData.push({
-          minPrice: getMinRoomPrice(roomsOfHotels, hotel.id),
-          currency: room.currency,
-          ...hotel,
-        });
-      }
+    finalData.push({
+      minPrice: getMinRoomPrice(roomsOfHotels, hotel.id),
+      ...hotel,
     });
   });
 

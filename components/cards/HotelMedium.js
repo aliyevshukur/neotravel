@@ -42,7 +42,7 @@ export const HotelMedium = ({ cardInfo, onPress, style }) => {
         ]}
         style={styles.gradient}
       >
-        {!loaded && (
+        {/* {!loaded && (
           <View style={styles.loaderWrapper}>
             <ActivityIndicator
               size="large"
@@ -50,7 +50,7 @@ export const HotelMedium = ({ cardInfo, onPress, style }) => {
               style={styles.loader}
             />
           </View>
-        )}
+        )} */}
         <Image
           resizeMode={"cover"}
           style={styles.bgImg}

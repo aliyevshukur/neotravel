@@ -64,7 +64,6 @@ export const HomePage = connect(mapStateToProps, {
     description: "Find place that gives you ultimate calm",
     catalogueName: "Recommended",
   };
-  // const [recommendedRooms, setRecommendedRooms] = useState([]);
   const [fieldValues, setFieldValues] = useState({
     place: "",
     guests: "",
@@ -76,20 +75,19 @@ export const HomePage = connect(mapStateToProps, {
   dispatch(setTabVisibility(true));
   const id = useSelector(selectUserId);
   useEffect(() => {
-    // fetchHotelsData();
     getHotelListFB();
-    // findRecommendedHotelsData();
-    // console.log(hotelList);
+    if (recommendedHotels.length === 0) {
+      setRecommendedHotelsData();
+    }
     updateFavoriteList(id, false);
   }, []);
 
-  const fetchHotelsData = async () => {};
+  const setRecommendedHotelsData = () => {
+    findRecommendedHotels(hotelList, 3).then((data) => {
+      console.log("DATAAA", data);
 
-  const findRecommendedHotelsData = async () => {
-    const data = await findRecommendedHotels(hotelList, 3);
-    // console.log("data", data);
-
-    setRecommendedHotels(data);
+      setRecommendedHotels(data);
+    });
   };
 
   const onFieldChange = (name, value) => {
