@@ -72,7 +72,7 @@ export const HotelScreen = connect(mapStateToProps, {
     });
 
     const selectRoomsHandler = () => {
-      navigation.navigate("RoomScreen", {hotelId: hotelInfo.id});
+      navigation.navigate("RoomScreen", {hotelId: hotelInfo.id, hotelName: hotelInfo.name});
     };
     const goBackHandler = () => {
       dispatch(setTabVisibility(true));
@@ -90,10 +90,6 @@ export const HotelScreen = connect(mapStateToProps, {
     };
     const closeGallery = () => {
       setGallery(false);
-    };
-
-    const selectRoomsHandler = () => {
-      navigation.navigate("RoomScreen");
     };
 
     BackHandler.addEventListener("hardwareBackPress", function () {

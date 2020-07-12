@@ -41,11 +41,12 @@ export const PaymentsScreen = () => {
         const roomRef = fb.db.collection('rooms').doc(id);
         roomRef.get().then(function(doc) {
           if (doc.exists) {
+            const rand = `${Math.random()}`;
             setPayments(
               [
                 ...resultRooms,
                 {
-                  id: doc.id,
+                  id: doc.id + rand,
                   hotelName: "Fairmont Baku",
                   roomName: doc.data().name,
                   price: doc.data().price,
@@ -56,7 +57,7 @@ export const PaymentsScreen = () => {
               ]
             );
             resultRooms.push({
-              id: doc.id,
+              id: doc.id + rand,
               hotelName: "Fairmont Baku",
               roomName: doc.data().name,
               price: doc.data().price,
