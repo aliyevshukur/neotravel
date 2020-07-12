@@ -174,7 +174,7 @@ export const ReservationScreen = connect(mapStateToProps, {
         break;
       case 4:
         setReservedFb(reservation);
-        // NAVIGATION HERE
+        navigation.navigate('AccountStack', { screen: 'payments' });
     }
   };
 

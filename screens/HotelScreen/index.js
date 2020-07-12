@@ -71,6 +71,9 @@ export const HotelScreen = connect(mapStateToProps, {
       };
     });
 
+    const selectRoomsHandler = () => {
+      navigation.navigate("RoomScreen", {hotelId: hotelInfo.id});
+    };
     const goBackHandler = () => {
       dispatch(setTabVisibility(true));
       navigation.goBack();
