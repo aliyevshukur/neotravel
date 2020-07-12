@@ -71,11 +71,9 @@ export const HotelScreen = connect(mapStateToProps, {
       };
     });
 
-<<<<<<< HEAD
-  const selectRoomsHandler = () => {
-    navigation.navigate("RoomScreen", {hotelId: hotelInfo.id});
-  };
-=======
+    const selectRoomsHandler = () => {
+      navigation.navigate("RoomScreen", {hotelId: hotelInfo.id});
+    };
     const goBackHandler = () => {
       dispatch(setTabVisibility(true));
       navigation.goBack();
@@ -86,7 +84,6 @@ export const HotelScreen = connect(mapStateToProps, {
       setIsLiked((value) => !value);
       updateFavoriteList(id, true);
     };
->>>>>>> master
 
     const galleryHandler = () => {
       setGallery(true);
