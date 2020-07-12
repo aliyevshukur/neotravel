@@ -29,7 +29,7 @@ const screenW = Dimensions.get("window").width;
 
 export const HotelScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  dispatch(setTabVisibility(false));
+  // dispatch(setTabVisibility(false));
   const theme = useSelector((state) => state.themeReducer).theme;
 
   const { hotelInfo } = route?.params;
@@ -45,7 +45,7 @@ export const HotelScreen = ({ navigation, route }) => {
   });
 
   const goBackHandler = () => {
-    dispatch(setTabVisibility(true));
+    // dispatch(setTabVisibility(true));
     navigation.goBack();
   };
   const likeHandler = () => {

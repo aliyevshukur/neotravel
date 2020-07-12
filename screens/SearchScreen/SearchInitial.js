@@ -141,7 +141,12 @@ export const SearchInitial = connect(mapStateToProps, {
               {listType === "list" ? (
                 isOnSearch ? (
                   <ScrollView>
-                    <LargeHotelSlider hotels={searchResult} />
+                    <LargeHotelSlider
+                      hotels={searchResult}
+                      onItemPress={(hotelInfo) =>
+                        navigation.navigate("HotelScreen", { hotelInfo })
+                      }
+                    />
                   </ScrollView>
                 ) : (
                   <ListViewSearch hotels={searchResult} />
@@ -149,7 +154,7 @@ export const SearchInitial = connect(mapStateToProps, {
               ) : (
                 <MapViewSearch
                   bottomListStyle={{ bottom: 110 }}
-                  hotels={hotels}
+                  hotels={searchResult}
                 />
               )}
             </View>

@@ -7,7 +7,15 @@ import { connect } from "react-redux";
 const { Navigator, Screen } = createStackNavigator();
 
 import { BottomTabNav } from "./BottomTabNav/";
-import { SignIn, ReservationScreen, SettingsPage, Favorites } from "../screens";
+import {
+  SignIn,
+  ReservationScreen,
+  SettingsPage,
+  Favorites,
+  HotelScreen,
+  RoomScreen,
+  FilterScreen,
+} from "../screens";
 import bgcLight from "../styles/colors";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { LoginScreen } from "../screens/LoginScreen";
@@ -74,6 +82,9 @@ export const RootNav = connect(myStateToProps)(({ status }) => {
           component={Favorites}
           options={{ headerShown: false }}
         />
+        <Screen name="HotelScreen" component={HotelScreen} />
+        <Screen name="RoomScreen" component={RoomScreen} />
+        <Screen name="Filter" component={FilterScreen} />
       </Navigator>
     </NavigationContainer>
   );

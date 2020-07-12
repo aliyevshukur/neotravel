@@ -35,6 +35,7 @@ import {
 } from "../../store/hotels";
 import { updateFavoriteList } from "../../store/favorites";
 import { selectUserId } from "../../store/auth";
+import { shadow } from "../../styles/commonStyles";
 
 const mapStateToProps = (state) => ({
   hotelList: getHotelList(state),
@@ -167,18 +168,17 @@ export const HomePage = connect(mapStateToProps, {
                 placeholder="Place"
                 onChangeText={(value) => onFieldChange("place", value)}
               />
-              <CustomPicker
-                dark={true}
-                title="Guests"
-                onValueChange={(value) => onFieldChange("guests", value)}
-                pickerValue={fieldValues.guests}
-              />
+                <CustomPicker
+                  dark={true}
+                  title="Guests"
+                  onValueChange={(value) => onFieldChange("guests", value)}
+                  pickerValue={fieldValues.guests}
+                />
             </View>
             <View style={styles.datepickerWrapper}>
               <CustomRangeDatepicker
                 placeholder={"Pick date"}
                 min={new Date()}
-                style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 0 }}
                 onSelect={(value) => onFieldChange("dateRange", value)}
                 rangeValue={fieldValues.dateRange}
               />
@@ -293,7 +293,11 @@ const styles = StyleSheet.create({
   },
   datepickerWrapper: {
     width: "90%",
-    flexDirection: "row",
     justifyContent: "flex-start",
+    backgroundColor: "#0000",
+    borderRadius: 40,
+    padding: 2,
+    width: "90%",
+    ...shadow
   },
 });

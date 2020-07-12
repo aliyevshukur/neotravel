@@ -49,6 +49,7 @@ export const LargeHotelSlider = connect(mapStateToProps)(
               />
             );
           }}
+          ListFooterComponent={<View style={{ margin: 100 }} />}
         />
       </View>
     );
@@ -60,7 +61,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 18,
     marginTop: "5%",
-    marginBottom: 100,
     width: "90%",
   },
   catalogueVertical: {

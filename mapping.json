@@ -5,37 +5,37 @@
       "appearances": {
         "default": {
           "mapping": {
-            "paddingHorizontal": 23
+            "paddingHorizontal": 12
           },
           "variantGroups": {
             "status": {
               "basic": {
-                "borderColor": "#CBCBCB",
-                "backgroundColor": "#E3E6EC",
+                "borderColor": "#0000",
+                "backgroundColor": "#0000",
                 "textColor": "#616167",
                 "state": {
                   "active": {
                     "borderColor": "#FF61A8",
-                    "backgroundColor": "#FFFFFF"
+                    "backgroundColor": "#0000"
                   }
                 }
               }
             },
             "size": {
               "small": {
-                "paddingVertical": 16,
-                "borderRadius": 28,
-                "borderWidth": 2.6
+                "paddingVertical": 12,
+                "borderRadius": 20,
+                "borderWidth": 0
               },
               "medium": {
-                "borderRadius": 28,
-                "borderWidth": 2.6,
-                "paddingVertical": 16
+                "borderRadius": 20,
+                "borderWidth": 0,
+                "paddingVertical": 12
               },
               "large": {
-                "borderRadius": 28,
-                "borderWidth": 2.6,
-                "paddingVertical": 16
+                "borderRadius": 20,
+                "borderWidth": 0,
+                "paddingVertical": 12
               }
             }
           }

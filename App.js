@@ -36,7 +36,7 @@ export default function App() {
     );
   }
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
+    <ApplicationProvider {...eva} theme={eva.light} mapping={mapping}>
       <Provider store={store}>
         {/* <PersistGate loading={null} persistor={persistor}> */}
           <StatusBar
