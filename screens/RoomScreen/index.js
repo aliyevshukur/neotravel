@@ -15,7 +15,7 @@ import {useSelector} from 'react-redux';
 
 export const RoomScreen = ({navigation, route}) => {
   const theme = useSelector(state => state.themeReducer).theme;
-  const {hotelId} = route?.params;
+  const {hotelId, hotelName} = route?.params;
 
   const [rooms, setRooms] = useState([]);
 
@@ -74,7 +74,7 @@ export const RoomScreen = ({navigation, route}) => {
         <TouchableOpacity style={styles.backBtn} onPress={goBackHandler}>
           <CustomSvg name={"chevronLeft"} style={{...styles.chevronLeft, color: theme=="light" ? COLORS.blackText : COLORS.white}} />
         </TouchableOpacity>
-        <CustomText style={{...styles.titleText, color: theme=="light" ? COLORS.blackText : COLORS.white}}>Mountain Resort</CustomText>
+        <CustomText style={{...styles.titleText, color: theme=="light" ? COLORS.blackText : COLORS.white}}>{hotelName}</CustomText>
       </View>
       <View style={styles.main}>
         <FlatList
