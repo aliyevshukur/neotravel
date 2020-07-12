@@ -60,7 +60,7 @@ export const HotelScreen = ({ navigation, route }) => {
   };
 
   const selectRoomsHandler = () => {
-    navigation.navigate("RoomScreen");
+    navigation.navigate("RoomScreen", {hotelId: hotelInfo.id});
   };
 
   BackHandler.addEventListener("hardwareBackPress", function () {
