@@ -13,7 +13,8 @@ import {
 } from "../../store/auth";
 import fb from "../../firebaseConfig";
 import COLORS from "../../styles/colors";
-import profileDefault from "../../assets/images/profileDefault.png";
+import profileDefaultNormal from "../../assets/images/UserScreen/profilePhotoNormal.png";
+import profileDefaultDark from "../../assets/images/UserScreen/profilePhotoDark.png";
 
 import { useSelector } from "react-redux";
 
@@ -35,9 +36,6 @@ export const UserScreen = connect(mapStateToProps, {
     uploadProfilePhoto,
   }) => {
     const haveProfilePhoto = !!fb?.auth?.currentUser?.photoURL;
-    // const imagePath = fb.auth?.currentUser?.photoURL
-    //   ? fb.auth.currentUser.photoURL
-    //   : "../../assets/images/UserScreen";
 
     const theme = useSelector((state) => state.themeReducer).theme;
 
@@ -74,9 +72,6 @@ export const UserScreen = connect(mapStateToProps, {
       },
     ];
 
-    const profilePicture = fb.auth?.currentUser?.photoURL
-      ? fb.auth.currentUser.photoURL
-      : require("../../assets/images/UserScreen/profile-picture.png");
     useEffect(() => {
       getUserInfo();
     }, []);
@@ -109,7 +104,13 @@ export const UserScreen = connect(mapStateToProps, {
           <View>
             {/* User profile picture and name */}
             <UserScreenHeader
-              profilePicture={haveProfilePhoto ? profilePhoto : profileDefault}
+              profilePicture={
+                haveProfilePhoto
+                  ? profilePhoto
+                  : theme == "light"
+                  ? profileDefaultNormal
+                  : profileDefaultDark
+              }
               fullName={userName}
             />
             {menuItems.map(({ icon, label, onPressItem }, i) => {

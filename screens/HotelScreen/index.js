@@ -23,205 +23,245 @@ import COLORS from "../../styles/colors";
 
 import { useSelector, useDispatch, connect } from "react-redux";
 import { setTabVisibility } from "../../store/navReducer";
+import {
+  updateFavoriteList,
+  selectFavorites,
+  addHotel,
+  deleteHotel,
+} from "../../store/favorites";
+import fb from "../../firebaseConfig";
 
 const screenH = Dimensions.get("window").height;
 const screenW = Dimensions.get("window").width;
 
-export const HotelScreen = ({ navigation, route }) => {
-  const dispatch = useDispatch();
-  dispatch(setTabVisibility(false));
-  const theme = useSelector((state) => state.themeReducer).theme;
+const mapStateToProps = (state) => ({
+  favorites: selectFavorites(state),
+});
 
-  const { hotelInfo } = route?.params;
+export const HotelScreen = connect(mapStateToProps, {
+  addHotel,
+  deleteHotel,
+  updateFavoriteList,
+})(
+  ({
+    navigation,
+    route,
+    favorites,
+    addHotel,
+    deleteHotel,
+    updateFavoriteList,
+  }) => {
+    const dispatch = useDispatch();
+    dispatch(setTabVisibility(false));
+    const theme = useSelector((state) => state.themeReducer).theme;
 
-  const [isGallery, setGallery] = useState(false);
-  const [isLiked, setLiked] = useState(hotelInfo.liked);
+    const { hotelInfo } = route?.params;
+    const [isLiked, setIsLiked] = useState(hotelInfo.isLiked);
 
-  const galleryImages = hotelInfo.images.map((item) => {
-    return {
-      source: { uri: item },
-      // dimensions: { width: "100%"},
-    };
-  });
+    const [isGallery, setGallery] = useState(false);
 
-  const goBackHandler = () => {
-    dispatch(setTabVisibility(true));
-    navigation.goBack();
-  };
-  const likeHandler = () => {
-    setLiked(!isLiked);
-  };
+    useEffect(() => {
+      setIsLiked(favorites.includes(hotelInfo.id));
+    }, [favorites]);
 
-  const galleryHandler = () => {
-    setGallery(true);
-  };
-  const closeGallery = () => {
-    setGallery(false);
-  };
+    const galleryImages = hotelInfo?.images?.map((item) => {
+      return {
+        source: { uri: item },
+        // dimensions: { width: "100%"},
+      };
+    });
 
+<<<<<<< HEAD
   const selectRoomsHandler = () => {
     navigation.navigate("RoomScreen", {hotelId: hotelInfo.id});
   };
+=======
+    const goBackHandler = () => {
+      dispatch(setTabVisibility(true));
+      navigation.goBack();
+    };
+    const likeHandler = () => {
+      isLiked ? deleteHotel(hotelInfo.id) : addHotel(hotelInfo.id);
+      const id = fb?.auth?.currentUser?.uid;
+      setIsLiked((value) => !value);
+      updateFavoriteList(id, true);
+    };
+>>>>>>> master
 
-  BackHandler.addEventListener("hardwareBackPress", function () {
-    if (isGallery) {
+    const galleryHandler = () => {
+      setGallery(true);
+    };
+    const closeGallery = () => {
       setGallery(false);
+    };
+
+    const selectRoomsHandler = () => {
+      navigation.navigate("RoomScreen");
+    };
+
+    BackHandler.addEventListener("hardwareBackPress", function () {
+      if (isGallery) {
+        setGallery(false);
+        return true;
+      }
+
+      //hardware back Button actions could be handled here
+      dispatch(setTabVisibility(true));
+      navigation.goBack();
       return true;
-    }
+    });
 
-    //hardware back Button actions could be handled here
-    dispatch(setTabVisibility(true));
-    navigation.goBack();
-    return true;
-  });
-
-  return (
-    <View
-      style={{
-        ...styles.container,
-        backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
-      }}
-    >
-      {isGallery ? (
-        <Gallery
-          style={styles.gallery}
-          images={galleryImages}
-          //   onSingleTapConfirmed={closeGallery}
-        />
-      ) : null}
-      <TouchableOpacity onPress={galleryHandler}>
-        <View>
-          <LinearGradient
-            start={[0, 0]}
-            end={[0, 0.5]}
-            colors={["rgba(0, 0, 0, 0.5)", "rgba(0, 0, 0, 0)"]}
-            style={styles.gradient}
-          >
-            <Image
-              resizeMode={"cover"}
-              style={styles.bgImg}
-              source={{ uri: hotelInfo.images[0] }}
-            />
-            <TouchableOpacity style={styles.backBtn} onPress={goBackHandler}>
-              <CustomSvg name={"chevronLeft"} style={styles.chevronLeft} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.likeBtn} onPress={likeHandler}>
-              <CustomSvg
-                name={isLiked ? "heartFull" : "heartEmpty"}
-                style={{ ...styles.heartSvg, color: isLiked ? "red" : "white" }}
-              />
-            </TouchableOpacity>
-          </LinearGradient>
-          <View style={styles.maskGroupHolder}>
-            {hotelInfo.images.length > 1 ? (
-              <Image
-                resizeMode={"cover"}
-                style={styles.maskImg}
-                source={{ uri: hotelInfo.images[1] }}
-              />
-            ) : null}
-            {hotelInfo.images.length > 2 ? (
-              <Image
-                resizeMode={"cover"}
-                style={styles.maskImg}
-                source={{ uri: hotelInfo.images[2] }}
-              />
-            ) : null}
-            {hotelInfo.images.length > 3 ? (
-              <LinearGradient
-                colors={["rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0.3)"]}
-                style={styles.maskImg}
-              >
-                <Image
-                  resizeMode={"cover"}
-                  style={{ width: "100%", height: "100%" }}
-                  source={{ uri: hotelInfo.images[3] }}
-                />
-                {hotelInfo.images.length > 4 ? (
-                  <View style={styles.countHolder}>
-                    <CustomText style={styles.imgCount}>
-                      {hotelInfo.images.length - 4}+
-                    </CustomText>
-                  </View>
-                ) : null}
-              </LinearGradient>
-            ) : null}
-          </View>
-        </View>
-      </TouchableOpacity>
-      <View style={styles.titleHolder}>
-        <CustomText
-          style={{
-            ...styles.titleText,
-            color: theme == "light" ? COLORS.blackText : COLORS.white,
-          }}
-        >
-          {hotelInfo.name}
-        </CustomText>
-        <Rating style={styles.rating} value={hotelInfo.rating} />
-      </View>
-      <View style={styles.mapHolder}>
-        <View style={styles.mapPreloader}>
-          <CustomText style={styles.mapLoading}>Map is loading..</CustomText>
-        </View>
-        <MapView
-          initialRegion={{
-            ...hotelInfo.marker,
-            latitudeDelta: 0.0043,
-            longitudeDelta: 0.0034,
-          }}
-          style={styles.mapStyle}
-        >
-          <Marker coordinate={hotelInfo.marker}>
+    return (
+      <View
+        style={{
+          ...styles.container,
+          backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+        }}
+      >
+        {isGallery ? (
+          <Gallery
+            style={styles.gallery}
+            images={galleryImages}
+            //   onSingleTapConfirmed={closeGallery}
+          />
+        ) : null}
+        <TouchableOpacity onPress={galleryHandler}>
+          <View>
             <LinearGradient
               start={[0, 0]}
-              end={[1, 0]}
-              colors={[COLORS.gradientOrange, COLORS.gradientPink]}
-              style={styles.gradientMarker}
+              end={[0, 0.5]}
+              colors={["rgba(0, 0, 0, 0.5)", "rgba(0, 0, 0, 0)"]}
+              style={styles.gradient}
             >
-              <CustomSvg name={"hSquare"} style={{ width: 15, height: 15 }} />
+              <Image
+                resizeMode={"cover"}
+                style={styles.bgImg}
+                source={{ uri: hotelInfo?.images[0] }}
+              />
+              <TouchableOpacity style={styles.backBtn} onPress={goBackHandler}>
+                <CustomSvg name={"chevronLeft"} style={styles.chevronLeft} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.likeBtn} onPress={likeHandler}>
+                <CustomSvg
+                  name={isLiked ? "heartFull" : "heartEmpty"}
+                  style={{
+                    ...styles.heartSvg,
+                    color: isLiked ? "red" : "white",
+                  }}
+                />
+              </TouchableOpacity>
             </LinearGradient>
-            {/* <Callout>
+            <View style={styles.maskGroupHolder}>
+              {hotelInfo?.images.length > 1 ? (
+                <Image
+                  resizeMode={"cover"}
+                  style={styles.maskImg}
+                  source={{ uri: hotelInfo?.images[1] }}
+                />
+              ) : null}
+              {hotelInfo?.images.length > 2 ? (
+                <Image
+                  resizeMode={"cover"}
+                  style={styles.maskImg}
+                  source={{ uri: hotelInfo?.images[2] }}
+                />
+              ) : null}
+              {hotelInfo?.images.length > 3 ? (
+                <LinearGradient
+                  colors={["rgba(0, 0, 0, 0.3)", "rgba(0, 0, 0, 0.3)"]}
+                  style={styles.maskImg}
+                >
+                  <Image
+                    resizeMode={"cover"}
+                    style={{ width: "100%", height: "100%" }}
+                    source={{ uri: hotelInfo?.images[3] }}
+                  />
+                  {hotelInfo?.images.length > 4 ? (
+                    <View style={styles.countHolder}>
+                      <CustomText style={styles.imgCount}>
+                        {hotelInfo?.images.length - 4}+
+                      </CustomText>
+                    </View>
+                  ) : null}
+                </LinearGradient>
+              ) : null}
+            </View>
+          </View>
+        </TouchableOpacity>
+        <View style={styles.titleHolder}>
+          <CustomText
+            style={{
+              ...styles.titleText,
+              color: theme == "light" ? COLORS.blackText : COLORS.white,
+            }}
+          >
+            {hotelInfo.name}
+          </CustomText>
+          <Rating style={styles.rating} value={hotelInfo.rating} />
+        </View>
+        <View style={styles.mapHolder}>
+          <View style={styles.mapPreloader}>
+            <CustomText style={styles.mapLoading}>Map is loading..</CustomText>
+          </View>
+          <MapView
+            initialRegion={{
+              ...hotelInfo.marker,
+              latitudeDelta: 0.0043,
+              longitudeDelta: 0.0034,
+            }}
+            style={styles.mapStyle}
+          >
+            <Marker coordinate={hotelInfo.marker}>
+              <LinearGradient
+                start={[0, 0]}
+                end={[1, 0]}
+                colors={[COLORS.gradientOrange, COLORS.gradientPink]}
+                style={styles.gradientMarker}
+              >
+                <CustomSvg name={"hSquare"} style={{ width: 15, height: 15 }} />
+              </LinearGradient>
+              {/* <Callout>
                           <CustomText>Go to hotel</CustomText>
                         </Callout> */}
-          </Marker>
-        </MapView>
-      </View>
-      <View style={styles.locationHolder}>
-        <IconWbg
-          style={{ ...styles.btnLocation, elevation: isGallery ? 0 : 5 }}
+            </Marker>
+          </MapView>
+        </View>
+        <View style={styles.locationHolder}>
+          <IconWbg
+            style={{ ...styles.btnLocation, elevation: isGallery ? 0 : 5 }}
+          />
+          <CustomText
+            style={{
+              ...styles.textLocation,
+              color: theme == "light" ? COLORS.grayDark : COLORS.gray,
+            }}
+          >
+            {hotelInfo.location}
+          </CustomText>
+        </View>
+        <View style={styles.walkingHolder}>
+          <IconWbg
+            style={{ ...styles.btnLocation, elevation: isGallery ? 0 : 5 }}
+            iconName={"walking"}
+          />
+          <CustomText
+            style={{
+              ...styles.textLocation,
+              color: theme == "light" ? COLORS.grayDark : COLORS.gray,
+            }}
+          >
+            {hotelInfo.distance}
+          </CustomText>
+        </View>
+        <CustomButton
+          title={"Select Rooms"}
+          style={{ ...styles.btnSelect, elevation: isGallery ? 0 : 5 }}
+          onPress={selectRoomsHandler}
         />
-        <CustomText
-          style={{
-            ...styles.textLocation,
-            color: theme == "light" ? COLORS.grayDark : COLORS.gray,
-          }}
-        >
-          {hotelInfo.location}
-        </CustomText>
       </View>
-      <View style={styles.walkingHolder}>
-        <IconWbg
-          style={{ ...styles.btnLocation, elevation: isGallery ? 0 : 5 }}
-          iconName={"walking"}
-        />
-        <CustomText
-          style={{
-            ...styles.textLocation,
-            color: theme == "light" ? COLORS.grayDark : COLORS.gray,
-          }}
-        >
-          {hotelInfo.distance}
-        </CustomText>
-      </View>
-      <CustomButton
-        title={"Select Rooms"}
-        style={{ ...styles.btnSelect, elevation: isGallery ? 0 : 5 }}
-        onPress={selectRoomsHandler}
-      />
-    </View>
-  );
-};
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

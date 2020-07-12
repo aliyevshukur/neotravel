@@ -4,8 +4,6 @@ import { CustomText, CustomSvg } from "../../components";
 import COLORS from "../../styles/colors";
 
 export const QandACard = ({ item, theme }) => {
-  console.log("theme from helpscreen -- ", theme);
-
   return (
     <View
       style={{

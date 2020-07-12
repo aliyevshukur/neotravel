@@ -30,7 +30,6 @@ export const LargeHotelSlider = connect(mapStateToProps)(
           data={hotels}
           renderItem={({ item }) => {
             const isLiked = favorites.includes(item.id);
-            console.log(item.price + " " + item.name + " " + item.images[0]);
             return (
               <HotelLarge
                 cardInfo={{
@@ -60,12 +59,10 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 18,
     marginTop: "5%",
-    marginBottom: 100,
     width: "90%",
   },
   catalogueVertical: {
     width: Dimensions.get("window").width,
     marginTop: 39,
-    // paddingBottom: 150,
   },
 });

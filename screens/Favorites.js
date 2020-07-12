@@ -26,17 +26,14 @@ export const Favorites = connect(mapStateToProps, { addHotel, deleteHotel })(
 
     return (
       <View style={styles.container}>
-        <View style={styles.favoriteCards}>
-          <LargeHotelSlider
-            hotels={filteredHotels}
-            bgColor={"transparent"}
-            style={{
-              height: "100%",
-              paddingBottom: "13%",
-              marginTop: 0,
-            }}
-          />
-        </View>
+        <LargeHotelSlider
+          hotels={filteredHotels}
+          bgColor={"transparent"}
+          style={{
+            height: "100%",
+            marginTop: 0,
+          }}
+        />
       </View>
     );
   }
@@ -46,18 +43,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    // alignItems: "center",
-    // justifyContent: "center",
-    paddingBottom: "5%",
   },
   header: {
     flexDirection: "row",
-    // justifyContent: "flex-start",
-    // elevation: 2,
-    // justifyContent: "center",
     alignItems: "center",
-    // justifyContent: "center",
-    // backgroundColor: "black",
     paddingTop: "10%",
     paddingBottom: "2%",
   },
@@ -67,9 +56,6 @@ const styles = StyleSheet.create({
     color: COLORS.gradientPink,
     marginTop: "5%",
     marginLeft: "25%",
-    // marginTop: "10%",
-    // top: "10%",
-    // marginBottom: "5%",
   },
   favoriteCards: {
     // flex: 1,
