@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import {setTheme} from '../../store/theme'
+import { setTheme } from "../../store/theme";
 
 import {
   CustomText,
@@ -18,15 +18,12 @@ export const UserInfo = ({
   setSurname,
   saveHandler,
 }) => {
-
   const dispatch = useDispatch();
-    const theme = useSelector(state => state.themeReducer).theme;
-    
-    const darkHandler = (value) => {
-      value ? dispatch(setTheme("dark")) : dispatch(setTheme("light"))
-    }
+  const theme = useSelector((state) => state.themeReducer).theme;
 
-
+  const darkHandler = (value) => {
+    value ? dispatch(setTheme("dark")) : dispatch(setTheme("light"));
+  };
 
   return (
     <View style={styles.userInfo}>
@@ -49,8 +46,20 @@ export const UserInfo = ({
         onChangeText={setSurname}
       />
       <View style={styles.darkModeContainer}>
-        <CustomText style={{...styles.darkModeText, color: theme=="light" ? COLORS.blackText : COLORS.gray}}>Dark mode</CustomText>
-        <ToggleButton value={!(theme=="light")}  setValue={(value) => {darkHandler(value)}} />
+        <CustomText
+          style={{
+            ...styles.darkModeText,
+            color: theme == "light" ? COLORS.blackText : COLORS.gray,
+          }}
+        >
+          Dark mode
+        </CustomText>
+        <ToggleButton
+          value={!(theme == "light")}
+          setValue={(value) => {
+            darkHandler(value);
+          }}
+        />
       </View>
       <CustomButton
         style={styles.btn}
@@ -89,6 +98,8 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: "35%",
-    fontSize: 22,
+    height: "13%",
+    marginTop: "5%",
+    fontSize: 21,
   },
 });

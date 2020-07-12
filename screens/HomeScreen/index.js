@@ -33,7 +33,7 @@ import {
   getRecommendedHotels,
   setLastSearchFieldValues,
 } from "../../store/hotels";
-import { updateFavoriteList } from "../../store/favorites";
+import { updateFavoriteList, selectFavorites } from "../../store/favorites";
 import { selectUserId } from "../../store/auth";
 import { shadow } from "../../styles/commonStyles";
 
@@ -41,6 +41,7 @@ const mapStateToProps = (state) => ({
   hotelList: getHotelList(state),
   searchResult: getSearchResult(state),
   recommendedHotels: getRecommendedHotels(state),
+  favorites: selectFavorites(state),
 });
 
 export const HomePage = connect(mapStateToProps, {
@@ -60,11 +61,13 @@ export const HomePage = connect(mapStateToProps, {
     setLastSearchFieldValues,
     setRecommendedHotels,
     recommendedHotels,
+    favorites,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
     catalogueName: "Recommended",
   };
+
   const [fieldValues, setFieldValues] = useState({
     place: "",
     guests: "",
@@ -202,6 +205,7 @@ export const HomePage = connect(mapStateToProps, {
               data={recommendedHotels}
               horizontal={true}
               renderItem={({ item }) => {
+                const isLiked = favorites.includes(item.id);
                 return (
                   <HotelMedium
                     cardInfo={{
@@ -211,6 +215,7 @@ export const HomePage = connect(mapStateToProps, {
                       rating: item.rating,
                       currency: item.currency,
                       place: item.city,
+                      isLiked: isLiked,
                     }}
                     style={styles.mediumHotelCard}
                     onPress={() => cardPressed(item)}

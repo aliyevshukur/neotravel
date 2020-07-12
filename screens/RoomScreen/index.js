@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -6,6 +6,8 @@ import {
   FlatList,
   Alert,
 } from "react-native";
+import fb from '../../firebaseConfig';
+
 import { CustomSvg, CustomText, RoomLarge } from "../../components";
 import COLORS from "../../styles/colors";
 
@@ -13,60 +15,57 @@ import {useSelector} from 'react-redux';
 
 export const RoomScreen = ({navigation, route}) => {
   const theme = useSelector(state => state.themeReducer).theme;
-  
-  const DATA = [
-    {
-      id: "4399593499594004392995",
-      name: "Standard King room",
-      imgUrl:
-        "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80",
-      price: "200",
-      currency: "EU",
-      time: "3",
-      features: ["coffee", "coins"],
-    },
-    {
-      id: "13454545534",
-      name: "Standard King room",
-      imgUrl:
-        "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80",
-      price: "200",
-      currency: "EU",
-      time: "3",
-      features: ["bath", "thermometer", "wifi", "coffee", "coins"],
-      extraInfo: "Bu orta babat bir otaqdi. Guman ki xoshunuza gelecek",
-    },
-    {
-      id: "845838828382885848584",
-      name: "Standard King room",
-      imgUrl:
-        "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80",
-      price: "200",
-      currency: "EU",
-      time: "3",
-      features: ["bath", "thermometer", "wifi", "coffee"],
-      extraInfo:
-        "Bu mohtehsem bir otaqdi. Shibhesiz sizin xoshunuza gelecek bundan hech narahat olamayin",
-    },
-  ];
+  const {hotelId, hotelName} = route?.params;
+
+  const [rooms, setRooms] = useState([]);
+
+  async function getRoomsFromFirebase () {
+    try{
+      const snapshot = await fb.db.collection('rooms').where('hotelID', '==', hotelId).get();
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+        return;
+      } else {
+        const resultFromDb = [];
+        snapshot.forEach(doc => {
+          resultFromDb.push({
+            id: doc.id,
+            name: doc.data().name,
+            imgUrl: doc.data().images[0],
+            price: doc.data().price,
+            currency: doc.data().currency,
+            time: "x",
+            features: doc.data().features,
+            description: doc.data().description,
+          });
+        });
+        setRooms(resultFromDb);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getRoomsFromFirebase();
+  }, []);
 
   const goBackHandler = () => {
     navigation.goBack();
   };
 
   const infoHandler = (id) => {
-    const index = DATA.findIndex((item) => item.id == id);
+    const index = rooms.findIndex((item) => item.id == id);
 
     Alert.alert(
-      `${DATA[index].name}`,
-      `${DATA[index].extraInfo}`,
+      `${rooms[index].name}`,
+      `${rooms[index].description}`,
       [{ text: "OK" }],
       { cancelable: true }
     );
   };
   const selectHandler = (id) => {
-    const index = DATA.findIndex((item) => item.id == id);
-    navigation.navigate("ReservationScreen", { roomId: "0a9lrJ8egawN5SRcXvgU" });
+    navigation.navigate("ReservationScreen", { roomId: id });
   };
 
   return (
@@ -75,11 +74,12 @@ export const RoomScreen = ({navigation, route}) => {
         <TouchableOpacity style={styles.backBtn} onPress={goBackHandler}>
           <CustomSvg name={"chevronLeft"} style={{...styles.chevronLeft, color: theme=="light" ? COLORS.blackText : COLORS.white}} />
         </TouchableOpacity>
-        <CustomText style={{...styles.titleText, color: theme=="light" ? COLORS.blackText : COLORS.white}}>Mountain Resort</CustomText>
+        <CustomText style={{...styles.titleText, color: theme=="light" ? COLORS.blackText : COLORS.white}}>{hotelName}</CustomText>
       </View>
       <View style={styles.main}>
         <FlatList
-          data={DATA}
+          data={rooms}
+          style={styles.flatList}
           renderItem={({ item }) => (
             <RoomLarge
               style={styles.roomItem}
@@ -89,6 +89,7 @@ export const RoomScreen = ({navigation, route}) => {
             />
           )}
           keyExtractor={(item) => item.id}
+          ListFooterComponent={<View style={{ margin: 10 }} />}
         />
       </View>
     </View>
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     paddingTop: 50,
-    paddingBottom: 25,
+    paddingBottom: 20,
   },
   backBtn: {
     marginLeft: 19,
@@ -130,8 +131,10 @@ const styles = StyleSheet.create({
     color: COLORS.blackText,
   },
   main: {
-    marginHorizontal: 20,
     paddingBottom: 100,
+  },
+  flatList: {
+    paddingHorizontal: 20,
   },
   roomItem: {
     marginBottom: 20,

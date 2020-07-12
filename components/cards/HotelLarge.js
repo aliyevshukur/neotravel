@@ -39,7 +39,7 @@ export const HotelLarge = connect(mapStateToProps, {
     const [isLiked, setIsLiked] = useState(cardInfo.isLiked);
 
     useEffect(() => {
-      setIsLiked(favorites.includes(cardInfo.id));
+      setIsLiked(favorites.includes(cardInfo.hotelID));
     }, [favorites]);
 
     const makeItShort = (value, length, end = " ...") => {
@@ -69,7 +69,8 @@ export const HotelLarge = connect(mapStateToProps, {
           <TouchableOpacity
             style={styles.heartHolder}
             onPress={() => {
-              isLiked ? deleteHotel(item.id) : addHotel(item.hotelID);
+              isLiked ? deleteHotel(item.hotelID) : addHotel(item.hotelID);
+              console.log("isLiked - " + isLiked);
               const id = fb?.auth?.currentUser?.uid;
               setIsLiked((value) => !value);
               updateFavoriteList(id, true);

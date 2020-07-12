@@ -157,14 +157,28 @@ export const getHotelListFB = () => async (dispatch) => {
 
 export const getHotelsOnDealsFB = () => async (dispatch) => {
   try {
-    const hotelIDsRef = fb.db.collection("hotelsOnDeals").doc("hotelIDs");
-    const hotelIDsDoc = await dealsRef.get();
-    let hotelIDs = [];
-    if(hotelIDsDoc.exists){
-      hotelIDs = hotelIDsDoc.data();
-    }
+    // const hotelIDsRef = fb.db.collection("hotelsOnDeals").doc("hotelIDs");
+    // const hotelIDsDoc = await dealsRef.get();
+    // let hotelIDs = [];
+    // if(hotelIDsDoc.exists){
+    //   hotelIDs = hotelIDsDoc.data();
+    // }
 
     // const 
+    fb.db
+      .collection("hotelsOnDeals")
+      .doc("hotelIDs")
+      .get()
+      .then((doc) => {
+        if (doc) {
+          dispatch(setHotelsOnDeals(hotelIDs));
+        } else {
+          dispatch(setHotelsOnDeals([]));
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   } catch (error) {
     console.log("ERROR", error);
   }
