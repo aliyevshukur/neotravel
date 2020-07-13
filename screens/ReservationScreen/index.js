@@ -72,11 +72,6 @@ export const ReservationScreen = connect(mapStateToProps, {
 
   const currentUserId = fb.auth.currentUser.uid;
   
-  // const route = {
-  //   params: {
-  //     roomId: "0a9lrJ8egawN5SRcXvgU",
-  //   }
-  // }
 
   const [stageNumber, setStageNumber] = useState(1);
   const [buttonTitle, setButtonTitle] = useState("");
@@ -160,14 +155,22 @@ export const ReservationScreen = connect(mapStateToProps, {
         break;
       case 2:
         const {firstName, lastName, email, address, postCode, country, mobilePhone,} = userFormValues;
-        if(firstName&&lastName&&email&&address&&postCode&&country&&mobilePhone){
+        if(
+          firstName.trim()&&
+          lastName.trim()&&
+          email.trim()&&
+          address.trim()&&
+          postCode.trim()&&
+          country.trim()&&
+          mobilePhone.trim()
+        ){
           setStageNumber(3);
           setCustomerInfo(userFormValues);
         }
         break;
       case 3:
         const {cardNumber, expiry, CVV, name} = cardFormValues;
-        if(cardNumber&&expiry&&CVV&&name){
+        if(cardNumber.trim().length==16 && expiry.trim().length>4&&CVV.trim().length==3&&name.length>0){
           setStageNumber(4);
           setCardInfo(cardFormValues);
         }

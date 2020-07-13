@@ -75,13 +75,15 @@ export function reducer(state = initalState, { type, payload }) {
           },
         };
       case SET_CUSTOMER_INFO:
+        const currentTime = new Date().getTime();
         return {
           ...state,
           reservation: {
             ...state.reservation,
             customerInfo: {
               ...payload
-            }
+            },
+            reserveDate: currentTime,
           },
         };
       case SET_CARD_INFO:

@@ -30,7 +30,7 @@ export const CreditCard = ({ cardNumber, name, CVV }) => {
       </View>
       <View style={styles.cardNumberWrapper}>{renderCardNumbers()}</View>
       <View style={styles.cardBottom}>
-        <Text style={styles.cardText}>{name}</Text>
+        <Text style={styles.nameText}>{name}</Text>
         <Text style={styles.cardText}>{CVV}</Text>
       </View>
     </LinearGradient>
@@ -40,8 +40,9 @@ export const CreditCard = ({ cardNumber, name, CVV }) => {
 const styles = StyleSheet.create({
   creditCard: {
     justifyContent: "space-between",
-    height: Dimensions.get('window').height*0.26,
-    maxHeight: 210,
+    height: 198,
+    // height: Dimensions.get('window').height*0.27,
+    // maxHeight: 250,
     width: Dimensions.get('window').width*0.9,
     borderRadius: 15,
     padding: 25,
@@ -69,6 +70,10 @@ const styles = StyleSheet.create({
   cardText: {
     color: "#FFFFFF",
     fontSize: 24,
+  },
+  nameText: {
+    color: "#FFFFFF",
+    fontSize: 19,
     textTransform: "uppercase",
   },
   cardBottom: {

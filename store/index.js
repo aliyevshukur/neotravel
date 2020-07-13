@@ -19,6 +19,7 @@ import {
 import { reducer as navReducer } from "./navReducer";
 import { reducer as themeReducer } from "./theme";
 import { reducer as reservationReducer } from "./reservation";
+import { reducer as paymentReducer} from './payments';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   navReducer,
   themeReducer,
   reservationReducer,
+  paymentReducer,
   [favoriteModuleName]: favoritesReducer,
 });
 
