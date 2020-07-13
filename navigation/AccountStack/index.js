@@ -85,7 +85,7 @@ export const AccountStack = ({ route, navigation }) => {
           component={screen.component}
           options={({ route }) => ({
             headerShown: Boolean(route.name !== "user"),
-            title: route.name,
+            title: route.name == "payments" ? "reservations" : route.name,
           })}
         />
       ))}
