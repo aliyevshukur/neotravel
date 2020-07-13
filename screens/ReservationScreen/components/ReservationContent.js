@@ -203,7 +203,7 @@ export const ReservationContent = connect(mapStateToProps)((props) => {
               onTouchStart={() => handleInputTouch("card", "name")}
             />
           </View>
-          <View style={styles.saveCard}>
+          {/* <View style={styles.saveCard}>
             <TouchableOpacity
               style={styles.checkBox}
               onPress={() => setIsChecked(!isChecked)}
@@ -219,7 +219,7 @@ export const ReservationContent = connect(mapStateToProps)((props) => {
             <CustomText style={styles.saveCardText}>
               Save this credit card
             </CustomText>
-          </View>
+          </View> */}
         </View>
       );
     case 4:

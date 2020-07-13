@@ -5,6 +5,9 @@ import COLORS from "../../styles/colors";
 import { useSelector } from "react-redux";
 
 export const PaymentItem = ({ paymentInfo, theme }) => {
+  const readableDate = new Date(paymentInfo?.date).getDate()
+  + "/" + new Date(paymentInfo?.date).getMonth()
+  + "/" + new Date (paymentInfo?.date).getFullYear(); 
   return (
     <View style={styles.paymentItem}>
       <Image style={styles.roomImg} source={{ uri: paymentInfo?.imgUrl }} />
@@ -23,7 +26,7 @@ export const PaymentItem = ({ paymentInfo, theme }) => {
               {paymentInfo?.roomName || "~"}
             </CustomText>
             <CustomText style={styles.date}>
-              {paymentInfo?.date || "date unknown"}
+              {paymentInfo?.date ? readableDate : "date unknown"}
             </CustomText>
           </View>
         </View>
@@ -93,7 +96,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontFamily: "NunitoBold",
-    fontSize: 20,
+    fontSize: 15,
     color: COLORS.gradientOrange,
   },
 });
