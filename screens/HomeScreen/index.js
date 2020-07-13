@@ -7,15 +7,18 @@ import {
   FlatList,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { connect, useSelector, useDispatch } from "react-redux";
 import { setTabVisibility } from "../../store/navReducer";
 
+import fb from "../../firebaseConfig";
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
 import { HotelMedium } from "../../components/cards/HotelMedium";
 import { findRecommendedHotels } from "../../utils/getRecommededHotels";
 import { EmptyListComponent } from "./EmptyListComponent";
+import { LoadingScreen } from "../../commons/LoadingScreen";
 
 import {
   CustomText,
@@ -29,12 +32,18 @@ import {
   getHotelList,
   searchHotelsFB,
   getSearchResult,
-  setRecommendedHotels,
+  getRecommendedHotelsFB,
   getRecommendedHotels,
   setLastSearchFieldValues,
 } from "../../store/hotels";
 import { updateFavoriteList, selectFavorites } from "../../store/favorites";
-import { selectUserId } from "../../store/auth";
+import { selectUserId, getUserInfo } from "../../store/auth";
+import {
+  getUserDataFB,
+  getUserData,
+  getLoading,
+  getErrorMsg,
+} from "../../store/user";
 import { shadow } from "../../styles/commonStyles";
 
 const mapStateToProps = (state) => ({
@@ -42,6 +51,9 @@ const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
   recommendedHotels: getRecommendedHotels(state),
   favorites: selectFavorites(state),
+  userData: getUserData(state),
+  loading: getLoading(state),
+  errorMsg: getErrorMsg(state),
 });
 
 export const HomePage = connect(mapStateToProps, {
@@ -49,19 +61,24 @@ export const HomePage = connect(mapStateToProps, {
   updateFavoriteList,
   searchHotelsFB,
   setLastSearchFieldValues,
-  setRecommendedHotels,
+  getRecommendedHotelsFB,
+  getUserDataFB,
 })((props) => {
   const {
     navigation,
     getHotelListFB,
     hotelList,
     searchHotelsFB,
-    // searchResult,
     updateFavoriteList,
     setLastSearchFieldValues,
     setRecommendedHotels,
     recommendedHotels,
     favorites,
+    getUserDataFB,
+    userData,
+    errorMsg,
+    loading,
+    getRecommendedHotelsFB,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
@@ -73,22 +90,26 @@ export const HomePage = connect(mapStateToProps, {
     guests: "",
     dateRange: {},
   });
-
   const theme = useSelector((state) => state.themeReducer).theme;
   const dispatch = useDispatch();
   dispatch(setTabVisibility(true));
   const id = useSelector(selectUserId);
   useEffect(() => {
     getHotelListFB();
-    if (recommendedHotels.length === 0) {
-      setRecommendedHotelsData();
-    }
+
+    getUserInfo();
+    getUserDataFB(id);
     updateFavoriteList(id, false);
   }, []);
 
+  useEffect(() => {
+    if (!loading) {
+      getRecommendedHotelsFB(userData.recommendeds);
+    }
+  }, [userData]);
+
   const setRecommendedHotelsData = () => {
     findRecommendedHotels(hotelList, 3).then((data) => {
-      console.log("DATAAA", data);
 
       setRecommendedHotels(data);
     });
@@ -143,6 +164,15 @@ export const HomePage = connect(mapStateToProps, {
     navigation.navigate("HotelScreen", { hotelInfo: item });
   };
 
+  if (loading && recommendedHotels.loading) {
+    return <LoadingScreen />;
+  }
+
+  if (errorMsg && recommendedHotels.errorMsg) {
+    Alert.alert("Something went wrong", errorMsg);
+    return <></>;
+  }
+
   return (
     <ImageBackground
       resizeMode="cover"
@@ -171,12 +201,12 @@ export const HomePage = connect(mapStateToProps, {
                 placeholder="Place"
                 onChangeText={(value) => onFieldChange("place", value)}
               />
-                <CustomPicker
-                  dark={true}
-                  title="Guests"
-                  onValueChange={(value) => onFieldChange("guests", value)}
-                  pickerValue={fieldValues.guests}
-                />
+              <CustomPicker
+                dark={true}
+                title="Guests"
+                onValueChange={(value) => onFieldChange("guests", value)}
+                pickerValue={fieldValues.guests}
+              />
             </View>
             <View style={styles.datepickerWrapper}>
               <CustomRangeDatepicker
@@ -202,7 +232,7 @@ export const HomePage = connect(mapStateToProps, {
               {texts.catalogueName}
             </CustomText>
             <FlatList
-              data={recommendedHotels}
+              data={recommendedHotels.data}
               horizontal={true}
               renderItem={({ item }) => {
                 const isLiked = favorites.includes(item.id);
@@ -224,6 +254,7 @@ export const HomePage = connect(mapStateToProps, {
               }}
               keyExtractor={(item) => item?.id}
               ListEmptyComponent={EmptyListComponent}
+              ListFooterComponent={<View style={{ margin: 10 }} />}
             />
           </View>
         </View>
@@ -303,6 +334,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     padding: 2,
     width: "90%",
-    ...shadow
+    ...shadow,
   },
 });

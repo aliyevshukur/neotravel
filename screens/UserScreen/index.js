@@ -46,8 +46,8 @@ export const UserScreen = connect(mapStateToProps, {
         onPressItem: "favorites",
       },
       {
-        icon: "creditCard",
-        label: "Payment",
+        icon: "reservations",
+        label: "Reservations",
         onPressItem: "payments",
       },
       {

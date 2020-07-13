@@ -60,6 +60,7 @@ export const RegisterScreen = connect(null, { sign })(
                     value={formValues[key]}
                     onChangeText={(value) => handleFieldChange(key, value)}
                     long={true}
+                    secureTextEntry={ key === 'password' ? true : false}
                   />
                 );
               })}

@@ -34,13 +34,16 @@ export const LoginScreen = connect(myStateToProps, { sign })(
           Alert.alert(
             `${
               field.charAt(0).toUpperCase() + field.slice(1, field.length)
-            } field is required to fill` 
+            } field is required to fill`
           );
           return;
         }
       }
 
-      await sign(formValues.email, formValues.password, false);
+      const response = await sign(formValues.email, formValues.password, false);
+      if (response) {
+        getUserInfo();
+      }
     };
 
     return (
@@ -64,6 +67,7 @@ export const LoginScreen = connect(myStateToProps, { sign })(
               value={formValues.password}
               onChangeText={(value) => handleFieldChange("password", value)}
               long={true}
+              secureTextEntry={true}
             />
           </View>
           <View style={styles.textWrapper}>

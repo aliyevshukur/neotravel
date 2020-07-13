@@ -53,7 +53,6 @@ export const BottomTabNav = () => {
       tabBarOptions={{
         showLabel: false,
         style: {
-          marginTop: 5,
           backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
           height: Dimensions.get("window").height / 10,
         },
