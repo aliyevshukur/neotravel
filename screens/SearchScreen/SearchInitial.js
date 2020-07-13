@@ -12,31 +12,23 @@ import { FilterRow } from "./components";
 import { MapViewSearch } from "../HomeScreen/SearchScreen/MapViewSearch";
 import { ListViewSearch } from "../HomeScreen/SearchScreen/ListViewSearch";
 import { hotels } from "../HomeScreen/SearchScreen";
+import { LoadingScreen } from "../../commons/LoadingScreen";
 import {
   getRecommendedHotels,
   getHotelsOnDealsFB,
   getHotelsOnDeals,
-  getHotelListFB,
-  getHotelList,
-  getRoomListFB,
-  getRoomList,
   searchHotelsFB,
   getSearchResult,
 } from "../../store/hotels";
-import { getMinRoomPrice } from "../../utils/getMinRoomPrice";
 
 const mapStateToProps = (state) => ({
   recommendedHotels: getRecommendedHotels(state),
   hotelsOnDeals: getHotelsOnDeals(state),
-  hotelList: getHotelList(state),
-  roomList: getRoomList(state),
   searchResult: getSearchResult(state),
 });
 
 export const SearchInitial = connect(mapStateToProps, {
   getHotelsOnDealsFB,
-  getHotelListFB,
-  getRoomListFB,
   searchHotelsFB,
 })(
   ({
@@ -44,10 +36,6 @@ export const SearchInitial = connect(mapStateToProps, {
     recommendedHotels,
     getHotelsOnDealsFB,
     hotelsOnDeals,
-    getHotelListFB,
-    hotelList,
-    getRoomListFB,
-    roomList,
     searchHotelsFB,
     searchResult,
   }) => {
@@ -55,26 +43,9 @@ export const SearchInitial = connect(mapStateToProps, {
     const [searchValue, setSearchValue] = useState("");
     const [isOnSearch, setIsOnSearch] = useState(false);
     const [listType, setListType] = useState("list");
-    const [dealsData, setDealsData] = useState([]);
 
     useEffect(() => {
       getHotelsOnDealsFB();
-      getHotelListFB();
-      getRoomListFB();
-
-      if (hotelList.lenght !== 0) {
-        const hotelsOnDealsData = [];
-        hotelList.forEach((hotel) => {
-          if (hotelsOnDeals.includes(hotel.id)) {
-            hotelsOnDealsData.push({
-              minPrice: getMinRoomPrice(roomList, hotel.id),
-              ...hotel,
-            });
-          }
-        });
-
-        setDealsData(hotelsOnDealsData);
-      }
     }, []);
 
     const submitSearchHandler = () => {
@@ -88,7 +59,10 @@ export const SearchInitial = connect(mapStateToProps, {
         setIsOnSearch(false);
       }
     };
-    console.log("searchResult", searchResult);
+    console.log("HOTELTEE", hotelsOnDeals);
+    if (hotelsOnDeals.loading) {
+      return <LoadingScreen />;
+    }
 
     return (
       <AppLayout
@@ -102,7 +76,7 @@ export const SearchInitial = connect(mapStateToProps, {
           onSubmitEditing={() => submitSearchHandler()}
           onChangeText={setSearchValue}
           value={searchValue}
-          style={{ marginTop: 30, marginBottom: 33 }}
+          style={{ marginTop: 30, marginBottom: 33, height: 45 }}
           long={true}
           placeHolder="Search for a city, area, or a hotel"
         />
@@ -112,7 +86,7 @@ export const SearchInitial = connect(mapStateToProps, {
               title="recommended"
               titleStyle={styles.recommendedTitleStyle}
               containerStyle={styles.recommendedContainerStyle}
-              hotelsList={recommendedHotels}
+              hotelsList={recommendedHotels.data}
             />
             <CardSlider
               title="deals"
@@ -121,7 +95,7 @@ export const SearchInitial = connect(mapStateToProps, {
                 color: theme == "light" ? COLORS.blackText : COLORS.white,
               }}
               containerStyle={styles.dealsContainerStyle}
-              hotelsList={dealsData}
+              hotelsList={hotelsOnDeals.data}
             />
           </ScrollView>
         ) : (
@@ -141,7 +115,12 @@ export const SearchInitial = connect(mapStateToProps, {
               {listType === "list" ? (
                 isOnSearch ? (
                   <ScrollView>
-                    <LargeHotelSlider hotels={searchResult} />
+                    <LargeHotelSlider
+                      hotels={searchResult}
+                      onItemPress={(hotelInfo) =>
+                        navigation.navigate("HotelScreen", { hotelInfo })
+                      }
+                    />
                   </ScrollView>
                 ) : (
                   <ListViewSearch hotels={searchResult} />
@@ -149,7 +128,7 @@ export const SearchInitial = connect(mapStateToProps, {
               ) : (
                 <MapViewSearch
                   bottomListStyle={{ bottom: 110 }}
-                  hotels={hotels}
+                  hotels={searchResult}
                 />
               )}
             </View>

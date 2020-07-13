@@ -55,13 +55,13 @@ export const PaymentsScreen = connect(mapStateToProps, {
         }}
       >
         <FlatList
-          style={styles.paymentList}
+          contentContainerStyle={styles.paymentList}
           data={payments}
           renderItem={({ item, index }) => (
             <PaymentItem theme={theme} key={index} paymentInfo={item} />
           )}
           keyExtractor={(item) => item.id}
-          ListFooterComponent={<View style={{ margin: 20 }} />}
+          // ListFooterComponent={<View style={{ margin: 20 }} />}
         />
       </View>
     </View>
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   main: {
     width: "100%",
-    paddingBottom: 90,
+    // paddingBottom: 90,
   },
   paymentList: {
     paddingTop: 40,
