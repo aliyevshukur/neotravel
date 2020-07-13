@@ -10,7 +10,6 @@ export const CardSlider = ({
   containerStyle,
   title = "any",
 }) => {
-  // console.log("DATAAA", hotelsList);
 
   return (
     <View style={[containerStyle, styles.container]}>

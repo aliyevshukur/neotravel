@@ -15,6 +15,10 @@ import {
   reducer as favoritesReducer,
   MODULE_NAME as favoriteModuleName,
 } from "./favorites";
+import {
+  reducer as userReducer,
+  MODULE_NAME as userModuleName,
+} from "./user";
 
 import { reducer as navReducer } from "./navReducer";
 import { reducer as themeReducer } from "./theme";
@@ -27,6 +31,7 @@ const rootReducer = combineReducers({
   themeReducer,
   reservationReducer,
   [favoriteModuleName]: favoritesReducer,
+  [userModuleName]: userReducer,
 });
 
 const persistConfig = {
@@ -37,7 +42,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = createStore(
-  rootReducer,
+  persistedReducer,
   composeWithDevTools(applyMiddleware(thunk))
 );
 

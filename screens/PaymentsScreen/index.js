@@ -26,7 +26,7 @@ export const PaymentsScreen = () => {
 
   async function getPaymentsFromFirebase () {
     try{
-      const snapshot = await fb.db.collection('reservations').where('userId', '==', "sTrusiVbFaS17ADwhfqOu4AzZdv2").get();
+      const snapshot = await fb.db.collection('reservations').where('userId', '==', currentUserId).get();
       if (snapshot.empty) {
         console.log('reservation not found');
         return;
@@ -119,13 +119,13 @@ export const PaymentsScreen = () => {
         }}
       >
         <FlatList
-          style={styles.paymentList}
+          contentContainerStyle={styles.paymentList}
           data={payments}
           renderItem={({ item, index }) => (
             <PaymentItem theme={theme} key={index} paymentInfo={item} />
           )}
           keyExtractor={(item) => item.id}
-          ListFooterComponent={<View style={{ margin: 20 }} />}
+          // ListFooterComponent={<View style={{ margin: 20 }} />}
         />
       </View>
     </View>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   },
   main: {
     width: "100%",
-    paddingBottom: 90,
+    // paddingBottom: 90,
   },
   paymentList: {
     paddingTop: 40,

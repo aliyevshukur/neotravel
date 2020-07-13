@@ -52,7 +52,7 @@ export const HotelScreen = connect(mapStateToProps, {
     updateFavoriteList,
   }) => {
     const dispatch = useDispatch();
-    dispatch(setTabVisibility(false));
+    // dispatch(setTabVisibility(false));
     const theme = useSelector((state) => state.themeReducer).theme;
 
     const { hotelInfo } = route?.params;
@@ -75,7 +75,7 @@ export const HotelScreen = connect(mapStateToProps, {
       navigation.navigate("RoomScreen", {hotelId: hotelInfo.id, hotelName: hotelInfo.name});
     };
     const goBackHandler = () => {
-      dispatch(setTabVisibility(true));
+      // dispatch(setTabVisibility(true));
       navigation.goBack();
     };
     const likeHandler = () => {

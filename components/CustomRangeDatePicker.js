@@ -39,6 +39,7 @@ export const CustomRangeDatepicker = ({
 const styles = StyleSheet.create({
   container: {
     // minHeight: 360,
-    backgroundColor: COLORS.bgcLight,
+    backgroundColor: '#0000',
+    borderRadius: 40
   },
 });

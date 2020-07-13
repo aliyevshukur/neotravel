@@ -5,12 +5,21 @@ import { isHotelAvailable } from "../utils/isHotelAvailable";
 // ACTIONS
 const SET_HOTEL_LIST = "SET_HOTEL_LIST";
 const SET_ROOM_LIST = "SET_ROOM_LIST";
-const SET_RECOMMENDED_HOTELS = "SET_RECOMMENDED_HOTELS";
 const SET_HOTELS_ON_DEALS = "SET_HOTELS_ON_DEALS";
 const SET_SEARCH_HOTEL_RESULT = "SET_SEARCH_HOTEL_RESULT";
 const SET_FILTERED_RESULT = "SET_FILTERED_RESULT";
 const SET_LAST_SEARCH_FIELD_VALUES = "SET_LAST_SEARCH_FIELD_VALUES";
 const SET_LAST_USER_CHOICES = "SET_LAST_USER_CHOICES";
+
+// RECOMMENDED HOTELS ACTIONS
+const FETCH_RECOMMENDED_HOTELS_REQUEST = "FETCH_RECOMMENDED_HOTELS_REQUEST";
+const FETCH_RECOMMENDED_HOTELS_ERROR = "FETCH_RECOMMENDED_HOTELS_ERROR";
+const FETCH_RECOMMENDED_HOTELS_SUCCESS = "FETCH_RECOMMENDED_HOTELS_SUCCESS";
+
+// HOTELS ON DEALS ACTIONS
+const FETCH_HOTELS_ON_DEALS_REQUEST = "FETCH_HOTELS_ON_DEALS_REQUEST";
+const FETCH_HOTELS_ON_DEALS_ERROR = "FETCH_HOTELS_ON_DEALS_ERROR";
+const FETCH_HOTELS_ON_DEALS_SUCCESS = "FETCH_HOTELS_ON_DEALS_SUCCESS";
 
 export const MODULE_NAME = "hotels";
 export const getHotelList = (state) => state[MODULE_NAME].hotelList;
@@ -27,13 +36,21 @@ export const getLastUserChoices = (state) => state[MODULE_NAME].lastUserChoices;
 const initialState = {
   hotelList: [],
   roomList: [],
-  recommendedHotels: [],
   search: {
     lastSearchFieldValues: {},
     searchResult: [],
   },
   lastUserChoices: {},
-  hotelsOnDeals: [],
+  hotelsOnDeals: {
+    loading: false,
+    errorMsg: "",
+    data: [],
+  },
+  recommendedHotels: {
+    loading: false,
+    errorMsg: "",
+    data: [],
+  },
 };
 
 // REDUCER
@@ -75,10 +92,60 @@ export const reducer = (state = initialState, { type, payload }) => {
         ...state,
         lastUserChoices: payload,
       };
-    case SET_RECOMMENDED_HOTELS:
+    case FETCH_RECOMMENDED_HOTELS_REQUEST:
       return {
         ...state,
-        recommendedHotels: payload,
+        recommendedHotels: {
+          ...state.recommendedHotels,
+          loading: true,
+          errorMsg: "",
+        },
+      };
+    case FETCH_RECOMMENDED_HOTELS_ERROR:
+      return {
+        ...state,
+        recommendedHotels: {
+          ...state.recommendedHotels,
+          errorMsg: payload,
+        },
+      };
+    case FETCH_RECOMMENDED_HOTELS_SUCCESS:
+      return {
+        ...state,
+        recommendedHotels: {
+          ...state.recommendedHotels,
+          loading: false,
+          errorMsg: "",
+          data: payload,
+        },
+      };
+    case FETCH_HOTELS_ON_DEALS_REQUEST:
+      return {
+        ...state,
+        hotelsOnDeals: {
+          ...state.hotelsOnDeals,
+          loading: true,
+          errorMsg: "",
+        },
+      };
+    case FETCH_HOTELS_ON_DEALS_ERROR:
+      return {
+        ...state,
+        hotelsOnDeals: {
+          ...state.hotelsOnDeals,
+          loading: false,
+          errorMsg: payload,
+        },
+      };
+    case FETCH_HOTELS_ON_DEALS_SUCCESS:
+      return {
+        ...state,
+        hotelsOnDeals: {
+          ...state.hotelsOnDeals,
+          data: payload,
+          loading: false,
+          errorMsg: "",
+        },
       };
     default:
       return state;
@@ -90,14 +157,6 @@ export const setHotelList = (payload) => ({
   type: SET_HOTEL_LIST,
   payload,
 });
-export const setRecommendedHotels = (payload) => {
-  console.log("PAYLOAD", payload);
-
-  return {
-    type: SET_RECOMMENDED_HOTELS,
-    payload,
-  };
-};
 export const setHotelsOnDeals = (payload) => ({
   type: SET_HOTELS_ON_DEALS,
   payload,
@@ -133,6 +192,47 @@ export const setLastUserChoices = (payload) => {
   };
 };
 
+// RECOMMENDED HOTELS
+export const fetchRecommendedHotelsRequest = () => {
+  return {
+    type: FETCH_RECOMMENDED_HOTELS_REQUEST,
+  };
+};
+
+export const fetchRecommendedHotelsError = (payload) => {
+  return {
+    type: FETCH_RECOMMENDED_HOTELS_ERROR,
+    payload,
+  };
+};
+
+export const fetchRecommendedHotelsSuccess = (payload) => {
+  return {
+    type: FETCH_RECOMMENDED_HOTELS_SUCCESS,
+    payload,
+  };
+};
+
+// HOTELS ON DEALS
+export const fetchHotelsOnDealsRequest = () => {
+  return {
+    type: FETCH_HOTELS_ON_DEALS_REQUEST,
+  };
+};
+
+export const fetchHotelsOnDealsError = (payload) => {
+  return {
+    type: FETCH_HOTELS_ON_DEALS_ERROR,
+    payload,
+  };
+};
+
+export const fetchHotelsOnDealsSuccess = (payload) => {
+  return {
+    type: FETCH_HOTELS_ON_DEALS_SUCCESS,
+    payload,
+  };
+};
 // MIDDLEWARES
 export const getHotelListFB = () => async (dispatch) => {
   try {
@@ -155,24 +255,85 @@ export const getHotelListFB = () => async (dispatch) => {
   } catch (error) {}
 };
 
-export const getHotelsOnDealsFB = () => (dispatch) => {
+export const getRecommendedHotelsFB = (hotelIDs) => async (dispatch) => {
   try {
-    fb.db
-      .collection("hotelsOnDeals")
-      .doc("hotelIDs")
-      .get()
-      .then((doc) => {
-        if (doc) {
-          dispatch(setHotelsOnDeals(hotelIDs));
-        } else {
-          dispatch(setHotelsOnDeals([]));
-        }
-      })
-      .catch((error) => {
-        console.log("error", error);
+    dispatch(fetchRecommendedHotelsRequest());
+
+    const hotelsRef = fb.db
+      .collection("hotels")
+      .where("__name__", "in", hotelIDs);
+    const allHotels = await hotelsRef.get();
+
+    if (allHotels) {
+      const hotelsArr = [];
+
+      const roomsArr = [];
+      const roomsRef = fb.db.collection("rooms");
+      const roomsDoc = await roomsRef.get();
+      roomsDoc.forEach((roomDoc) => {
+        roomsArr.push({
+          id: roomDoc.id,
+          ...roomDoc.data(),
+        });
       });
+
+      allHotels.forEach((doc) => {
+        hotelsArr.push({
+          id: doc.id,
+          minPrice: getMinRoomPrice(roomsArr, doc.id),
+          ...doc.data(),
+        });
+      });
+
+      dispatch(fetchRecommendedHotelsSuccess(hotelsArr));
+    } else {
+      dispatch(fetchRecommendedHotelsSuccess([]));
+    }
   } catch (error) {
-    console.log("error", error);
+    dispatch(fetchRecommendedHotelsError(error));
+  }
+};
+
+export const getHotelsOnDealsFB = () => async (dispatch) => {
+  try {
+    dispatch(fetchHotelsOnDealsRequest());
+
+    const hotelIDsRef = fb.db.collection("hotelsOnDeals").doc("hotelIDs");
+    const hotelIDsDoc = await hotelIDsRef.get();
+    let hotelIDs = [];
+    if (hotelIDsDoc.exists) {
+      hotelIDs = hotelIDsDoc.data().IDs;
+    }
+
+    const roomsArr = [];
+    const roomsRef = fb.db.collection("rooms");
+    const roomsDoc = await roomsRef.get();
+    roomsDoc.forEach((roomDoc) => {
+      roomsArr.push({
+        id: roomDoc.id,
+        ...roomDoc.data(),
+      });
+    });
+
+    // const
+    const hotelsRef = fb.db
+      .collection("hotels")
+      .where("__name__", "in", hotelIDs);
+    const hotelsDoc = await hotelsRef.get();
+    const hotelsArr = [];
+    hotelsDoc.forEach((doc) => {
+      hotelsArr.push({
+        id: doc.id,
+        minPrice: getMinRoomPrice(roomsArr, doc.id),
+        ...doc.data(),
+      });
+    });
+    // console.log("HOTELS ARR", hotelsArr);
+
+    dispatch(fetchHotelsOnDealsSuccess(hotelsArr));
+  } catch (error) {
+    dispatch(fetchHotelsOnDealsError(error));
+    console.log("ERROR", error);
   }
 };
 
@@ -200,7 +361,6 @@ export const getRoomListFB = () => async (dispatch) => {
 export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
   dispatch
 ) => {
-
   const hotelData = [];
   const hotelIDs = [];
 
@@ -239,19 +399,19 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
     const finalData = hotelData.map((hotel) => {
       const minPrice = getMinRoomPrice(searchedHotelRooms, hotel.id);
 
-      const isAvailable = isHotelAvailable(
-        searchedHotelRooms,
-        hotel.id,
-        dateRange,
-        reservationsData
-      );
-      if (isAvailable) {
-        return {
-          id: hotel.id,
-          minPrice,
-          ...hotel,
-        };
-      }
+      // const isAvailable = isHotelAvailable(
+      //   searchedHotelRooms,
+      //   hotel.id,
+      //   dateRange,
+      //   reservationsData
+      // );
+      // if (isAvailable) {
+      return {
+        id: hotel.id,
+        minPrice,
+        ...hotel,
+      };
+      // }
     });
 
     if (finalData.length !== 0) {

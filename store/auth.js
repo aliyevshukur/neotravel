@@ -80,12 +80,29 @@ export const sign = (email, password, isSignIn, userName = "John") => async (
         fb.auth.currentUser.updateProfile({
           displayName: userName,
         });
-        fb.db.collection("users").doc(fb.auth.currentUser.uid).set({
-          id: fb.auth.currentUser.uid,
-          name: userName,
-          favorites: [],
-          email: email,
-        });
+
+        const hotelIDs = [];
+        fb.db
+          .collection("hotels")
+          .get()
+          .then((snap) => {
+            snap.forEach((doc) => {
+              hotelIDs.push(doc.id);
+            });
+            const randomIDs = [];
+            for (let i = 0; i < 4; i++) {
+              const randomNum = Math.floor(Math.random() * hotelIDs.length);
+              randomIDs.push(hotelIDs[randomNum]);
+            }
+            fb.db.collection("users").doc(fb.auth.currentUser.uid).set({
+              id: fb.auth.currentUser.uid,
+              name: userName,
+              favorites: [],
+              email: email,
+              recommendeds: randomIDs,
+            });
+          });
+
         dispatch(setStatus(true));
       });
     }

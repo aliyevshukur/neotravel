@@ -44,6 +44,7 @@ export const SmallCardSlider = ({
 const styles = StyleSheet.create({
   catalogueHorizontal: {
     height: 180,
+
   },
   smallHotelCard: {
     marginLeft: 18,

@@ -23,7 +23,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
 const TabItems = [
   {
     name: "HomePageStack",
-    component: HomePageStack, 
+    component: HomePageStack,
     icon: "home",
   },
   {
@@ -53,7 +53,6 @@ export const BottomTabNav = () => {
       tabBarOptions={{
         showLabel: false,
         style: {
-          marginTop: 5,
           backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
           height: Dimensions.get("window").height / 10,
         },
@@ -66,7 +65,7 @@ export const BottomTabNav = () => {
           name={name}
           component={component}
           options={{
-            tabBarVisible: tabStatus.status,
+            // tabBarVisible: tabStatus.status,
             unmountOnBlur: true,
             tabBarIcon: ({ focused }) => {
               return (

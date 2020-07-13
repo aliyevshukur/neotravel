@@ -62,11 +62,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 35,
   },
   icon: {
-    width: 21,
-    height: 17,
+    width: 24,
+    height: 23,
     marginRight: 14,
-    height: 17,
-    width: 21,
   },
   svg: {
     width: "100%",

@@ -48,6 +48,7 @@ export const LargeHotelSlider = connect(mapStateToProps)(
               />
             );
           }}
+          ListFooterComponent={<View style={{ margin: 100 }} />}
         />
       </View>
     );
@@ -57,7 +58,7 @@ export const LargeHotelSlider = connect(mapStateToProps)(
 const styles = StyleSheet.create({
   hotelLargeStyle: {
     marginLeft: 20,
-    marginRight: 18,
+    marginRight: 50,
     marginTop: "5%",
     width: "90%",
   },

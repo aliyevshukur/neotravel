@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import {useSelector} from 'react-redux';
+import { useSelector } from "react-redux";
 
 import search from "../assets/images/inputComponents/search.png";
 import cross from "../assets/images/inputComponents/times.png";
@@ -17,7 +17,6 @@ import longRectangle from "../assets/images/inputComponents/longRectangle.png";
 import darkRectangle from "../assets/images/inputComponents/darkRectangle.png";
 import COLORS from "../styles/colors";
 import { CustomSvg } from "./cards/CustomSvg";
-
 
 export const CustomInput = ({
   style,
@@ -32,12 +31,10 @@ export const CustomInput = ({
   keyboardType = "default",
   maxLength,
   textStyle,
+  secureTextEntry,
   ...rest
 }) => {
-
-  const theme = useSelector(state => state.themeReducer).theme;
-
-
+  const theme = useSelector((state) => state.themeReducer).theme;
 
   const crossBtnHandler = () => {
     onChangeText("");
@@ -65,11 +62,18 @@ export const CustomInput = ({
         value={value}
         onChangeText={(value) => onChangeText(value)}
         onTouchStart={onTouchStart}
-        style={[styles.textInput, { ...textStyle, color: theme=="light" ? COLORS.blackText : COLORS.white }]}
+        style={[
+          styles.textInput,
+          {
+            ...textStyle,
+            color: theme == "light" ? COLORS.blackText : COLORS.white,
+          },
+        ]}
         placeholder={placeholder}
         placeholderTextColor="#616167"
         keyboardType={keyboardType}
         maxLength={maxLength}
+        secureTextEntry={secureTextEntry}
       ></TextInput>
       {isCross && value !== "" && (
         <TouchableOpacity
