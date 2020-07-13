@@ -5,6 +5,7 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
@@ -89,9 +90,9 @@ export const RoomLarge = ({ style, cardInfo, onSelectPress, onInfoPress }) => {
         {cardItem.currency || "$"}{" "}
         {makeItShort(cardItem.price, 7, "...") || "~"}
       </CustomText>
-      <CustomText style={styles.nights}>
+      {/* <CustomText style={styles.nights}>
         {makeItShort(cardItem.time, 3) || "~"} nights
-      </CustomText>
+      </CustomText> */}
       <View style={styles.selectHolder}>
         <CustomButton
           title={"Select"}
@@ -171,10 +172,10 @@ const styles = StyleSheet.create({
   price: {
     position: "absolute",
     left: 20,
-    bottom: 45,
+    bottom: 35,
     fontFamily: "NunitoBold",
     fontWeight: "800",
-    fontSize: 24,
+    fontSize: 22,
     fontStyle: "normal",
     color: COLORS.darkPriceInCards,
   },
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   selectBtn: {
-    width: 185,
+    width: Dimensions.get('window').width*0.49,
     height: 60,
     fontSize: 22,
   },
