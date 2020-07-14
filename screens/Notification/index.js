@@ -5,9 +5,9 @@ import {
   ImageBackground,
   StatusBar,
   Dimensions,
+  Alert,
 } from "react-native";
-import {useSelector} from 'react-redux';
-
+import { useSelector } from "react-redux";
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
@@ -15,6 +15,9 @@ import image from "../../assets/images/notfBg.png";
 import Constants from "expo-constants";
 import { NotfCard } from "./NotfCard";
 import { FlatList } from "react-native-gesture-handler";
+import * as Permissions from "expo-permissions";
+import * as Notifications from "expo-notifications";
+import fb from "../../firebaseConfig";
 
 const notifications = [
   { description: "Please rate your stay at Venice Royal, Venice, Italy. " },
@@ -25,15 +28,58 @@ const notifications = [
   },
 ];
 
-
 export const NotificationScreen = ({ navigation }) => {
-  const theme = useSelector(state => state.themeReducer).theme;
+  const theme = useSelector((state) => state.themeReducer).theme;
   const searchRoomHandler = () => {
     navigation.navigate("SearchStack");
-  }
+  };
 
+  const registerForPushNotifications = async () => {
+    try {
+      //checking for existing permission
+      const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = status;
+
+      // asking for permissions if is not granted
+      if (finalStatus !== "granted") {
+        console.log(finalStatuss, "---finalStatus");
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
+        finalStatus = status;
+      }
+      // console.log(uid, "---uid");
+      // if permission denied
+      if (finalStatus !== "granted") {
+        return;
+      }
+
+      //get pushNotfsToken
+      let token = await Notifications.getExpoPushTokenAsync({ uid });
+      console.log(token, "---token");
+      //add token to firebase
+
+      let uid = fb.auth().currentUser.uid;
+      fb.db().ref("users").child(uid).update({
+        expoPushToken: token,
+      });
+      Alert.alert("Failed to get push token for push notification!");
+      console.log(uid, "---uid");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    registerForPushNotifications();
+  }, []);
   return (
-    <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+      }}
+    >
       <View style={styles.imageWrapper}>
         <ImageBackground source={image} style={styles.image}>
           <View style={styles.contentWrapper}>
@@ -57,6 +103,7 @@ export const NotificationScreen = ({ navigation }) => {
           <View style={[styles.separator, highlighted && { marginLeft: 0 }]} />
         )}
         data={notifications}
+        keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => {
           return (
             <NotfCard

@@ -121,13 +121,15 @@ export const ReservationContent = connect(mapStateToProps)((props) => {
             pickerValue={reserveFormValues.guests}
             pickerWidth={"100%"}
           />
-          <CustomRangeDatepicker
-            placeholder={"Pick date"}
-            min={new Date()}
-            style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 0 }}
-            onSelect={(value) => handleReserveFieldChange("dateRange", value)}
-            rangeValue={reserveFormValues.dateRange}
-          />
+          <View style={styles.datePickerHolder}>
+            <CustomRangeDatepicker
+              placeholder={"Pick date"}
+              min={new Date()}
+              style={{ backgroundColor: "rgba(0,0,0,0.5)", padding: 0 }}
+              onSelect={(value) => handleReserveFieldChange("dateRange", value)}
+              rangeValue={reserveFormValues.dateRange}
+            />
+          </View>
         </View>
       );
     case 2:
@@ -154,7 +156,7 @@ export const ReservationContent = connect(mapStateToProps)((props) => {
           <CreditCard
             cardNumber={cardFormValues.cardNumber}
             name={cardFormValues.name}
-            CVV={cardFormValues.CVV}
+            CVV={cardFormValues.expiry}
           />
           <View style={styles.cardForm}>
             <CustomInput
@@ -203,7 +205,7 @@ export const ReservationContent = connect(mapStateToProps)((props) => {
               onTouchStart={() => handleInputTouch("card", "name")}
             />
           </View>
-          <View style={styles.saveCard}>
+          {/* <View style={styles.saveCard}>
             <TouchableOpacity
               style={styles.checkBox}
               onPress={() => setIsChecked(!isChecked)}
@@ -219,7 +221,7 @@ export const ReservationContent = connect(mapStateToProps)((props) => {
             <CustomText style={styles.saveCardText}>
               Save this credit card
             </CustomText>
-          </View>
+          </View> */}
         </View>
       );
     case 4:
@@ -282,6 +284,12 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 150,
     justifyContent: "space-between",
+  },
+  datePickerHolder: {
+    backgroundColor: "#0000",
+    borderRadius: 40,
+    padding: 2,
+    elevation: 2,
   },
   cardForm: {
     marginTop: 5,
