@@ -3,21 +3,19 @@ import { View, StyleSheet, Image } from "react-native";
 import COLORS from "../../styles/colors";
 import { CustomText, CustomSvg } from "../../components";
 
-import {useSelector} from 'react-redux';
-
+import { useSelector } from "react-redux";
 
 import icon from "../../assets/images/homeScreen/chevron-right.png";
 import { color } from "react-native-reanimated";
 
-export const NotfCard = ({ item, isLast }) => {
-
-  const theme = useSelector(state => state.themeReducer).theme;
+export const NotfCard = ({ item = [], isLast }) => {
+  const theme = useSelector((state) => state.themeReducer).theme;
 
   let lastItemColor = COLORS.opaqueFirst,
-  itemColor = COLORS.bgcLight,
-  textColor = COLORS.blackText;
+    itemColor = COLORS.bgcLight,
+    textColor = COLORS.blackText;
 
-  if(theme=="light") {
+  if (theme == "light") {
     lastItemColor = COLORS.opaqueFirst;
     itemColor = COLORS.bgcLight;
     textColor = COLORS.blackText;
@@ -27,18 +25,27 @@ export const NotfCard = ({ item, isLast }) => {
     textColor = COLORS.gray;
   }
 
-
-
   return (
     <View
       style={[
         styles.wrapper,
-        { backgroundColor: isLast ? lastItemColor  : itemColor },
+        { backgroundColor: isLast ? lastItemColor : itemColor },
       ]}
     >
-      <CustomText weight="semiBold" style={{...styles.description, color: textColor}}>
-        {item.description}
+      <View style={styles.textWrapper}>
+      <CustomText
+        weight="semiBold"
+        style={{ ...styles.description, color: textColor }}
+      >
+        {item.hotelName + "("+ item.roomName + ")"}
       </CustomText>
+      <CustomText
+        weight="semiBold"
+        style={{ ...styles.dateText, color: textColor }}
+      >
+        {new Date(item.startDate).toDateString() + "-" + new Date(item.endDate).toDateString()}
+      </CustomText>
+      </View>
       <View style={styles.icon}>
         <CustomSvg name="chevronRight" gradient={isLast} style={styles.svg} />
       </View>
@@ -55,6 +62,8 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     backgroundColor: COLORS.bgcLight,
     paddingLeft: 28,
+    borderBottomColor: COLORS.gray,
+    borderBottomWidth: 2
   },
   description: {
     fontSize: 18,
@@ -73,4 +82,11 @@ const styles = StyleSheet.create({
     height: "100%",
     color: COLORS.gray,
   },
+  textWrapper: {
+    alignItems: 'flex-start'
+  },
+  dateText: {
+    fontSize: 14,
+    width: "85%",
+  }
 });

@@ -24,6 +24,7 @@ import { reducer as navReducer } from "./navReducer";
 import { reducer as themeReducer } from "./theme";
 import { reducer as reservationReducer } from "./reservation";
 import { reducer as paymentReducer} from './payments';
+import { reducer as notficationReducer, MODULE_NAME as notficationModuleName} from './notfication';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   paymentReducer,
   [favoriteModuleName]: favoritesReducer,
   [userModuleName]: userReducer,
+  [notficationModuleName]: notficationReducer
 });
 
 const persistConfig = {
