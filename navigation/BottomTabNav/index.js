@@ -66,7 +66,7 @@ export const BottomTabNav = () => {
           component={component}
           options={{
             // tabBarVisible: tabStatus.status,
-            unmountOnBlur: true,
+            // unmountOnBlur: true,
             tabBarIcon: ({ focused }) => {
               return (
                 <TabBarIcon icon={icon} isActive={focused ? true : false} />

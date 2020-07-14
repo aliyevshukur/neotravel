@@ -18,21 +18,22 @@ import { ToggleButton } from "../../components/ToggleButton";
 import { SelectAlert } from "./SelectAlert";
 import {
   getSearchResult,
+  getPureSearchResult,
   setSearchHotelResults,
   setLastUserChoices,
-  getLastUserChoices,
   searchHotelsFB,
-  getLastSearchFieldValues,
   getHotelsOnDealsFB,
   getHotelsOnDeals,
+  getLastUserChoices,
+  setFilteredResult,
 } from "../../store/hotels";
 import { filterByPriceFB } from "../../utils/firestoreRequests";
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
-  lastUserChoices: getLastUserChoices(state),
-  lastSearchFieldValues: getLastSearchFieldValues(state),
+  pureSearchResult: getPureSearchResult(state),
   hotelsOnDeals: getHotelsOnDeals(state),
+  lastUserChoices: getLastUserChoices(state),
 });
 
 export const FilterScreen = connect(mapStateToProps, {
@@ -45,11 +46,10 @@ export const FilterScreen = connect(mapStateToProps, {
     navigation,
     route,
     searchResult,
+    pureSearchResult,
     setSearchHotelResults,
     setLastUserChoices,
     lastUserChoices,
-    lastSearchFieldValues,
-    searchHotelsFB,
     getHotelsOnDealsFB,
     hotelsOnDeals,
   }) => {
@@ -60,17 +60,17 @@ export const FilterScreen = connect(mapStateToProps, {
       budget: {
         fieldId: "budget", //must be same as object name
         name: "Your budget",
-        selectables: ["$100+", "$200+", "$300+", "$400+", "$500+"],
+        selectables: ["$100", "$200", "$300", "$400", "$500", "$3000"],
       },
       rating: {
         fieldId: "rating",
         name: "Rating",
-        selectables: ["1+", "2+", "3+", "3.5+", "4+", "4.5+", "5"],
+        selectables: ["1+", "2+", "3+", "3.5+", "4+", "4.5+", "5+"],
       },
       reviewScore: {
         fieldId: "reviewScore",
         name: "Review score",
-        selectables: ["1+", "2+", "3+", "3.5+", "4+", "4.5+", "5"],
+        selectables: ["1+", "2+", "3+", "3.5+", "4+", "4.5+", "5+"],
       },
       meals: {
         fieldId: "meals",
@@ -105,19 +105,26 @@ export const FilterScreen = connect(mapStateToProps, {
     const [userChoices, setUserChoices] = useState(lastUserChoices); //values will be used as filter
     const [modal, setModal] = useState(false);
     const [selectProcess, setSelectProcess] = useState("");
+    const [priceResult, setPriceResult] = useState(true);
+
+    const fetchHotelsOnDeals = () => {
+      if (hotelsOnDeals.data.length === 0) {
+        getHotelsOnDealsFB();
+      }
+    };
 
     useEffect(() => {
-      getHotelsOnDealsFB();
-    }, [hotelsOnDeals]);
+      fetchHotelsOnDeals();
+    }, []);
 
     const selectHandler = (id) => {
       setSelectProcess(id);
       setModal(true);
     };
-    const togleHandler = (id) => {
+    const togleHandler = (id, value) => {
       setUserChoices({
         ...userChoices,
-        [id]: userChoices[id] ? false : true,
+        [id]: value,
       });
     };
 
@@ -133,8 +140,8 @@ export const FilterScreen = connect(mapStateToProps, {
     });
 
     const resetHandler = () => {
-      setLastUserChoices({});
-      setUserChoices({});
+      setLastUserChoices({ breakfast: false, deals: false });
+      setUserChoices({ breakfast: false, deals: false });
     };
 
     const applyHandler = () => {
@@ -143,19 +150,17 @@ export const FilterScreen = connect(mapStateToProps, {
 
       // Set search result to inital search if all filters are empty
       if (Object.keys(userChoices).length === 0) {
-        searchHotelsFB(
-          lastSearchFieldValues.place,
-          lastSearchFieldValues.guests
-        );
+        setSearchHotelResults(pureSearchResult);
       } else {
         // Take filter values from userChoices state
-        const result = filterResult(searchResult);
+        const result = filterResult(pureSearchResult);
         setSearchHotelResults(result);
       }
       navigation.navigate("HomeSearchScreen");
     };
 
     const filterResult = (searchResult) => {
+      console.log("INDIDE");
       const {
         budget,
         rating,
@@ -166,19 +171,26 @@ export const FilterScreen = connect(mapStateToProps, {
       } = userChoices;
       const result = [];
       searchResult.forEach((hotel) => {
-        const priceCondition = budget
-          ? filterByPrice(hotel.id, budget.slice(1, budget.length - 1))
-          : true;
+        filterByPrice(hotel.id, budget.slice(1, budget.length));
+        const priceCondition = budget ? priceResult : true;
         const ratingCondition = rating
           ? hotel.rating >= rating?.slice(0, rating.length - 1)
           : true;
         const reviewCondition = reviewScore
-          ? hotel.reviewScore >= reviewScore.slice(0, reviewScore.length - 1)
+          ? String(hotel.reviewScore) >=
+            reviewScore.slice(0, reviewScore.length - 1)
           : true;
         const typeCondition = type ? hotel.type === type : true;
         const breakfastCondition = breakfast ? hotel.breakfast === true : true;
-        // TODO check if room is available
         const isOnDeals = deals ? findIfonDeals(hotel.id) : true;
+
+        console.log("priceCondition", priceCondition);
+        console.log("ratingCondition", ratingCondition);
+        console.log("reviewCondition", reviewCondition);
+        console.log("typeCondition", typeCondition);
+        console.log("breakfastCondition", breakfastCondition);
+        console.log("isOnDeals", isOnDeals);
+
         if (
           priceCondition &&
           ratingCondition &&
@@ -196,13 +208,18 @@ export const FilterScreen = connect(mapStateToProps, {
 
     const findIfonDeals = (id) => {
       let result = false;
-      if (hotelsOnDeals.includes(id)) result = true;
+      hotelsOnDeals.data.forEach((hotel) => {
+        if (hotel.id === id) result = true;
+      });
 
       return result;
     };
 
     const filterByPrice = async (hotelID, price) => {
-      return await filterByPriceFB(hotelID, price);
+      let result = false;
+      result = await filterByPriceFB(hotelID, price);
+
+      setPriceResult(result);
     };
 
     return (
@@ -310,8 +327,7 @@ export const FilterScreen = connect(mapStateToProps, {
                   <View style={styles.selectTouch}>
                     <ToggleButton
                       value={userChoices[item.fieldId]}
-                      reser={true}
-                      setValue={() => togleHandler(item.fieldId)}
+                      setValue={(value) => togleHandler(item.fieldId, value)}
                     />
                   </View>
                 )}

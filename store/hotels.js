@@ -1,12 +1,16 @@
 import fb from "../firebaseConfig";
-import { getMinRoomPrice } from "../utils/getMinRoomPrice";
 import { isHotelAvailable } from "../utils/isHotelAvailable";
+import { CalendarViewModes } from "@ui-kitten/components";
 
 // ACTIONS
 const SET_HOTEL_LIST = "SET_HOTEL_LIST";
 const SET_ROOM_LIST = "SET_ROOM_LIST";
 const SET_HOTELS_ON_DEALS = "SET_HOTELS_ON_DEALS";
+
+// SEARCH AND FILTER
 const SET_SEARCH_HOTEL_RESULT = "SET_SEARCH_HOTEL_RESULT";
+const START_SEARCH_REQUEST = "START_SEARCH_REQUEST";
+const SET_PURE_SEARCH_RESULT = "SET_PURE_SEARCH_RESULT";
 const SET_FILTERED_RESULT = "SET_FILTERED_RESULT";
 const SET_LAST_SEARCH_FIELD_VALUES = "SET_LAST_SEARCH_FIELD_VALUES";
 const SET_LAST_USER_CHOICES = "SET_LAST_USER_CHOICES";
@@ -29,8 +33,9 @@ export const getHotelsOnDeals = (state) => state[MODULE_NAME].hotelsOnDeals;
 export const getRoomList = (state) => state[MODULE_NAME].roomList;
 export const getSearchResult = (state) =>
   state[MODULE_NAME].search.searchResult;
-export const getLastSearchFieldValues = (state) =>
-  state[MODULE_NAME].search.lastSearchFieldValues;
+export const getSearchLoading = (state) => state[MODULE_NAME].search.loading;
+export const getPureSearchResult = (state) =>
+  state[MODULE_NAME].search.pureSearchResult;
 export const getLastUserChoices = (state) => state[MODULE_NAME].lastUserChoices;
 
 const initialState = {
@@ -39,6 +44,8 @@ const initialState = {
   search: {
     lastSearchFieldValues: {},
     searchResult: [],
+    loading: false,
+    pureSearchResult: [],
   },
   lastUserChoices: {},
   hotelsOnDeals: {
@@ -77,6 +84,23 @@ export const reducer = (state = initialState, { type, payload }) => {
         search: {
           ...state.search,
           searchResult: payload,
+          loading: false,
+        },
+      };
+    case START_SEARCH_REQUEST:
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          loading: true,
+        },
+      };
+    case SET_PURE_SEARCH_RESULT:
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          pureSearchResult: payload,
         },
       };
     case SET_LAST_SEARCH_FIELD_VALUES:
@@ -168,6 +192,13 @@ export const setRoomList = (payload) => ({
 
 export const setSearchHotelResults = (payload) => ({
   type: SET_SEARCH_HOTEL_RESULT,
+  payload,
+});
+export const startSearchRequest = () => ({
+  type: START_SEARCH_REQUEST,
+});
+export const setPureSearchResults = (payload) => ({
+  type: SET_PURE_SEARCH_RESULT,
   payload,
 });
 
@@ -267,20 +298,9 @@ export const getRecommendedHotelsFB = (hotelIDs) => async (dispatch) => {
     if (allHotels) {
       const hotelsArr = [];
 
-      const roomsArr = [];
-      const roomsRef = fb.db.collection("rooms");
-      const roomsDoc = await roomsRef.get();
-      roomsDoc.forEach((roomDoc) => {
-        roomsArr.push({
-          id: roomDoc.id,
-          ...roomDoc.data(),
-        });
-      });
-
       allHotels.forEach((doc) => {
         hotelsArr.push({
           id: doc.id,
-          minPrice: getMinRoomPrice(roomsArr, doc.id),
           ...doc.data(),
         });
       });
@@ -305,16 +325,6 @@ export const getHotelsOnDealsFB = () => async (dispatch) => {
       hotelIDs = hotelIDsDoc.data().IDs;
     }
 
-    const roomsArr = [];
-    const roomsRef = fb.db.collection("rooms");
-    const roomsDoc = await roomsRef.get();
-    roomsDoc.forEach((roomDoc) => {
-      roomsArr.push({
-        id: roomDoc.id,
-        ...roomDoc.data(),
-      });
-    });
-
     // const
     const hotelsRef = fb.db
       .collection("hotels")
@@ -324,11 +334,9 @@ export const getHotelsOnDealsFB = () => async (dispatch) => {
     hotelsDoc.forEach((doc) => {
       hotelsArr.push({
         id: doc.id,
-        minPrice: getMinRoomPrice(roomsArr, doc.id),
         ...doc.data(),
       });
     });
-    // console.log("HOTELS ARR", hotelsArr);
 
     dispatch(fetchHotelsOnDealsSuccess(hotelsArr));
   } catch (error) {
@@ -361,6 +369,7 @@ export const getRoomListFB = () => async (dispatch) => {
 export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
   dispatch
 ) => {
+  dispatch(startSearchRequest());
   const hotelData = [];
   const hotelIDs = [];
 
@@ -397,8 +406,6 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
 
     // Combine results to find final data
     const finalData = hotelData.map((hotel) => {
-      const minPrice = getMinRoomPrice(searchedHotelRooms, hotel.id);
-
       // const isAvailable = isHotelAvailable(
       //   searchedHotelRooms,
       //   hotel.id,
@@ -408,7 +415,6 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
       // if (isAvailable) {
       return {
         id: hotel.id,
-        minPrice,
         ...hotel,
       };
       // }
@@ -416,10 +422,13 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
 
     if (finalData.length !== 0) {
       dispatch(setSearchHotelResults(finalData));
+      dispatch(setPureSearchResults(finalData));
     } else {
       dispatch(setSearchHotelResults([]));
+      dispatch(setPureSearchResults([]));
     }
   } else {
     dispatch(setSearchHotelResults([]));
+    dispatch(setPureSearchResults([]));
   }
 };

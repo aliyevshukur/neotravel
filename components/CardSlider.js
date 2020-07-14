@@ -9,6 +9,7 @@ export const CardSlider = ({
   hotelsList,
   containerStyle,
   title = "any",
+  onPressItem,
 }) => {
 
   return (
@@ -33,6 +34,7 @@ export const CardSlider = ({
             }}
             style={styles.mediumHotelCard}
             key={item.id}
+            onPress={() => onPressItem(item)}
           />
         )}
       />

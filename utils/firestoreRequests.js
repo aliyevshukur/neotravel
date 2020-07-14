@@ -23,14 +23,16 @@ export const filterByPriceFB = async (hotelID, price) => {
     const roomsRef = fb.db
       .collection("rooms")
       .where("hotelID", "==", hotelID)
-      .where("price", ">=", price);
-    const roomsData = await roomsRef.get().then((doc) => {
+      .where("price", "<=", price);
+    const roomsDoc = await roomsRef.get();
+    roomsDoc.forEach((doc) => {
       if (doc.exists) {
         isExists = true;
       }
     });
+
+    return isExists;
   } catch (error) {
     console.log("ERROR", error);
   }
-  return isExists;
 };
