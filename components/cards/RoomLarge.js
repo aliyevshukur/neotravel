@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     bottom: 35,
     fontFamily: "NunitoBold",
     fontWeight: "800",
-    fontSize: 22,
+    fontSize: 18,
     fontStyle: "normal",
     color: COLORS.darkPriceInCards,
   },

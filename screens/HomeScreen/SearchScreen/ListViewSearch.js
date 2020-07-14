@@ -13,7 +13,6 @@ export const ListViewSearch = ({ hotels, navigation }) => {
   const theme = useSelector((state) => state.themeReducer).theme;
 
   const onItemPress = (item) => {
-    console.log('HOOOOOOOOO');
     
     navigation.navigate("HotelScreen", { hotelInfo: item });
   };

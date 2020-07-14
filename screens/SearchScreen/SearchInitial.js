@@ -19,12 +19,14 @@ import {
   getHotelsOnDeals,
   searchHotelsFB,
   getSearchResult,
+  getSearchLoading
 } from "../../store/hotels";
 
 const mapStateToProps = (state) => ({
   recommendedHotels: getRecommendedHotels(state),
   hotelsOnDeals: getHotelsOnDeals(state),
   searchResult: getSearchResult(state),
+  loading: getSearchLoading(state)
 });
 
 export const SearchInitial = connect(mapStateToProps, {
@@ -38,6 +40,7 @@ export const SearchInitial = connect(mapStateToProps, {
     hotelsOnDeals,
     searchHotelsFB,
     searchResult,
+    loading
   }) => {
     const theme = useSelector((state) => state.themeReducer).theme;
     const [searchValue, setSearchValue] = useState("");
@@ -59,7 +62,6 @@ export const SearchInitial = connect(mapStateToProps, {
         setIsOnSearch(false);
       }
     };
-    console.log("HOTELTEE", hotelsOnDeals);
     if (hotelsOnDeals.loading) {
       return <LoadingScreen />;
     }
@@ -87,6 +89,9 @@ export const SearchInitial = connect(mapStateToProps, {
               titleStyle={styles.recommendedTitleStyle}
               containerStyle={styles.recommendedContainerStyle}
               hotelsList={recommendedHotels.data}
+              onPressItem={(hotelInfo) =>
+                navigation.navigate("HotelScreen", { hotelInfo: hotelInfo })
+              }
             />
             <CardSlider
               title="deals"
@@ -96,6 +101,9 @@ export const SearchInitial = connect(mapStateToProps, {
               }}
               containerStyle={styles.dealsContainerStyle}
               hotelsList={hotelsOnDeals.data}
+              onPressItem={(hotelInfo) =>
+                navigation.navigate("HotelScreen", { hotelInfo })
+              }
             />
           </ScrollView>
         ) : (
