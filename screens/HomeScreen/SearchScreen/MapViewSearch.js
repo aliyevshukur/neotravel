@@ -7,11 +7,16 @@ import { CustomText } from "../../../components/CustomText";
 import { CustomButton } from "../../../components/CustomButton";
 import COLORS from "../../../styles/colors";
 import { SmallCardSlider } from "../../../components";
+import { mapStyleDark, mapStyleNormal } from "../../../styles/commonStyles";
+import { useSelector } from "react-redux";
 
 export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
   const texts = {
     markerCalloutName: "go to hotel",
   };
+
+  const theme = useSelector((state) => state.themeReducer).theme;
+
   const initialRegion = {
     latitude: 37.78825,
     longitude: -122.4324,
@@ -23,6 +28,7 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
     <View>
       <MapView
         style={styles.map}
+        customMapStyle={theme == "light" ? mapStyleNormal : mapStyleDark}
         initialRegion={{
           ...hotels[0].marker,
           latitudeDelta: 0.0922,
