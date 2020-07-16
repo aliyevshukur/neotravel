@@ -17,12 +17,12 @@ export const CustomPicker = ({
   onValueChange,
 }) => {
   return (
-    <View style={{...styles.pickerContainer, width: pickerWidth}}>
+    <View style={{ ...styles.pickerContainer, width: pickerWidth }}>
       <Picker
         mode="dropdown"
         selectedValue={pickerValue}
         onValueChange={(value) => onValueChange(value)}
-        style={{...styles.picker, width: pickerWidth}}
+        style={{ ...styles.picker, width: pickerWidth }}
         itemStyle={{ color: "green" }}
       >
         <Picker.Item label={title} itemStyle={{ color: COLORS.grayDark }} />
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     color: COLORS.grayDark,
     borderRadius: 50,
     paddingRight: 10,
+    backgroundColor: "transparent",
   },
   pickerContainer: {
     width: 115,
@@ -57,6 +58,7 @@ const styles = StyleSheet.create({
   pickerPng: {
     width: 9.3,
     height: 5.28,
-    right: 30,
+    right: "80%",
+    top: "1%",
   },
 });

@@ -9,13 +9,13 @@ const SET_COMPLETED_HOTEL_INFO = "SET_COMPLETED_HOTEL_INFO";
 const SET_COMPLETED_USER_INFO = "SET_COMPLETED_USER_INFO";
 const SET_COMPLETED_RESERVE_INFO = "SET_COMPLETED_RESERVE_INFO";
 
-
 export const MODULE_NAME = "reservationReducer";
 export const selectReserveData = (state) => state[MODULE_NAME].reservation;
 export const selectCompleted = (state) => state[MODULE_NAME].completed;
 
 const initalState = {
   completed: {
+    id: null,
     guests: null,
     startDate: "",
     endDate: "",
@@ -49,106 +49,104 @@ const initalState = {
       CVV: null,
       name: "",
     },
-  }    
+  },
 };
 
 // REDUCER
 export function reducer(state = initalState, { type, payload }) {
-    switch (type) {
-      case SET_ROOM_AND_USER_ID:
-        return {
-          ...state,
-          reservation: {
-            ...state.reservation,
-            roomId: payload.roomId,
-            userId: payload.userId,
-          },
-        };
-      case SET_RESERVE_INFO:
-        return {
-          ...state,
-          reservation: {
-            ...state.reservation,
-            guests: payload.guests,
-            startDate: new Date(payload.dateRange.startDate).getTime(),
-            endDate: new Date(payload.dateRange.endDate).getTime(),
-          },
-        };
-      case SET_CUSTOMER_INFO:
-        const currentTime = new Date().getTime();
-        return {
-          ...state,
-          reservation: {
-            ...state.reservation,
-            customerInfo: {
-              ...payload
-            },
-            reserveDate: currentTime,
-          },
-        };
-      case SET_CARD_INFO:
-        return {
-          ...state,
-          reservation: {
-            ...state.reservation,
-            cardInfo: {
-              ...payload
-            }
-          },
-        };
-      case SET_COMPLETED_ROOM_INFO:
-        return {
-          ...state,
-          completed: {
-            ...state.completed,
+  switch (type) {
+    case SET_ROOM_AND_USER_ID:
+      return {
+        ...state,
+        reservation: {
+          ...state.reservation,
+          roomId: payload.roomId,
+          userId: payload.userId,
+        },
+      };
+    case SET_RESERVE_INFO:
+      return {
+        ...state,
+        reservation: {
+          ...state.reservation,
+          guests: payload.guests,
+          startDate: new Date(payload.dateRange.startDate).getTime(),
+          endDate: new Date(payload.dateRange.endDate).getTime(),
+        },
+      };
+    case SET_CUSTOMER_INFO:
+      const currentTime = new Date().getTime();
+      return {
+        ...state,
+        reservation: {
+          ...state.reservation,
+          customerInfo: {
             ...payload,
           },
-        };
-      case SET_COMPLETED_HOTEL_INFO:
-        return {
-          ...state,
-          completed: {
-            ...state.completed,
+          reserveDate: currentTime,
+        },
+      };
+    case SET_CARD_INFO:
+      return {
+        ...state,
+        reservation: {
+          ...state.reservation,
+          cardInfo: {
             ...payload,
           },
-        };
-      case SET_COMPLETED_USER_INFO:
-        return {
-          ...state,
-          completed: {
-            ...state.completed,
-            ...payload,
-          },
-        };
-      case SET_COMPLETED_RESERVE_INFO:
-        return {
-          ...state,
-          completed: {
-            ...state.completed,
-            guests: payload.guests,
-            startDate: new Date(payload.dateRange.startDate).getTime(),
-            endDate: new Date(payload.dateRange.endDate).getTime(),
-          },
-        };
-      
-      default:
-        return state;
-    }
+        },
+      };
+    case SET_COMPLETED_ROOM_INFO:
+      return {
+        ...state,
+        completed: {
+          ...state.completed,
+          ...payload,
+        },
+      };
+    case SET_COMPLETED_HOTEL_INFO:
+      return {
+        ...state,
+        completed: {
+          ...state.completed,
+          ...payload,
+        },
+      };
+    case SET_COMPLETED_USER_INFO:
+      return {
+        ...state,
+        completed: {
+          ...state.completed,
+          ...payload,
+        },
+      };
+    case SET_COMPLETED_RESERVE_INFO:
+      return {
+        ...state,
+        completed: {
+          ...state.completed,
+          guests: payload.guests,
+          startDate: new Date(payload.dateRange.startDate).getTime(),
+          endDate: new Date(payload.dateRange.endDate).getTime(),
+        },
+      };
+
+    default:
+      return state;
+  }
 }
-
-
 
 // ACTIONS
 export const setRoomAndUserID = (payload) => ({
-  type: SET_ROOM_AND_USER_ID ,
+  type: SET_ROOM_AND_USER_ID,
   payload,
 });
 export const setReserveInfo = (payload) => ({
-  type: SET_RESERVE_INFO ,
+  type: SET_RESERVE_INFO,
   payload,
 });
 export const setCustomerInfo = (payload) => ({
-  type: SET_CUSTOMER_INFO ,
+  type: SET_CUSTOMER_INFO,
   payload,
 });
 export const setCardInfo = (payload) => ({
@@ -174,15 +172,13 @@ export const setCompletedReserveInfo = (payload) => ({
 
 // MIDDLEWARES
 
-
 export const setReservedFb = (data) => async (dispatch) => {
-  try{
+  try {
     await fb.db.collection("reservations").doc().set(data);
   } catch (error) {
     console.log(error);
   }
 };
-
 
 // export const checkIfRoomReserved = (data) => async (dispatch) => {
 //   let currentTime = new Date().getTime();

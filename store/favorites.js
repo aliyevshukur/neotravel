@@ -54,6 +54,7 @@ export const updateFavoriteList = (uid, isWrite = false) => async (
   getState
 ) => {
   try {
+    console.log(getState().favorite.favorites);
     if (isWrite) {
       await fb.db
         .collection("users")
@@ -61,7 +62,8 @@ export const updateFavoriteList = (uid, isWrite = false) => async (
         .update({
           favorites: getState().favorite.favorites,
         })
-        .then(() => console.log("updated successfully!"));
+        .then(() => console.log("updated successfully!"))
+        .catch((error) => console.log(error));
     } else {
       if (uid) {
         const docRef = fb.db.collection("users").doc(uid);
@@ -74,6 +76,6 @@ export const updateFavoriteList = (uid, isWrite = false) => async (
     }
     console.log(getState().favorite.favorites);
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message + " Nurmehemmed ");
   }
 };
