@@ -306,6 +306,7 @@ export const ReservationScreen = connect(mapStateToProps, {
             setCompletedHotelInfo({
               hotelName: hotelData.name,
               rating: hotelData.rating,
+              id: hotelId,
             });
           } else {
             // doc.data() will be undefined in this case

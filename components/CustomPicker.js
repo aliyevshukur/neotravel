@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     color: COLORS.grayDark,
     borderRadius: 50,
     paddingRight: 10,
+    backgroundColor: "transparent",
   },
   pickerContainer: {
     width: 115,
@@ -58,6 +59,7 @@ const styles = StyleSheet.create({
   pickerPng: {
     width: 9.3,
     height: 5.28,
-    right: 30,
+    right: "80%",
+    top: "1%",
   },
 });

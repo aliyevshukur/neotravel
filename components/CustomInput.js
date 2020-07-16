@@ -32,6 +32,8 @@ export const CustomInput = ({
   maxLength,
   textStyle,
   secureTextEntry,
+  onFocus,
+  onBlur,
   ...rest
 }) => {
   const theme = useSelector((state) => state.themeReducer).theme;
@@ -60,6 +62,8 @@ export const CustomInput = ({
       <TextInput
         {...rest}
         value={value}
+        onFocus={onFocus}
+        onBlur={onBlur}
         onChangeText={(value) => onChangeText(value)}
         onTouchStart={onTouchStart}
         style={[
