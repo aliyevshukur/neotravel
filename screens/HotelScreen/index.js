@@ -72,7 +72,10 @@ export const HotelScreen = connect(mapStateToProps, {
     });
 
     const selectRoomsHandler = () => {
-      navigation.navigate("RoomScreen", {hotelId: hotelInfo.id, hotelName: hotelInfo.name});
+      navigation.navigate("RoomScreen", {
+        hotelId: hotelInfo.id,
+        hotelName: hotelInfo.name,
+      });
     };
     const goBackHandler = () => {
       // dispatch(setTabVisibility(true));
@@ -229,7 +232,7 @@ export const HotelScreen = connect(mapStateToProps, {
               color: theme == "light" ? COLORS.grayDark : COLORS.gray,
             }}
           >
-            {hotelInfo.location}
+            {hotelInfo.city + ", " + hotelInfo.street + " st."}
           </CustomText>
         </View>
         <View style={styles.walkingHolder}>

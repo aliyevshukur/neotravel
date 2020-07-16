@@ -47,11 +47,19 @@ const initialState = {
     loading: false,
     pureSearchResult: [],
   },
-  lastUserChoices: {},
+  lastUserChoices: {
+    budget: "",
+    rating: "",
+    reviewScore: "",
+    type: "",
+    breakfast: false,
+    deals: false,
+  },
   hotelsOnDeals: {
     loading: false,
     errorMsg: "",
     data: [],
+    
   },
   recommendedHotels: {
     loading: false,
@@ -289,7 +297,6 @@ export const getHotelListFB = () => async (dispatch) => {
 export const getRecommendedHotelsFB = (hotelIDs) => async (dispatch) => {
   try {
     dispatch(fetchRecommendedHotelsRequest());
-
     const hotelsRef = fb.db
       .collection("hotels")
       .where("__name__", "in", hotelIDs);

@@ -140,8 +140,22 @@ export const FilterScreen = connect(mapStateToProps, {
     });
 
     const resetHandler = () => {
-      setLastUserChoices({ breakfast: false, deals: false });
-      setUserChoices({ breakfast: false, deals: false });
+      setLastUserChoices({
+        budget: "",
+        rating: "",
+        reviewScore: "",
+        type: "",
+        breakfast: false,
+        deals: false,
+      });
+      setUserChoices({
+        budget: "",
+        rating: "",
+        reviewScore: "",
+        type: "",
+        breakfast: false,
+        deals: false,
+      });
     };
 
     const applyHandler = () => {
@@ -160,19 +174,25 @@ export const FilterScreen = connect(mapStateToProps, {
     };
 
     const filterResult = (searchResult) => {
-      console.log("INDIDE");
+      // Extract all filter option values
       const {
         budget,
         rating,
         reviewScore,
         type,
-        breakfast = false,
-        deals = false,
+        breakfast,
+        deals,
       } = userChoices;
+
+      // Filtered result
       const result = [];
+
+      // Loop throgh all searched otels and filter by selcted options
       searchResult.forEach((hotel) => {
-        filterByPrice(hotel.id, budget.slice(1, budget.length));
-        const priceCondition = budget ? priceResult : true;
+        // Filter option conditions
+        const priceCondition = budget
+          ? +hotel.minPrice < +budget.slice(1, budget.length)
+          : true;
         const ratingCondition = rating
           ? hotel.rating >= rating?.slice(0, rating.length - 1)
           : true;
@@ -184,13 +204,7 @@ export const FilterScreen = connect(mapStateToProps, {
         const breakfastCondition = breakfast ? hotel.breakfast === true : true;
         const isOnDeals = deals ? findIfonDeals(hotel.id) : true;
 
-        console.log("priceCondition", priceCondition);
-        console.log("ratingCondition", ratingCondition);
-        console.log("reviewCondition", reviewCondition);
-        console.log("typeCondition", typeCondition);
-        console.log("breakfastCondition", breakfastCondition);
-        console.log("isOnDeals", isOnDeals);
-
+        // Push hotel if all condtions are satisfied
         if (
           priceCondition &&
           ratingCondition &&
@@ -213,13 +227,6 @@ export const FilterScreen = connect(mapStateToProps, {
       });
 
       return result;
-    };
-
-    const filterByPrice = async (hotelID, price) => {
-      let result = false;
-      result = await filterByPriceFB(hotelID, price);
-
-      setPriceResult(result);
     };
 
     return (
