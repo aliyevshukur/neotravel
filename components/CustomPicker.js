@@ -13,16 +13,17 @@ export const CustomPicker = ({
     { label: "2", value: "2" },
     { label: "3", value: "3" },
     { label: "4", value: "4" },
+    { label: "5", value: "5" },
   ],
   onValueChange,
 }) => {
   return (
-    <View style={{...styles.pickerContainer, width: pickerWidth}}>
+    <View style={{ ...styles.pickerContainer, width: pickerWidth }}>
       <Picker
         mode="dropdown"
         selectedValue={pickerValue}
         onValueChange={(value) => onValueChange(value)}
-        style={{...styles.picker, width: pickerWidth}}
+        style={{ ...styles.picker, width: pickerWidth }}
         itemStyle={{ color: "green" }}
       >
         <Picker.Item label={title} itemStyle={{ color: COLORS.grayDark }} />

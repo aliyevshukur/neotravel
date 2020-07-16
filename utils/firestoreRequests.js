@@ -36,3 +36,31 @@ export const filterByPriceFB = async (hotelID, price) => {
     console.log("ERROR", error);
   }
 };
+
+export const isRoomReserved = async (dateRange, roomID) => {
+  let currentTime = new Date().getTime();
+  try {
+    const snapshot = await fb.db
+      .collection("reservations")
+      .where("endDate", ">", currentTime)
+      .where("roomId", "==", roomID)
+      .get();
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return false;
+    }
+    snapshot.forEach((doc) => {
+      const { startDate, endDate } = doc.data();
+      if (
+        (startDate >= dateRange.startDate && startDate <= dateRange.endDate) ||
+        (endDate >= dateRange.startDate && endDate <= dateRange.endDate)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

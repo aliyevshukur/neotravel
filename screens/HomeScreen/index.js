@@ -18,7 +18,6 @@ import COLORS from "../../styles/colors";
 import { HotelMedium } from "../../components/cards/HotelMedium";
 import { EmptyListComponent } from "./EmptyListComponent";
 import { LoadingScreen } from "../../commons/LoadingScreen";
-
 import {
   CustomText,
   CustomButton,
@@ -43,6 +42,7 @@ import {
   fetchUserRequest,
 } from "../../store/user";
 import { shadow } from "../../styles/commonStyles";
+import { checkIfRoomReserved } from "../../store/reservation";
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
@@ -60,6 +60,7 @@ export const HomePage = connect(mapStateToProps, {
   getRecommendedHotelsFB,
   getUserDataFB,
   fetchUserRequest,
+  checkIfRoomReserved,
 })((props) => {
   const {
     navigation,
@@ -74,6 +75,7 @@ export const HomePage = connect(mapStateToProps, {
     loading,
     getRecommendedHotelsFB,
     fetchUserRequest,
+    checkIfRoomReserved,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
@@ -85,6 +87,9 @@ export const HomePage = connect(mapStateToProps, {
     guests: "",
     dateRange: {},
   });
+
+  // Search button turns to loader if it is true
+  const [isSeachLoading, setIsSearchLoading] = useState(false);
 
   const theme = useSelector((state) => state.themeReducer).theme;
   const dispatch = useDispatch();
@@ -130,10 +135,12 @@ export const HomePage = connect(mapStateToProps, {
       }
     }
 
+    // Turn on loader on search button
+    setIsSearchLoading(true);
+
     const formattedPlace =
       fieldValues.place.charAt(0).toUpperCase() +
       fieldValues.place.slice(1, fieldValues.place.length).toLowerCase();
-
     const formattedGuests = +fieldValues.guests;
 
     setLastSearchFieldValues({
@@ -153,6 +160,9 @@ export const HomePage = connect(mapStateToProps, {
       startDate: fieldValues.dateRange.startDate,
       endDate: fieldValues.dateRange.endDate,
     });
+
+    // Turn off loader on search button
+    setIsSearchLoading(false);
   };
 
   const cardPressed = (item) => {
@@ -211,16 +221,22 @@ export const HomePage = connect(mapStateToProps, {
                 rangeValue={fieldValues.dateRange}
               />
             </View>
-            <CustomButton
-              style={{
-                marginTop: 20,
-                fontSize: 24,
-                width: "90%",
-                marginTop: 30,
-              }}
-              title="Search a room"
-              onPress={onFormSubmit}
-            />
+            {!isSeachLoading ? (
+              <CustomButton
+                style={{
+                  marginTop: 20,
+                  fontSize: 24,
+                  width: "90%",
+                  marginTop: 30,
+                }}
+                title="Search a room"
+                onPress={onFormSubmit}
+              />
+            ) : (
+              <View style={styles.loaderWrapper}>
+                <ActivityIndicator size="large" color={COLORS.pink} />
+              </View>
+            )}
           </View>
           <View style={styles.catalogue}>
             <CustomText style={styles.catalogueName}>
@@ -330,5 +346,10 @@ const styles = StyleSheet.create({
     padding: 2,
     width: "90%",
     ...shadow,
+  },
+  loaderWrapper: {
+    height: 70,
+    marginTop: 20,
+    width: "90%",
   },
 });

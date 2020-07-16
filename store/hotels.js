@@ -1,6 +1,5 @@
 import fb from "../firebaseConfig";
-import { isHotelAvailable } from "../utils/isHotelAvailable";
-import { CalendarViewModes } from "@ui-kitten/components";
+import { isRoomReserved } from "../utils/firestoreRequests";
 
 // ACTIONS
 const SET_HOTEL_LIST = "SET_HOTEL_LIST";
@@ -59,7 +58,6 @@ const initialState = {
     loading: false,
     errorMsg: "",
     data: [],
-    
   },
   recommendedHotels: {
     loading: false,
@@ -380,56 +378,53 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
   const hotelData = [];
   const hotelIDs = [];
 
-  // Set searched hotelData and hotelIDs
+  // Filter by city and set searched hotelData and hotelIDs
   const hotelsRef = fb.db.collection("hotels").where("city", "==", place);
   const searchedHotelsSnap = await hotelsRef.get();
   searchedHotelsSnap.forEach((doc) => {
     hotelData.push({ id: doc.id, ...doc.data() });
     hotelIDs.push(doc.id);
   });
+
+  // Return empty array if result is empty
   if (hotelIDs.length !== 0) {
-    // Filter out rooms of searched hotels
+    // Filter rooms of filtered hotels by guest size
     const roomsRef = fb.db
       .collection("rooms")
       .where("hotelID", "in", hotelIDs)
       .where("maxGuests", ">=", guests);
-    const searchedRoomsSnap = await roomsRef.get();
-    const searchedHotelRooms = searchedRoomsSnap.docs.map((doc) => {
+    const roomsByGuestsSnap = await roomsRef.get();
+    const roomsByGuests = roomsByGuestsSnap.docs.map((doc) => {
       return {
         id: doc.id,
         ...doc.data(),
       };
     });
 
-    // Get reservations
-    const reservationsRef = fb.db.collection("reservations");
-    const reservationsSnap = await reservationsRef.get();
-    const reservationsData = reservationsSnap.docs.map((doc) => {
-      return {
-        id: doc.id,
-        ...doc.data(),
-      };
+    const unReservedRoomIDs = [];
+    for (let j = 0; j < roomsByGuests.length; j++) {
+      // Check if room is not reserved
+      const isReserved = await isRoomReserved(
+        dateRange,
+        roomsByGuests[j].hotelID
+      );
+      console.log("IS RESERVED", isReserved);
+      if (!isReserved) {
+        unReservedRoomIDs.push(roomsByGuests[j].hotelID);
+      }
+    }
+
+    const finalSearchResult = [];
+    // Contains hotel IDs that has at least one room not reserved at entered time range
+    hotelData.forEach((hotel) => {
+      if (unReservedRoomIDs.includes(hotel.id)) {
+        finalSearchResult.push(hotel);
+      }
     });
 
-    // Combine results to find final data
-    const finalData = hotelData.map((hotel) => {
-      // const isAvailable = isHotelAvailable(
-      //   searchedHotelRooms,
-      //   hotel.id,
-      //   dateRange,
-      //   reservationsData
-      // );
-      // if (isAvailable) {
-      return {
-        id: hotel.id,
-        ...hotel,
-      };
-      // }
-    });
-
-    if (finalData.length !== 0) {
-      dispatch(setSearchHotelResults(finalData));
-      dispatch(setPureSearchResults(finalData));
+    if (finalSearchResult.length !== 0) {
+      dispatch(setSearchHotelResults(finalSearchResult));
+      dispatch(setPureSearchResults(finalSearchResult));
     } else {
       dispatch(setSearchHotelResults([]));
       dispatch(setPureSearchResults([]));
