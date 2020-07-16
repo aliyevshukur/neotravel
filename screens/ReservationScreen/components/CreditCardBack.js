@@ -1,11 +1,20 @@
 import React from "react";
-import { View, Image, StyleSheet, Text, Dimensions } from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  Dimensions,
+  ImageBackground,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import visaLogo from "../../../assets/images/ReservationScreen/visa-logo.png";
 import cardLogo from "../../../assets/images/ReservationScreen/card-logo.png";
+import { CustomText } from "../../../components";
+import cvvBackground from "../../../assets/images/ReservationScreen/cvvBackground.png";
 
-export const CreditCard = ({ cardNumber, name, CVV }) => {
+export const CreditCardBack = ({ CVV }) => {
   const renderCardNumbers = () => {
     const segments = cardNumber.match(/.{1,4}/g) || [];
     const result = segments.map((text, ind) => (
@@ -25,14 +34,21 @@ export const CreditCard = ({ cardNumber, name, CVV }) => {
     >
       <View style={styles.circle} />
       <View style={styles.cardLogos}>
-        <Image source={cardLogo} style={{ width: 42, height: 30 }} />
-        <Image source={visaLogo} style={{ width: 75, height: 24 }} />
+        <Image
+          source={visaLogo}
+          style={{ width: 75, height: 24, alignSelf: "flex-end" }}
+        />
       </View>
-      <View style={styles.cardNumberWrapper}>{renderCardNumbers()}</View>
-      <View style={styles.cardBottom}>
-        <Text style={styles.nameText}>{name}</Text>
-        <Text style={styles.cardText}>{CVV}</Text>
-      </View>
+      <ImageBackground
+        source={cvvBackground}
+        style={{
+          width: "85%",
+          height: "50%",
+          alignItems: "flex-end",
+        }}
+      >
+        <CustomText style={styles.cvvText}>{CVV}</CustomText>
+      </ImageBackground>
     </LinearGradient>
   );
 };
@@ -48,6 +64,21 @@ const styles = StyleSheet.create({
     padding: 25,
     position: "relative",
     overflow: "hidden",
+  },
+  ccvContainer: {
+    width: "65%",
+    height: "20%",
+    alignItems: "flex-end",
+    // justifyContent: "center",
+    paddingRight: "2%",
+    marginBottom: "15%",
+  },
+  cvvText: {
+    fontSize: 20,
+    fontFamily: "NunitoRegular",
+    color: "white",
+    marginRight: "20%",
+    marginTop: "2%",
   },
   circle: {
     backgroundColor: "#FFFFFF",

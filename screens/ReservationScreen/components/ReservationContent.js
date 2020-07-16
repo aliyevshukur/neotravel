@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -7,9 +7,11 @@ import {
   SafeAreaView,
   Dimensions,
   Alert,
+  Button,
 } from "react-native";
 import { Header } from "@react-navigation/stack";
 import { useSelector, connect } from "react-redux";
+import CardFlip from "react-native-card-flip";
 
 import COLORS from "../../../styles/colors";
 import {
@@ -22,6 +24,7 @@ import { CreditCard } from "./CreditCard";
 import { HotelLarge } from "../../../components/cards/HotelLarge";
 import { CustomSvg } from "../../../components/cards/CustomSvg";
 import { selectFavorites } from "../../../store/favorites";
+import { CreditCardBack } from "./CreditCardBack";
 
 const mapStateToProps = (state) => ({
   favorites: selectFavorites(state),
@@ -41,12 +44,14 @@ export const ReservationContent = connect(mapStateToProps)((props) => {
     favorites,
   } = props;
 
+  const [isFlipped, setIsFlipped] = useState(false);
   const theme = useSelector((state) => state.themeReducer).theme;
   const orderColor = theme == "light" ? COLORS.grayDark : COLORS.gray,
     costColor = theme == "light" ? COLORS.blackText : COLORS.white,
     infoColor = theme == "light" ? COLORS.gray : COLORS.grayLight;
 
   const [isChecked, setIsChecked] = useState(false);
+  const cardFlip = useRef(null);
 
   const formFields = [
     { name: "firstName", placeHolder: "First Name" },
@@ -153,11 +158,17 @@ export const ReservationContent = connect(mapStateToProps)((props) => {
     case 3:
       return (
         <View style={styles.cardContainer}>
-          <CreditCard
-            cardNumber={cardFormValues.cardNumber}
-            name={cardFormValues.name}
-            CVV={cardFormValues.expiry}
-          />
+          <CardFlip
+            style={styles.cardFlipContainer}
+            ref={(card) => (cardFlip.current = card)}
+          >
+            <CreditCard
+              cardNumber={cardFormValues.cardNumber}
+              name={cardFormValues.name}
+              CVV={cardFormValues.expiry}
+            />
+            <CreditCardBack CVV={cardFormValues.CVV} />
+          </CardFlip>
           <View style={styles.cardForm}>
             <CustomInput
               isSearch={false}
@@ -184,6 +195,8 @@ export const ReservationContent = connect(mapStateToProps)((props) => {
                 onTouchStart={() => handleInputTouch("card", "expiry")}
               />
               <CustomInput
+                onFocus={() => cardFlip.current.flip()}
+                onBlur={() => cardFlip.current.flip()}
                 isSearch={false}
                 isCross={false}
                 style={styles.inputExpiry}
@@ -230,12 +243,12 @@ export const ReservationContent = connect(mapStateToProps)((props) => {
           <HotelLarge
             isMinimal={true}
             style={{ width: "90%" }}
-            isLiked={completePreviewValues.isLiked}
             cardInfo={{
               name: completePreviewValues.hotelName,
               rating: completePreviewValues.rating,
               imgUrl: completePreviewValues.imgUrl,
               isLiked: favorites.includes(completePreviewValues.id),
+              hotelID: completePreviewValues.id,
             }}
           />
           <View style={styles.orderDescription}>
@@ -279,6 +292,11 @@ const styles = StyleSheet.create({
   cardContainer: {
     alignItems: "center",
     width: "100%",
+    // position: "relative",
+  },
+  cardFlipContainer: {
+    left: "5%",
+    width: "100%",
   },
   reservForm: {
     width: "90%",
@@ -292,7 +310,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   cardForm: {
-    marginTop: 5,
+    marginTop: "55%",
     width: "100%",
     alignItems: "center",
   },
