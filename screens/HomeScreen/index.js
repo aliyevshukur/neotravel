@@ -16,7 +16,6 @@ import fb from "../../firebaseConfig";
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
 import { HotelMedium } from "../../components/cards/HotelMedium";
-import { findRecommendedHotels } from "../../utils/getRecommededHotels";
 import { EmptyListComponent } from "./EmptyListComponent";
 import { LoadingScreen } from "../../commons/LoadingScreen";
 
@@ -28,8 +27,6 @@ import {
   CustomRangeDatepicker,
 } from "../../components";
 import {
-  getHotelListFB,
-  getHotelList,
   searchHotelsFB,
   getSearchResult,
   getRecommendedHotelsFB,
@@ -43,11 +40,11 @@ import {
   getUserData,
   getLoading,
   getErrorMsg,
+  fetchUserRequest,
 } from "../../store/user";
 import { shadow } from "../../styles/commonStyles";
 
 const mapStateToProps = (state) => ({
-  hotelList: getHotelList(state),
   searchResult: getSearchResult(state),
   recommendedHotels: getRecommendedHotels(state),
   favorites: selectFavorites(state),
@@ -57,21 +54,18 @@ const mapStateToProps = (state) => ({
 });
 
 export const HomePage = connect(mapStateToProps, {
-  getHotelListFB,
   updateFavoriteList,
   searchHotelsFB,
   setLastSearchFieldValues,
   getRecommendedHotelsFB,
   getUserDataFB,
+  fetchUserRequest,
 })((props) => {
   const {
     navigation,
-    getHotelListFB,
-    hotelList,
     searchHotelsFB,
     updateFavoriteList,
     setLastSearchFieldValues,
-    setRecommendedHotels,
     recommendedHotels,
     favorites,
     getUserDataFB,
@@ -79,6 +73,7 @@ export const HomePage = connect(mapStateToProps, {
     errorMsg,
     loading,
     getRecommendedHotelsFB,
+    fetchUserRequest,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
@@ -90,15 +85,22 @@ export const HomePage = connect(mapStateToProps, {
     guests: "",
     dateRange: {},
   });
+
   const theme = useSelector((state) => state.themeReducer).theme;
   const dispatch = useDispatch();
   dispatch(setTabVisibility(true));
   const id = useSelector(selectUserId);
+
   useEffect(() => {
-    getHotelListFB();
+    fb.auth.onAuthStateChanged((user) => {
+      if (user) {
+        getUserDataFB(user.uid);
+      } else {
+        fetchUserRequest();
+      }
+    });
 
     getUserInfo();
-    getUserDataFB(id);
     updateFavoriteList(id, false);
   }, []);
 
@@ -107,13 +109,6 @@ export const HomePage = connect(mapStateToProps, {
       getRecommendedHotelsFB(userData.recommendeds);
     }
   }, [userData]);
-
-  const setRecommendedHotelsData = () => {
-    findRecommendedHotels(hotelList, 3).then((data) => {
-
-      setRecommendedHotels(data);
-    });
-  };
 
   const onFieldChange = (name, value) => {
     setFieldValues({

@@ -39,7 +39,6 @@ export const NotificationScreen = connect(mapStateToProps)(({ navigation, notifi
   const searchRoomHandler = () => {
     navigation.navigate("SearchStack");
   };
-console.log("NOTFFF", notifications);
 
   // const registerForPushNotifications = async () => {
   //   try {
