@@ -224,7 +224,6 @@ export const HomePage = connect(mapStateToProps, {
             {!isSeachLoading ? (
               <CustomButton
                 style={{
-                  marginTop: 20,
                   fontSize: 24,
                   width: "90%",
                   marginTop: 30,
@@ -349,7 +348,7 @@ const styles = StyleSheet.create({
   },
   loaderWrapper: {
     height: 70,
-    marginTop: 20,
+    marginTop: 30,
     width: "90%",
   },
 });

@@ -1,5 +1,5 @@
 import fb from "../firebaseConfig";
-import { isRoomReserved } from "../utils/firestoreRequests";
+import { getReservedHotels } from "../utils/firestoreRequests";
 
 // ACTIONS
 const SET_HOTEL_LIST = "SET_HOTEL_LIST";
@@ -375,9 +375,9 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
   dispatch
 ) => {
   dispatch(startSearchRequest());
+
   const hotelData = [];
   const hotelIDs = [];
-
   // Filter by city and set searched hotelData and hotelIDs
   const hotelsRef = fb.db.collection("hotels").where("city", "==", place);
   const searchedHotelsSnap = await hotelsRef.get();
@@ -401,23 +401,22 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
       };
     });
 
-    const unReservedRoomIDs = [];
-    for (let j = 0; j < roomsByGuests.length; j++) {
-      // Check if room is not reserved
-      const isReserved = await isRoomReserved(
-        dateRange,
-        roomsByGuests[j].hotelID
-      );
-      console.log("IS RESERVED", isReserved);
-      if (!isReserved) {
-        unReservedRoomIDs.push(roomsByGuests[j].hotelID);
+    const roomIDs = [];
+    // Get rooms of searched city's hotels
+    const roomsByHotels = roomsByGuests.filter((room) => {
+      if (hotelIDs.includes(room.hotelID)) {
+        roomIDs.push(room.id);
+        return true;
+      } else {
+        return false;
       }
-    }
+    });
+    // Get available hotels by entered date
+    const reservedHotelIDs = await getReservedHotels(roomsByHotels, dateRange, roomIDs);
 
     const finalSearchResult = [];
-    // Contains hotel IDs that has at least one room not reserved at entered time range
     hotelData.forEach((hotel) => {
-      if (unReservedRoomIDs.includes(hotel.id)) {
+      if (!reservedHotelIDs.includes(hotel.id)) {
         finalSearchResult.push(hotel);
       }
     });

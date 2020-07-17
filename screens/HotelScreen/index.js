@@ -118,7 +118,7 @@ export const HotelScreen = connect(mapStateToProps, {
           <Gallery
             style={styles.gallery}
             images={galleryImages}
-            //   onSingleTapConfirmed={closeGallery}
+            onSingleTapConfirmed={closeGallery}
           />
         ) : null}
         <TouchableOpacity onPress={galleryHandler}>
