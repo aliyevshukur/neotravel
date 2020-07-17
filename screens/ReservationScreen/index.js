@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
-  ScrollView,
-  KeyboardAvoidingView,
   StyleSheet,
-  Keyboard,
-  TouchableWithoutFeedback,
-  Platform,
   TouchableOpacity,
   Dimensions,
   Alert,
