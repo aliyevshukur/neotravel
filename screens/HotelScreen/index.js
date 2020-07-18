@@ -118,7 +118,7 @@ export const HotelScreen = connect(mapStateToProps, {
           <Gallery
             style={styles.gallery}
             images={galleryImages}
-            //   onSingleTapConfirmed={closeGallery}
+            onSingleTapConfirmed={closeGallery}
           />
         ) : null}
         <TouchableOpacity onPress={galleryHandler}>
@@ -235,20 +235,6 @@ export const HotelScreen = connect(mapStateToProps, {
             {hotelInfo.city + ", " + hotelInfo.street + " st."}
           </CustomText>
         </View>
-        <View style={styles.walkingHolder}>
-          <IconWbg
-            style={{ ...styles.btnLocation, elevation: isGallery ? 0 : 5 }}
-            iconName={"walking"}
-          />
-          <CustomText
-            style={{
-              ...styles.textLocation,
-              color: theme == "light" ? COLORS.grayDark : COLORS.gray,
-            }}
-          >
-            {hotelInfo.distance}
-          </CustomText>
-        </View>
         <CustomButton
           title={"Select Rooms"}
           style={{ ...styles.btnSelect, elevation: isGallery ? 0 : 5 }}
@@ -355,7 +341,7 @@ const styles = StyleSheet.create({
   },
   mapHolder: {
     width: "100%",
-    height: screenH * 0.2,
+    height: screenH * 0.25,
     justifyContent: "center",
     alignItems: "center",
   },

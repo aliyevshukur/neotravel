@@ -180,28 +180,29 @@ export const setReservedFb = (data) => async (dispatch) => {
   }
 };
 
-// export const checkIfRoomReserved = (data) => async (dispatch) => {
-//   let currentTime = new Date().getTime();
-//   // console.log(currentTime);
-//   try{
-//     const snapshot = await fb.db.collection('reservations').where('endDate', '>', currentTime).where('roomId', '==', data.roomId).get();
-//     if (snapshot.empty) {
-//       console.log('No matching documents.');
-//       return false;
-//     }
-//     snapshot.forEach(doc => {
-//       // console.log(doc.id, '=>', doc.data());
-//       if((doc.data().startDate >= data.startDate && doc.data().startDate <= data.endDate)
-//       ||
-//       (doc.data().endDate >= data.startDate && doc.data().endDate <= data.endDate)
-//       ) {
-//         return true;
-//       } else {
-//         return false;
-//       }
-//     });
-//     // dispatch(setReservInfo("reserv"));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+
+export const checkIfRoomReserved = (data) => async (dispatch) => {
+  let currentTime = new Date().getTime();
+  // console.log(currentTime);
+  try{
+    const snapshot = await fb.db.collection('reservations').where('endDate', '>', currentTime).where('roomId', '==', data.roomId).get();
+    if (snapshot.empty) {
+      console.log('No matching documents.');
+      return false;
+    }
+    snapshot.forEach(doc => {
+      // console.log(doc.id, '=>', doc.data());
+      if((doc.data().startDate >= data.startDate && doc.data().startDate <= data.endDate)
+      ||
+      (doc.data().endDate >= data.startDate && doc.data().endDate <= data.endDate)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    // dispatch(setReservInfo("reserv"));
+  } catch (error) {
+    console.log(error);
+  }
+};
