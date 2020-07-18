@@ -25,9 +25,7 @@ import {
   getHotelsOnDealsFB,
   getHotelsOnDeals,
   getLastUserChoices,
-  setFilteredResult,
 } from "../../store/hotels";
-import { filterByPriceFB } from "../../utils/firestoreRequests";
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
@@ -45,7 +43,6 @@ export const FilterScreen = connect(mapStateToProps, {
   ({
     navigation,
     route,
-    searchResult,
     pureSearchResult,
     setSearchHotelResults,
     setLastUserChoices,
@@ -101,11 +98,9 @@ export const FilterScreen = connect(mapStateToProps, {
         name: "Deals",
       },
     };
-
     const [userChoices, setUserChoices] = useState(lastUserChoices); //values will be used as filter
     const [modal, setModal] = useState(false);
     const [selectProcess, setSelectProcess] = useState("");
-    const [priceResult, setPriceResult] = useState(true);
 
     const fetchHotelsOnDeals = () => {
       if (hotelsOnDeals.data.length === 0) {
@@ -170,7 +165,7 @@ export const FilterScreen = connect(mapStateToProps, {
         const result = filterResult(pureSearchResult);
         setSearchHotelResults(result);
       }
-      navigation.navigate("HomeSearchScreen");
+      navigation.navigate(route.params.backScreen);
     };
 
     const filterResult = (searchResult) => {

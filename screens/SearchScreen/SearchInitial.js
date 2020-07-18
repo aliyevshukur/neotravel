@@ -19,14 +19,14 @@ import {
   getHotelsOnDeals,
   searchHotelsFB,
   getSearchResult,
-  getSearchLoading
+  getSearchLoading,
 } from "../../store/hotels";
 
 const mapStateToProps = (state) => ({
   recommendedHotels: getRecommendedHotels(state),
   hotelsOnDeals: getHotelsOnDeals(state),
   searchResult: getSearchResult(state),
-  loading: getSearchLoading(state)
+  loading: getSearchLoading(state),
 });
 
 export const SearchInitial = connect(mapStateToProps, {
@@ -40,7 +40,7 @@ export const SearchInitial = connect(mapStateToProps, {
     hotelsOnDeals,
     searchHotelsFB,
     searchResult,
-    loading
+    loading,
   }) => {
     const theme = useSelector((state) => state.themeReducer).theme;
     const [searchValue, setSearchValue] = useState("");
@@ -137,6 +137,9 @@ export const SearchInitial = connect(mapStateToProps, {
                 <MapViewSearch
                   bottomListStyle={{ bottom: 110 }}
                   hotels={searchResult}
+                  onItemPress={(hotelInfo) =>
+                    navigation.navigate("HotelScreen", { hotelInfo })
+                  }
                 />
               )}
             </View>

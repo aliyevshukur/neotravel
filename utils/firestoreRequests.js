@@ -37,7 +37,7 @@ export const filterByPriceFB = async (hotelID, price) => {
   }
 };
 
-export const getReservedHotels = async (rooms, dateRange, roomIDs) => {
+export const getReservedHotels = async (rooms, dateRange) => {
   let currentTime = new Date().getTime();
   try {
     const snapshot = await fb.db
@@ -67,7 +67,6 @@ export const getReservedHotels = async (rooms, dateRange, roomIDs) => {
                 endDate <= dateRange.endDate.getTime())
             ) {
             } else {
-              console.log(startDate, dateRange.startDate.getTime());
               const index = reservedHotels.indexOf(room.id);
               reservedHotels.splice(index, 1);
               availableHotelIDs.push(room.hotelID);
