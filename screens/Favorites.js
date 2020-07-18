@@ -32,6 +32,7 @@ export const Favorites = connect(mapStateToProps, { addHotel, deleteHotel })(
             height: "100%",
             marginTop: 0,
           }}
+          onItemPress={hotelInfo => navigation.navigate("HotelScreen", {hotelInfo})}
         />
       </View>
     );
