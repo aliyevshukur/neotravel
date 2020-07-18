@@ -66,10 +66,8 @@ export const getReservedHotels = async (rooms, dateRange, roomIDs) => {
               (endDate >= dateRange.startDate.getTime() &&
                 endDate <= dateRange.endDate.getTime())
             ) {
-              console.log("YES");
             } else {
               console.log(startDate, dateRange.startDate.getTime());
-              console.log("INSIDE IF");
               const index = reservedHotels.indexOf(room.id);
               reservedHotels.splice(index, 1);
               availableHotelIDs.push(room.hotelID);
@@ -78,7 +76,6 @@ export const getReservedHotels = async (rooms, dateRange, roomIDs) => {
         }
       });
     });
-    console.log("RESERVED HOTELS", reservedHotels);
     return reservedHotels;
   } catch (error) {
     console.log(error);

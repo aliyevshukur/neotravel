@@ -26,6 +26,7 @@ import {
   CustomRangeDatepicker,
 } from "../../components";
 import {
+  getHotelListFB,
   searchHotelsFB,
   getSearchResult,
   getRecommendedHotelsFB,
@@ -54,6 +55,7 @@ const mapStateToProps = (state) => ({
 });
 
 export const HomePage = connect(mapStateToProps, {
+  getHotelListFB,
   updateFavoriteList,
   searchHotelsFB,
   setLastSearchFieldValues,
@@ -64,6 +66,7 @@ export const HomePage = connect(mapStateToProps, {
 })((props) => {
   const {
     navigation,
+    getHotelListFB,
     searchHotelsFB,
     updateFavoriteList,
     setLastSearchFieldValues,
@@ -104,7 +107,7 @@ export const HomePage = connect(mapStateToProps, {
         fetchUserRequest();
       }
     });
-
+    getHotelListFB();
     getUserInfo();
     updateFavoriteList(id, false);
   }, []);
