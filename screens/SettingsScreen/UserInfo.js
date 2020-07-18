@@ -27,7 +27,9 @@ export const UserInfo = ({
 
   return (
     <View style={styles.userInfo}>
-      <CustomText style={styles.label}>Name</CustomText>
+      <View style={styles.labelWrapper}>
+        <CustomText style={styles.label}>Name</CustomText>
+      </View>
       <CustomInput
         isCross={false}
         isSearch={false}
@@ -36,7 +38,9 @@ export const UserInfo = ({
         value={name}
         onChangeText={setName}
       />
-      <CustomText style={styles.label}>Surname</CustomText>
+      <View style={styles.labelWrapper}>
+        <CustomText style={styles.label}>Surname</CustomText>
+      </View>
       <CustomInput
         isCross={false}
         isSearch={false}
@@ -61,34 +65,40 @@ export const UserInfo = ({
           }}
         />
       </View>
-      <CustomButton
-        style={styles.btn}
-        title="Save"
-        onPress={() => {
-          saveHandler();
-        }}
-      />
+      <View style={styles.saveButtonWrapper}>
+        <CustomButton
+          style={styles.btn}
+          title="Save"
+          onPress={() => {
+            saveHandler();
+          }}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   label: {
-    alignSelf: "center",
     fontSize: 22,
     color: COLORS.pink,
     fontFamily: "NunitoRegular",
   },
+  lableWrapper: {},
   input: {
-    marginVertical: "4%",
+    width: "100%",
+    marginBottom: 7,
   },
   userInfo: {
+    paddingHorizontal: 16,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   darkModeContainer: {
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: "5%",
   },
   darkModeText: {
@@ -98,8 +108,13 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: "35%",
-    height: "13%",
+    height: '100%',
     marginTop: "5%",
     fontSize: 21,
   },
+  saveButtonWrapper: {
+    width: '100%',
+    height: "13%",
+    alignItems: 'center'
+  }
 });

@@ -19,7 +19,6 @@ export const Favorites = connect(mapStateToProps, { addHotel, deleteHotel })(
     const filteredHotels = hotels.filter((item) => {
       return favorites.includes(item.id);
     });
-
     const goBackHandler = () => {
       navigation.goBack();
     };

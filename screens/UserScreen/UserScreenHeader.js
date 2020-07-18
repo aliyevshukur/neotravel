@@ -11,13 +11,13 @@ import { CustomText } from "../../components";
 import COLORS from "../../styles/colors";
 import fb from "../../firebaseConfig";
 import { useSelector } from "react-redux";
+import profileDefaultNormal from "../../assets/images/UserScreen/profilePhotoNormal.png";
+import profileDefaultDark from "../../assets/images/UserScreen/profilePhotoDark.png";
 
-export const UserScreenHeader = ({ profilePicture, fullName, userName }) => {
-  // const isPicture = fb.auth.currentUser.photoURL !== null;
-
+export const UserScreenHeader = ({ profilePicture, fullName }) => {
   const theme = useSelector((state) => state.themeReducer).theme;
 
-  return profilePicture ? (
+  return (
     <View
       style={{
         ...styles.container,
@@ -27,9 +27,11 @@ export const UserScreenHeader = ({ profilePicture, fullName, userName }) => {
       <Image
         style={styles.profilePicture}
         source={
-          fb?.auth?.currentUser?.photoURL
+          profilePicture
             ? { uri: profilePicture }
-            : profilePicture
+            : theme == "light"
+            ? profileDefaultNormal
+            : profileDefaultDark
         }
       />
       <CustomText
@@ -43,13 +45,14 @@ export const UserScreenHeader = ({ profilePicture, fullName, userName }) => {
         {fullName}
       </CustomText>
     </View>
-  ) : (
-    <ActivityIndicator
-      color={COLORS.gradientPink}
-      size="small"
-      style={{ alignItems: "center", justifyContent: "center" }}
-    />
   );
+  // : (
+  //   <ActivityIndicator
+  //     color={COLORS.gradientPink}
+  //     size="small"
+  //     style={{ alignItems: "center", justifyContent: "center" }}
+  //   />
+  // );
 };
 
 const width = Dimensions.get("window").width;
