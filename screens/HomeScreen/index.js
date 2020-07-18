@@ -8,7 +8,10 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  BackHandler,
 } from "react-native";
+import {useNavigationState} from '@react-navigation/native';
+
 import { connect, useSelector, useDispatch } from "react-redux";
 import { setTabVisibility } from "../../store/navReducer";
 
@@ -44,6 +47,8 @@ import {
 } from "../../store/user";
 import { shadow } from "../../styles/commonStyles";
 import { checkIfRoomReserved } from "../../store/reservation";
+
+
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
@@ -84,6 +89,9 @@ export const HomePage = connect(mapStateToProps, {
     description: "Find place that gives you ultimate calm",
     catalogueName: "Recommended",
   };
+
+  const state = useNavigationState(state => state);
+  const routeName = (state.routeNames[state.index]);
 
   const [fieldValues, setFieldValues] = useState({
     place: "",
@@ -180,6 +188,16 @@ export const HomePage = connect(mapStateToProps, {
     Alert.alert("Something went wrong", errorMsg);
     return <></>;
   }
+
+  BackHandler.addEventListener("hardwareBackPress", function () {
+    //hardware back Button actions could be handled here
+    if(routeName=="HomePage"){
+      BackHandler.exitApp();
+      return true;
+    }
+    navigation.goBack();
+    return true;
+  });
 
   return (
     <ImageBackground

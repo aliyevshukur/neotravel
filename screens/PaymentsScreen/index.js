@@ -19,6 +19,7 @@ const screenWidth = Dimensions.get("window").width;
 
 import {
   selectPayments,
+  setInitial,
   getPaymentsFromFirebase,
 } from '../../store/payments';
 
@@ -27,17 +28,20 @@ const mapStateToProps = (state) => ({
 });
 export const PaymentsScreen = connect(mapStateToProps, {
   getPaymentsFromFirebase,
+  setInitial,
 })(({
   payments,
   getPaymentsFromFirebase,
+  setInitial,
 }) => {
-
+  
   const theme = useSelector((state) => state.themeReducer).theme;
 
   const currentUserId = fb.auth.currentUser.uid;
   
 
   useEffect(() => {
+    setInitial();
     getPaymentsFromFirebase(currentUserId);
   }, []);
 

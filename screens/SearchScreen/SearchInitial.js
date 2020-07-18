@@ -137,9 +137,7 @@ export const SearchInitial = connect(mapStateToProps, {
                 <MapViewSearch
                   bottomListStyle={{ bottom: 110 }}
                   hotels={searchResult}
-                  onItemPress={(hotelInfo) =>
-                    navigation.navigate("HotelScreen", { hotelInfo })
-                  }
+                  navigation={navigation}
                 />
               )}
             </View>
