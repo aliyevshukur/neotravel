@@ -137,6 +137,7 @@ export const SearchInitial = connect(mapStateToProps, {
                 <MapViewSearch
                   bottomListStyle={{ bottom: 110 }}
                   hotels={searchResult}
+                  navigation={navigation}
                 />
               )}
             </View>
