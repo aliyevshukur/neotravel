@@ -411,9 +411,16 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
         return false;
       }
     });
-    // Get available hotels by entered date
-    const reservedHotelIDs = await getReservedHotels(roomsByHotels, dateRange, roomIDs);
-
+    let reservedHotelIDs = [];
+    // Check if dateRange entered  
+    if (Object.keys(dateRange).length != 0) {
+      // Get available hotels by entered date
+      reservedHotelIDs = await getReservedHotels(
+        roomsByHotels,
+        dateRange,
+        roomIDs
+      );
+    }
     const finalSearchResult = [];
     hotelData.forEach((hotel) => {
       if (!reservedHotelIDs.includes(hotel.id)) {
