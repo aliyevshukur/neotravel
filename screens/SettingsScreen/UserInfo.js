@@ -79,6 +79,12 @@ export const UserInfo = ({
 };
 
 const styles = StyleSheet.create({
+  userInfo: {
+    paddingHorizontal: 16,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    width: '100%',
+  },
   label: {
     fontSize: 22,
     color: COLORS.pink,
@@ -88,11 +94,6 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     marginBottom: 7,
-  },
-  userInfo: {
-    paddingHorizontal: 16,
-    justifyContent: "center",
-    alignItems: "flex-start",
   },
   darkModeContainer: {
     width: "100%",
@@ -108,13 +109,13 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: "35%",
-    height: '100%',
+    height: "100%",
     marginTop: "5%",
     fontSize: 21,
   },
   saveButtonWrapper: {
-    width: '100%',
+    width: "100%",
     height: "13%",
-    alignItems: 'center'
-  }
+    alignItems: "center",
+  },
 });

@@ -26,6 +26,7 @@ import { getCameraPermissions } from "../../utils/getCameraPermission";
 import { ImagePickerModal } from "./ImagePickerModal";
 import COLORS from "../../styles/colors";
 import { UserInfo } from "./UserInfo";
+import { shadow } from "../../styles/commonStyles";
 
 const mapStateToProps = (state) => ({
   profilePhoto: selectUserPhotoUrl(state),
@@ -109,6 +110,7 @@ export const SettingsPage = connect(mapStateToProps, {
                 setIsModalShown(true);
                 setIsUploading(false);
               }}
+              style={{ width: "100%", height: "100%", borderRadius: 75 }}
             >
               <Image
                 style={styles.img}
@@ -151,37 +153,27 @@ export const SettingsPage = connect(mapStateToProps, {
 );
 
 const styles = StyleSheet.create({
-  header: {
-    marginVertical: "8%",
-    alignSelf: "center",
-    fontSize: 30,
-    color: COLORS.gradientPink,
-    fontFamily: "NunitoBold",
-  },
   container: {
     flex: 1,
+    alignItems: "center",
     backgroundColor: COLORS.bgcLight,
   },
+  profileContainer: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: "#0000",
+    elevation: 3,
+  },
   img: {
-    width: Dimensions.get("window").height / 7,
-    height: Dimensions.get("window").height / 7,
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.blackText,
-    borderWidth: 0.5,
-    borderRadius: Dimensions.get("window").height / 14,
+    width: "100%",
+    height: "100%",
+    borderRadius: 75,
     marginBottom: "10%",
   },
   indicator: {
-    width: Dimensions.get("window").height / 7,
-    height: Dimensions.get("window").height / 7,
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.blackText,
-    borderWidth: 0.5,
-    borderRadius: Dimensions.get("window").height / 14,
-  },
-  profileContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingTop: 10,
+    width: "100%",
+    height: "100%",
+    borderRadius: 75,
   },
 });
