@@ -47,11 +47,8 @@ import {
 } from "../../store/user";
 import { shadow } from "../../styles/commonStyles";
 import { checkIfRoomReserved } from "../../store/reservation";
-<<<<<<< HEAD
 import { selectPayments, getPaymentsFromFirebase } from "../../store/payments";
 import { sendPushNotification } from "../../utils/pushNotification";
-=======
->>>>>>> master
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
