@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import icon from "../../assets/images/homeScreen/chevron-right.png";
 import { color } from "react-native-reanimated";
 
-export const NotfCard = ({ item = [], isLast }) => {
+export const NotfCard = ({ content="~", isLast }) => {
   const theme = useSelector((state) => state.themeReducer).theme;
 
   let lastItemColor = COLORS.opaqueFirst,
@@ -37,14 +37,15 @@ export const NotfCard = ({ item = [], isLast }) => {
         weight="semiBold"
         style={{ ...styles.description, color: textColor }}
       >
-        {item.hotelName + "("+ item.roomName + ")"}
+        {/* {item.hotelName + "("+ item.roomName + ")"} */}
+        {content}
       </CustomText>
-      <CustomText
+      {/* <CustomText
         weight="semiBold"
         style={{ ...styles.dateText, color: textColor }}
       >
         {new Date(item.startDate).toDateString() + "-" + new Date(item.endDate).toDateString()}
-      </CustomText>
+      </CustomText> */}
       </View>
       {/* <View style={styles.icon}>
         <CustomSvg name="chevronRight" gradient={isLast} style={styles.svg} />
@@ -66,7 +67,6 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 18,
-    width: "85%",
   },
   icon: {
     flex: 1,
@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
   },
   textWrapper: {
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    width: "80%",
   },
   dateText: {
     fontSize: 14,

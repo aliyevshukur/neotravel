@@ -3,10 +3,8 @@ import { StyleSheet, Text, View, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { CustomSvg, CustomText } from "../../components";
 import { logOut } from "../../store/auth";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import COLORS from "../../styles/colors";
-
-import { useSelector } from "react-redux";
 
 export const UserMenuItem = connect(null, { logOut })(
   ({ icon, label, logOut, navigation, onPressItem }) => {
@@ -21,7 +19,7 @@ export const UserMenuItem = connect(null, { logOut })(
             text: "No",
             style: "cancel",
           },
-          { text: "Yes", onPress: () => logOut() },
+          { text: "Yes", onPress: () => logOut()},
         ],
         { cancelable: true }
       );
