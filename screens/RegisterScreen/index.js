@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Alert, Modal } from "react-native";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
@@ -20,6 +20,8 @@ export const RegisterScreen = connect(null, { sign })(
     });
 
     const fromFields = ["name", "surname", "email", "password"];
+    
+    const theme = useSelector(state => state.themeReducer).theme;
 
     const handleFieldChange = (name, value) => {
       setFormValues({
@@ -43,7 +45,7 @@ export const RegisterScreen = connect(null, { sign })(
     };
     return (
       <>
-        <View style={styles.container}>
+        <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
           <View style={styles.wrapper}>
             <CustomText style={styles.header}>Register</CustomText>
 
