@@ -37,7 +37,7 @@ export const filterByPriceFB = async (hotelID, price) => {
   }
 };
 
-export const getReservedHotels = async (rooms, dateRange) => {
+export const getAvailableHotels = async (rooms, dateRange) => {
   let currentTime = new Date().getTime();
   try {
     const snapshot = await fb.db
@@ -51,31 +51,38 @@ export const getReservedHotels = async (rooms, dateRange) => {
     const availableHotelIDs = [];
     // Remaining hotels will be unavailable
     const reservedHotels = [];
+    const reservations = [];
     snapshot.forEach((doc) => {
-      rooms.forEach((room) => {
-        if (!availableHotelIDs.includes(room.hotelID)) {
-          if (room.id === doc.data().roomId) {
-            // Prevent duplicate hotelIDs
-            if (!reservedHotels.includes(room.hotelID)) {
-              reservedHotels.push(room.hotelID);
-            }
-            const { startDate, endDate } = doc.data();
-            if (
-              (startDate >= dateRange.startDate.getTime() &&
-                startDate <= dateRange.endDate.getTime()) ||
-              (endDate >= dateRange.startDate.getTime() &&
-                endDate <= dateRange.endDate.getTime())
-            ) {
-            } else {
-              const index = reservedHotels.indexOf(room.id);
-              reservedHotels.splice(index, 1);
-              availableHotelIDs.push(room.hotelID);
-            }
-          }
-        }
-      });
+      reservations.push({ id: doc.id, ...doc.data() });
     });
-    return reservedHotels;
+
+    rooms.forEach((room) => {
+      // Get reservation of rooms
+      const roomReservations = reservations.filter(
+        (reservation) => reservation.roomId === room.id
+      );
+      // If reservation of rooms is empty add it to available hotels
+      if (roomReservations.length === 0) {
+        availableHotelIDs.push(room.hotelID);
+      } else {
+        roomReservations.forEach((reservation) => {
+          const { startDate, endDate } = reservation;
+          if (
+            !(
+              startDate >= dateRange.startDate.getTime() &&
+              startDate <= dateRange.endDate.getTime()
+            ) ||
+            !(
+              endDate >= dateRange.startDate.getTime() &&
+              endDate <= dateRange.endDate.getTime()
+            )
+          ) {
+            availableHotelIDs.push(room.hotelID);
+          }
+        });
+      }
+    });
+    return availableHotelIDs;
   } catch (error) {
     console.log(error);
   }
