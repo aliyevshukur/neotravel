@@ -18,7 +18,7 @@ export const CustomPicker = ({
   onValueChange,
 }) => {
   return (
-    <View style={{ ...styles.pickerContainer, width: pickerWidth }}>
+    <View style={{ ...styles.pickerContainer, width: pickerWidth, backgroundColor: COLORS.bgcLight}}>
       <Picker
         mode="dropdown"
         selectedValue={pickerValue}
