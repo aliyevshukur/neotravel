@@ -14,7 +14,7 @@ import { CustomButton, CustomText, CustomSvg } from "../../components";
 import { ProgressBar } from "./components/ProgressBar";
 import { ReservationContent } from "./components/ReservationContent";
 import COLORS from "../../styles/colors";
-import { sendNotfication } from "../../store/notfication";
+import { sendNotification, sendNotificationFB } from "../../store/notification";
 
 import { connect, useSelector } from "react-redux";
 import {
@@ -46,7 +46,8 @@ export const ReservationScreen = connect(mapStateToProps, {
   setCompletedHotelInfo,
   setCompletedUserInfo,
   setCompletedReserveInfo,
-  sendNotfication,
+  sendNotification,
+  sendNotificationFB,
 })(
   ({
     navigation,
@@ -62,7 +63,8 @@ export const ReservationScreen = connect(mapStateToProps, {
     setCompletedHotelInfo,
     setCompletedUserInfo,
     setCompletedReserveInfo,
-    sendNotfication,
+    sendNotification,
+    sendNotificationFB,
   }) => {
     const currentUserId = fb.auth.currentUser.uid;
 
@@ -183,11 +185,14 @@ export const ReservationScreen = connect(mapStateToProps, {
           }
           break;
         case 4:
-          sendNotfication({
-            hotelName: completedValues.hotelName,
-            roomName: completedValues.roomName,
-            startDate: reservation.startDate,
-            endDate: reservation.endDate,
+          const content = "You successfully reserved "
+            + completedValues.hotelName + " ( "
+            + completedValues.roomName + " ) for "
+            + new Date(reservation.startDate).toDateString();
+
+          sendNotificationFB({
+            userID: currentUserId,
+            content,
           });
           setReservedFb(reservation);
           navigation.navigate("AccountStack", { screen: "payments" });
@@ -204,7 +209,7 @@ export const ReservationScreen = connect(mapStateToProps, {
               Alert.alert(
                 "Info",
                 "Selected guests is more than room capacity. You can change number of guests or search for another room.",
-                [{ text: "Ok", onPress: () => {} }],
+                [{ text: "Ok", onPress: () => { } }],
                 { cancelable: true }
               );
             } else {
@@ -254,7 +259,7 @@ export const ReservationScreen = connect(mapStateToProps, {
             Alert.alert(
               "Info",
               "This room is reserved in selected time interval, please choose different time or search for another room",
-              [{ text: "Ok", onPress: () => {} }],
+              [{ text: "Ok", onPress: () => { } }],
               { cancelable: true }
             );
             console.log("reserved");
