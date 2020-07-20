@@ -97,10 +97,10 @@ export const HomeSearchScreen = connect(mapStateToProps, {
       <View style={styles.searchLabel}>
         <CustomText>
           {`${place} ${guests} guests ${
-            monthNames[startDate.getMonth()]
-          } ${startDate.getDate()} - ${
-            monthNames[endDate.getMonth()]
-          } ${endDate.getDate()}`}
+            monthNames[new Date(startDate).getMonth()]
+          } ${new Date(startDate).getDate()} - ${
+            monthNames[new Date(endDate).getMonth()]
+          } ${new Date(endDate).getDate()}`}
         </CustomText>
       </View>
       <FilterRow

@@ -166,8 +166,8 @@ export const HomePage = connect(mapStateToProps, {
     navigation.navigate("HomeSearchScreen", {
       place: fieldValues.place,
       guests: fieldValues.guests,
-      startDate: fieldValues.dateRange.startDate,
-      endDate: fieldValues.dateRange.endDate,
+      startDate: fieldValues.dateRange.startDate.getTime(),
+      endDate: fieldValues.dateRange.endDate.getTime(),
     });
 
     // Turn off loader on search button

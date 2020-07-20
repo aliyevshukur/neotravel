@@ -1,5 +1,5 @@
 import fb from "../firebaseConfig";
-import { getReservedHotels } from "../utils/firestoreRequests";
+import { getAvailableHotels } from "../utils/firestoreRequests";
 
 // ACTIONS
 const SET_HOTEL_LIST = "SET_HOTEL_LIST";
@@ -411,11 +411,11 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
         return false;
       }
     });
-    let reservedHotelIDs = [];
-    // Check if dateRange entered  
+    let avialableHotelIDs = [];
+    // Check if dateRange entered
     if (Object.keys(dateRange).length != 0) {
       // Get available hotels by entered date
-      reservedHotelIDs = await getReservedHotels(
+      avialableHotelIDs = await getAvailableHotels(
         roomsByHotels,
         dateRange,
         roomIDs
@@ -423,7 +423,7 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
     }
     const finalSearchResult = [];
     hotelData.forEach((hotel) => {
-      if (!reservedHotelIDs.includes(hotel.id)) {
+      if (avialableHotelIDs.includes(hotel.id)) {
         finalSearchResult.push(hotel);
       }
     });
