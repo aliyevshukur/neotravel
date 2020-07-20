@@ -1,11 +1,20 @@
 import React from "react";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
+import { useSelector } from "react-redux";
+
 import COLORS from "../styles/colors";
+import { AppLayout } from "./AppLayout";
 
 export const LoadingScreen = () => {
-  return (
-    <View style={styles.loadingScreen}>
+  const theme = useSelector((state) => state.themeReducer).theme;
 
+  return (
+    <AppLayout
+      style={{
+        ...styles.loadingScreen,
+        backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+      }}
+    >
       <View style={styles.loaderWrapper}>
         <ActivityIndicator
           size="large"
@@ -13,7 +22,7 @@ export const LoadingScreen = () => {
           style={styles.loader}
         />
       </View>
-    </View>
+    </AppLayout>
   );
 };
 
@@ -23,5 +32,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
 });

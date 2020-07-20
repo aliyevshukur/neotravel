@@ -47,8 +47,11 @@ import {
 } from "../../store/user";
 import { shadow } from "../../styles/commonStyles";
 import { checkIfRoomReserved } from "../../store/reservation";
+<<<<<<< HEAD
 import { selectPayments, getPaymentsFromFirebase } from "../../store/payments";
 import { sendPushNotification } from "../../utils/pushNotification";
+=======
+>>>>>>> master
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
@@ -188,8 +191,8 @@ export const HomePage = connect(mapStateToProps, {
     navigation.navigate("HomeSearchScreen", {
       place: fieldValues.place,
       guests: fieldValues.guests,
-      startDate: fieldValues.dateRange.startDate,
-      endDate: fieldValues.dateRange.endDate,
+      startDate: fieldValues.dateRange.startDate.getTime(),
+      endDate: fieldValues.dateRange.endDate.getTime(),
     });
 
     // Turn off loader on search button
@@ -244,7 +247,7 @@ export const HomePage = connect(mapStateToProps, {
                 // long={true}
                 isSearch={false}
                 isCross={false}
-                placeholder="Place"
+                placeholder="City"
                 onChangeText={(value) => onFieldChange("place", value)}
               />
               <CustomPicker
@@ -380,11 +383,8 @@ const styles = StyleSheet.create({
   },
   datepickerWrapper: {
     width: "90%",
-    justifyContent: "flex-start",
     backgroundColor: "#0000",
     borderRadius: 40,
-    padding: 2,
-    width: "90%",
     ...shadow,
   },
   loaderWrapper: {

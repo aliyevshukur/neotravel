@@ -9,6 +9,7 @@ import { MapViewSearch } from "./MapViewSearch";
 import { PrimarySearch, FilterRow } from "../../SearchScreen/components";
 import { CustomText } from "../../../components";
 import { getSearchResult, setSearchHotelResults } from "../../../store/hotels";
+import { NoResult } from "../../../commons/NoResult";
 
 export const hotels = [
   {
@@ -84,7 +85,7 @@ export const HomeSearchScreen = connect(mapStateToProps, {
   // const resetSearchResult = () => {
   //   setSearchHotelResults([]);
   // };
-  
+
   return (
     <View
       style={{
@@ -96,10 +97,10 @@ export const HomeSearchScreen = connect(mapStateToProps, {
       <View style={styles.searchLabel}>
         <CustomText>
           {`${place} ${guests} guests ${
-            monthNames[startDate.getMonth()]
-          } ${startDate.getDate()} - ${
-            monthNames[endDate.getMonth()]
-          } ${endDate.getDate()}`}
+            monthNames[new Date(startDate).getMonth()]
+          } ${new Date(startDate).getDate()} - ${
+            monthNames[new Date(endDate).getMonth()]
+          } ${new Date(endDate).getDate()}`}
         </CustomText>
       </View>
       <FilterRow
@@ -123,9 +124,7 @@ export const HomeSearchScreen = connect(mapStateToProps, {
           )}
         </View>
       ) : (
-        <View style={styles.notFound}>
-          <CustomText>No results found</CustomText>
-        </View>
+        <NoResult />
       )}
     </View>
   );
@@ -172,12 +171,6 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     marginLeft: 18,
-  },
-  notFound: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
   },
   searchLabel: {
     paddingBottom: 10,

@@ -21,6 +21,7 @@ import {
   getSearchResult,
   getSearchLoading,
 } from "../../store/hotels";
+import { NoResult } from "../../commons/NoResult";
 
 const mapStateToProps = (state) => ({
   recommendedHotels: getRecommendedHotels(state),
@@ -106,8 +107,10 @@ export const SearchInitial = connect(mapStateToProps, {
               }
             />
           </ScrollView>
-        ) : (
-          <>
+        ) : loading ? (
+          <LoadingScreen />
+        ) : searchResult.length != 0 ? (
+          <View>
             <FilterRow
               backScreen="initial"
               navigation={navigation}
@@ -141,7 +144,9 @@ export const SearchInitial = connect(mapStateToProps, {
                 />
               )}
             </View>
-          </>
+          </View>
+        ) : (
+          <NoResult />
         )}
       </AppLayout>
     );

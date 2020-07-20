@@ -19,14 +19,12 @@ export const UserMenuItem = connect(null, { logOut })(
         [
           {
             text: "No",
-            // onPress: () => console.log("Cancel Pressed"),
             style: "cancel",
           },
           { text: "Yes", onPress: () => logOut() },
         ],
         { cancelable: true }
       );
-      // logOut();
     };
     return (
       <TouchableOpacity

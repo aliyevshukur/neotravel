@@ -1,5 +1,5 @@
 import fb from "../firebaseConfig";
-import { getReservedHotels } from "../utils/firestoreRequests";
+import { getAvailableHotels } from "../utils/firestoreRequests";
 
 // ACTIONS
 const SET_HOTEL_LIST = "SET_HOTEL_LIST";
@@ -7,8 +7,8 @@ const SET_ROOM_LIST = "SET_ROOM_LIST";
 const SET_HOTELS_ON_DEALS = "SET_HOTELS_ON_DEALS";
 
 // SEARCH AND FILTER
-const SET_SEARCH_HOTEL_RESULT = "SET_SEARCH_HOTEL_RESULT";
 const START_SEARCH_REQUEST = "START_SEARCH_REQUEST";
+const SET_SEARCH_HOTEL_RESULT = "SET_SEARCH_HOTEL_RESULT";
 const SET_PURE_SEARCH_RESULT = "SET_PURE_SEARCH_RESULT";
 const SET_FILTERED_RESULT = "SET_FILTERED_RESULT";
 const SET_LAST_SEARCH_FIELD_VALUES = "SET_LAST_SEARCH_FIELD_VALUES";
@@ -411,11 +411,11 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
         return false;
       }
     });
-    let reservedHotelIDs = [];
-    // Check if dateRange entered  
+    let avialableHotelIDs = [];
+    // Check if dateRange entered
     if (Object.keys(dateRange).length != 0) {
       // Get available hotels by entered date
-      reservedHotelIDs = await getReservedHotels(
+      avialableHotelIDs = await getAvailableHotels(
         roomsByHotels,
         dateRange,
         roomIDs
@@ -423,7 +423,7 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
     }
     const finalSearchResult = [];
     hotelData.forEach((hotel) => {
-      if (!reservedHotelIDs.includes(hotel.id)) {
+      if (avialableHotelIDs.includes(hotel.id)) {
         finalSearchResult.push(hotel);
       }
     });
