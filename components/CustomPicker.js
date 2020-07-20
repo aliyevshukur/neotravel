@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { StyleSheet, ImageBackground, Picker, Image, View } from "react-native";
+import { useSelector } from "react-redux";
 
 import caretDown from "../assets/images/inputComponents/caret-down.png";
 import COLORS from "../styles/colors";
+import { shadow } from "../styles/commonStyles";
 
 export const CustomPicker = ({
   pickerWidth = 115,
@@ -17,13 +19,24 @@ export const CustomPicker = ({
   ],
   onValueChange,
 }) => {
+  const theme = useSelector((state) => state.themeReducer).theme;
+
   return (
-    <View style={{ ...styles.pickerContainer, width: pickerWidth, backgroundColor: COLORS.bgcLight}}>
+    <View
+      style={{
+        ...styles.pickerContainer,
+        width: pickerWidth,
+        backgroundColor: theme === "light" ? COLORS.bgcLight : COLORS.bgcDark,
+      }}
+    >
       <Picker
         mode="dropdown"
         selectedValue={pickerValue}
         onValueChange={(value) => onValueChange(value)}
-        style={{ ...styles.picker, width: pickerWidth }}
+        style={{
+          ...styles.picker,
+          width: pickerWidth,
+        }}
         itemStyle={{ color: "green" }}
       >
         <Picker.Item label={title} itemStyle={{ color: COLORS.grayDark }} />
@@ -43,18 +56,14 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     color: COLORS.grayDark,
     borderRadius: 50,
-    paddingRight: 10,
     backgroundColor: "transparent",
   },
   pickerContainer: {
-    width: 115,
-    height: 54.5,
     flexDirection: "row",
     alignItems: "center",
-    // marginLeft: 10,
     borderRadius: 50,
-    elevation: 2,
     marginTop: 10,
+    ...shadow,
   },
   pickerPng: {
     width: 9.3,

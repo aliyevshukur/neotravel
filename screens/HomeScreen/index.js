@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   BackHandler,
 } from "react-native";
-import {useNavigationState} from '@react-navigation/native';
+import { useNavigationState } from "@react-navigation/native";
 
 import { connect, useSelector, useDispatch } from "react-redux";
 import { setTabVisibility } from "../../store/navReducer";
@@ -47,8 +47,6 @@ import {
 } from "../../store/user";
 import { shadow } from "../../styles/commonStyles";
 import { checkIfRoomReserved } from "../../store/reservation";
-
-
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
@@ -90,8 +88,8 @@ export const HomePage = connect(mapStateToProps, {
     catalogueName: "Recommended",
   };
 
-  const state = useNavigationState(state => state);
-  const routeName = (state.routeNames[state.index]);
+  const state = useNavigationState((state) => state);
+  const routeName = state.routeNames[state.index];
 
   const [fieldValues, setFieldValues] = useState({
     place: "",
@@ -191,7 +189,7 @@ export const HomePage = connect(mapStateToProps, {
 
   BackHandler.addEventListener("hardwareBackPress", function () {
     //hardware back Button actions could be handled here
-    if(routeName=="HomePage"){
+    if (routeName == "HomePage") {
       BackHandler.exitApp();
       return true;
     }
@@ -224,7 +222,7 @@ export const HomePage = connect(mapStateToProps, {
                 // long={true}
                 isSearch={false}
                 isCross={false}
-                placeholder="Place"
+                placeholder="City"
                 onChangeText={(value) => onFieldChange("place", value)}
               />
               <CustomPicker
@@ -360,11 +358,8 @@ const styles = StyleSheet.create({
   },
   datepickerWrapper: {
     width: "90%",
-    justifyContent: "flex-start",
     backgroundColor: "#0000",
     borderRadius: 40,
-    padding: 2,
-    width: "90%",
     ...shadow,
   },
   loaderWrapper: {

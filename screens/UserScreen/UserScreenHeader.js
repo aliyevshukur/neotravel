@@ -24,16 +24,18 @@ export const UserScreenHeader = ({ profilePicture, fullName }) => {
         backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
       }}
     >
-      <Image
-        style={styles.profilePicture}
-        source={
-          profilePicture
-            ? { uri: profilePicture }
-            : theme == "light"
-            ? profileDefaultNormal
-            : profileDefaultDark
-        }
-      />
+      <View style={styles.imageWrapper}>
+        <Image
+          style={styles.profilePicture}
+          source={
+            profilePicture
+              ? { uri: profilePicture }
+              : theme == "light"
+              ? profileDefaultNormal
+              : profileDefaultDark
+          }
+        />
+      </View>
       <CustomText
         style={[
           styles.userName,
@@ -62,20 +64,25 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     paddingHorizontal: 28,
-    paddingVertical: 11,
+    paddingVertical: 7,
     alignItems: "center",
     width: width + 10,
     backgroundColor: COLORS.bgcLight,
     elevation: 5,
     marginTop: 7,
   },
-  profilePicture: {
+  imageWrapper: {
+    backgroundColor: "#0000",
+    width: 70,
+    height: 70,
+    elevation: 5,
     borderRadius: 50,
     marginRight: 33,
-    borderWidth: 0.5,
-    borderColor: COLORS.blackText,
-    width: 60,
-    height: 60,
+  },
+  profilePicture: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 50,
   },
   userName: {
     fontSize: 22,

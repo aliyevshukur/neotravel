@@ -17,6 +17,7 @@ import longRectangle from "../assets/images/inputComponents/longRectangle.png";
 import darkRectangle from "../assets/images/inputComponents/darkRectangle.png";
 import COLORS from "../styles/colors";
 import { CustomSvg } from "./cards/CustomSvg";
+import { shadow } from "../styles/commonStyles";
 
 export const CustomInput = ({
   style,
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     paddingRight: 14,
     flexDirection: "row",
     alignItems: "center",
-    elevation: 5,
+    ...shadow
   },
   search: {
     width: 16,

@@ -23,19 +23,19 @@
             },
             "size": {
               "small": {
-                "paddingVertical": 12,
+                "paddingVertical": 15,
                 "borderRadius": 20,
                 "borderWidth": 0
               },
               "medium": {
                 "borderRadius": 20,
                 "borderWidth": 0,
-                "paddingVertical": 12
+                "paddingVertical": 15
               },
               "large": {
                 "borderRadius": 20,
                 "borderWidth": 0,
-                "paddingVertical": 12
+                "paddingVertical": 15
               }
             }
           }
