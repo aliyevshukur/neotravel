@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 import {
   NotificationScreen,
-  SecondScreen,
   UserScreen,
   SignIn,
   ReservationScreen,

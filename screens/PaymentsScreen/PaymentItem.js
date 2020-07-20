@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, View, Image } from "react-native";
 import { CustomText } from "../../components";
 import COLORS from "../../styles/colors";
-import { useSelector } from "react-redux";
 
 export const PaymentItem = ({ paymentInfo, theme }) => {
   const readableDate = new Date(paymentInfo?.date).getDate()

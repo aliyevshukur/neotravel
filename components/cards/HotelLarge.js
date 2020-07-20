@@ -69,11 +69,8 @@ export const HotelLarge = connect(mapStateToProps, {
           <TouchableOpacity
             style={styles.heartHolder}
             onPress={() => {
-              console.log(item.hotelID);
               isLiked ? deleteHotel(item.hotelID) : addHotel(item.hotelID);
-              console.log("isLiked - " + isLiked);
               const id = fb?.auth?.currentUser?.uid;
-              console.log("userID" + id);
               setIsLiked((value) => !value);
               updateFavoriteList(id, true);
             }}

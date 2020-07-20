@@ -41,11 +41,8 @@ export const ImagePickerModal = ({ setIsShown, uploadImg }) => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    width: Dimensions.get("window").height / 6,
-    height: Dimensions.get("window").height / 6,
-    backgroundColor: COLORS.white,
-    borderWidth: 0.5,
-    borderRadius: Dimensions.get("window").height / 12,
+    width: "100%",
+    height: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
