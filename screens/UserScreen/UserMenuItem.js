@@ -35,9 +35,11 @@ export const UserMenuItem = connect(null, { logOut })(
         }}
       >
         <View style={styles.container}>
+          {/* SVG Icon */}
           <View style={styles.icon}>
             <CustomSvg name={icon} gradient={true} style={styles.svg} />
           </View>
+          {/* Menu item Label */}
           <CustomText
             style={{
               ...styles.itemText,

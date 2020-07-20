@@ -25,6 +25,7 @@ import { HotelLarge } from "../../../components/cards/HotelLarge";
 import { CustomSvg } from "../../../components/cards/CustomSvg";
 import { selectFavorites } from "../../../store/favorites";
 import { CreditCardBack } from "./CreditCardBack";
+import { shadow } from "../../../styles/commonStyles";
 
 const mapStateToProps = (state) => ({
   favorites: selectFavorites(state),
@@ -307,7 +308,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0000",
     borderRadius: 40,
     padding: 2,
-    elevation: 2,
+    ...shadow
   },
   cardForm: {
     marginTop: "55%",

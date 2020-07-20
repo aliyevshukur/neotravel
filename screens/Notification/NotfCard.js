@@ -46,24 +46,23 @@ export const NotfCard = ({ item = [], isLast }) => {
         {new Date(item.startDate).toDateString() + "-" + new Date(item.endDate).toDateString()}
       </CustomText>
       </View>
-      <View style={styles.icon}>
+      {/* <View style={styles.icon}>
         <CustomSvg name="chevronRight" gradient={isLast} style={styles.svg} />
-      </View>
+      </View> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    // flexDirection: "row",
+    // justifyContent: "center",
+    // alignItems: "center",
     paddingVertical: 30,
     backgroundColor: COLORS.bgcLight,
     paddingLeft: 28,
     borderBottomColor: COLORS.gray,
-    borderBottomWidth: 2
+    borderBottomWidth: 1,
   },
   description: {
     fontSize: 18,

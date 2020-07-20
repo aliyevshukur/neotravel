@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import { useSelector, connect } from "react-redux";
 
 import COLORS from "../../styles/colors";
 import { CustomInput, LargeHotelSlider } from "../../components";
 import { AppLayout } from "../../commons/AppLayout";
 import { CardSlider } from "../../components";
-
-import { ScrollView } from "react-native-gesture-handler";
 import { FilterRow } from "./components";
 import { MapViewSearch } from "../HomeScreen/SearchScreen/MapViewSearch";
 import { ListViewSearch } from "../HomeScreen/SearchScreen/ListViewSearch";
-import { hotels } from "../HomeScreen/SearchScreen";
 import { LoadingScreen } from "../../commons/LoadingScreen";
 import {
   getRecommendedHotels,
@@ -44,10 +41,11 @@ export const SearchInitial = connect(mapStateToProps, {
     loading,
   }) => {
     const theme = useSelector((state) => state.themeReducer).theme;
+
     const [searchValue, setSearchValue] = useState("");
     const [isOnSearch, setIsOnSearch] = useState(false);
     const [listType, setListType] = useState("list");
-
+    console.log("search value", searchResult);
     useEffect(() => {
       getHotelsOnDealsFB();
     }, []);
@@ -109,8 +107,8 @@ export const SearchInitial = connect(mapStateToProps, {
           </ScrollView>
         ) : loading ? (
           <LoadingScreen />
-        ) : searchResult.length != 0 ? (
-          <View>
+        ) : (
+          <View style={{width: '100%'}}>
             <FilterRow
               backScreen="initial"
               navigation={navigation}
@@ -122,31 +120,33 @@ export const SearchInitial = connect(mapStateToProps, {
                 setListType((v) => (v === "map" ? (v = "list") : (v = "map")))
               }
             />
-            <View style={styles.listContainer}>
-              {listType === "list" ? (
-                isOnSearch ? (
-                  <ScrollView>
-                    <LargeHotelSlider
-                      hotels={searchResult}
-                      onItemPress={(hotelInfo) =>
-                        navigation.navigate("HotelScreen", { hotelInfo })
-                      }
-                    />
-                  </ScrollView>
+            {searchResult.length != 0 ? (
+              <View style={styles.listContainer}>
+                {listType === "list" ? (
+                  isOnSearch ? (
+                    <ScrollView>
+                      <LargeHotelSlider
+                        hotels={searchResult}
+                        onItemPress={(hotelInfo) =>
+                          navigation.navigate("HotelScreen", { hotelInfo })
+                        }
+                      />
+                    </ScrollView>
+                  ) : (
+                    <ListViewSearch hotels={searchResult} />
+                  )
                 ) : (
-                  <ListViewSearch hotels={searchResult} />
-                )
-              ) : (
-                <MapViewSearch
-                  bottomListStyle={{ bottom: 110 }}
-                  hotels={searchResult}
-                  navigation={navigation}
-                />
-              )}
-            </View>
+                  <MapViewSearch
+                    bottomListStyle={{ bottom: 110 }}
+                    hotels={searchResult}
+                    navigation={navigation}
+                  />
+                )}
+              </View>
+            ) : (
+              <NoResult />
+            )}
           </View>
-        ) : (
-          <NoResult />
         )}
       </AppLayout>
     );
@@ -167,10 +167,6 @@ const styles = StyleSheet.create({
     color: COLORS.bgcLight,
     marginTop: 30,
   },
-  listContainer: {
-    // alignItems: "flex-end",
-  },
-
   dealsTitleStyle: {
     color: COLORS.bgcDark,
     marginTop: 21,

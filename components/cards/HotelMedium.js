@@ -24,11 +24,10 @@ export const HotelMedium = ({ cardInfo, onPress, style }) => {
       : null;
   };
 
-  const imageURL =
-    item.imgUrl.slice(0, item.imgUrl.indexOf("?")) + "?w=1.0&q=5";
+  // const imageURL =
+  //   item.imgUrl.slice(0, item.imgUrl.indexOf("?"));
 
   const [loaded, setLoaded] = useState(false);
-
   return (
     <TouchableOpacity
       style={[styles.container, { ...style }]}
@@ -54,7 +53,7 @@ export const HotelMedium = ({ cardInfo, onPress, style }) => {
         <Image
           resizeMode={"cover"}
           style={styles.bgImg}
-          source={{ uri: imageURL }}
+          source={{ uri: item.imgUrl }}
           onLoad={() => setLoaded(true)}
         />
         <CustomText style={styles.name}>
