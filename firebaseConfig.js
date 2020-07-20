@@ -19,6 +19,7 @@ const fb = {
   db: firebase.firestore(),
   auth: firebase.auth(),
   storage: firebase.storage(),
+  database: firebase.database(),
 };
 
 export default fb;
