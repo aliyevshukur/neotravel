@@ -144,6 +144,9 @@ export const logOut = () => (dispatch) => {
   try {
     const signOut = fb.auth.signOut();
     if (signOut) {
+      // logOut();
+      dispatch(setUserProfilePhoto(""));
+      dispatch(setUserName(""));
       dispatch(setStatus(false));
     }
   } catch (error) {

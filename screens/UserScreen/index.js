@@ -26,6 +26,7 @@ export const UserScreen = connect(mapStateToProps, {
 })(({ getUserInfo, userName, profilePhoto, navigation }) => {
   const theme = useSelector((state) => state.themeReducer).theme;
 
+  // Data of user menu items
   const menuItems = [
     {
       icon: "heartFull",
@@ -62,13 +63,13 @@ export const UserScreen = connect(mapStateToProps, {
     });
   }, []);
 
-  if (
-    profilePhoto &&
-    (fb?.auth?.currentUser?.photoURL !== profilePhoto ||
-      fb?.auth?.currentUser?.displayName !== userName)
-  ) {
-    return <LoadingScreen />;
-  }
+  // if (
+  //   profilePhoto &&
+  //   (fb?.auth?.currentUser?.photoURL !== profilePhoto ||
+  //     fb?.auth?.currentUser?.displayName !== userName)
+  // ) {
+  //   return <LoadingScreen />;
+  // }
 
   return (
     <AppLayout
