@@ -37,7 +37,7 @@ import {
   setLastSearchFieldValues,
 } from "../../store/hotels";
 import { updateFavoriteList, selectFavorites } from "../../store/favorites";
-import { selectUserId, getUserInfo } from "../../store/auth";
+import { selectUserId, getUserInfo, selectPushToken } from "../../store/auth";
 import {
   getUserDataFB,
   getUserData,
@@ -47,6 +47,11 @@ import {
 } from "../../store/user";
 import { shadow } from "../../styles/commonStyles";
 import { checkIfRoomReserved } from "../../store/reservation";
+<<<<<<< HEAD
+import { selectPayments, getPaymentsFromFirebase } from "../../store/payments";
+import { sendPushNotification } from "../../utils/pushNotification";
+=======
+>>>>>>> master
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
@@ -55,6 +60,8 @@ const mapStateToProps = (state) => ({
   userData: getUserData(state),
   loading: getLoading(state),
   errorMsg: getErrorMsg(state),
+  pushToken: selectPushToken(state),
+  reservations: selectPayments(state),
 });
 
 export const HomePage = connect(mapStateToProps, {
@@ -66,6 +73,7 @@ export const HomePage = connect(mapStateToProps, {
   getUserDataFB,
   fetchUserRequest,
   checkIfRoomReserved,
+  getPaymentsFromFirebase,
 })((props) => {
   const {
     navigation,
@@ -82,6 +90,9 @@ export const HomePage = connect(mapStateToProps, {
     getRecommendedHotelsFB,
     fetchUserRequest,
     checkIfRoomReserved,
+    pushToken,
+    reservations,
+    getPaymentsFromFirebase,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
@@ -104,6 +115,20 @@ export const HomePage = connect(mapStateToProps, {
   const dispatch = useDispatch();
   dispatch(setTabVisibility(true));
   const id = useSelector(selectUserId);
+  //Check if there is any reservation that startDate remain 1 day
+  const checkReservations = () => {
+    if (reservations.length) {
+      for (let i = 0; i < reservations.length; i++) {
+        if (reservations[i].startDate - Date.now() < 86400000) {
+          sendPushNotification(pushToken, reservations[i].hotelName);
+        }
+      }
+    }
+  };
+  getPaymentsFromFirebase(fb.auth.currentUser?.uid);
+  useEffect(() => {
+    checkReservations();
+  }, []);
 
   useEffect(() => {
     fb.auth.onAuthStateChanged((user) => {
