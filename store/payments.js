@@ -1,6 +1,7 @@
 import fb from "../firebaseConfig";
 
 const SET_PAYMENTS = "SET_PAYMENTS";
+const SET_INITIAL = "SET_INITIAL";
 
 export const MODULE_NAME = "paymentReducer";
 
@@ -23,6 +24,8 @@ export function reducer(state = initialState, { type, payload }) {
             payload,
           ],
         };
+      case SET_INITIAL:
+        return initialState;
       default:
         return state;
     }
@@ -35,13 +38,17 @@ export const setPayments = (payload) => ({
   type: SET_PAYMENTS,
   payload,
 });
+export const setInitial = (payload) => ({
+  type: SET_INITIAL,
+  payload,
+});
 
 
 // MIDDLEWARES
 export const getPaymentsFromFirebase = (userId) => async (dispatch) => {
   const arrayReserv = [];
   try{
-    const snapshot = await fb.db.collection('reservations').where('userId', '==', userId).get();
+    const snapshot = await fb.db.collection('reservations').where('userId', '==', userId).orderBy('reserveDate', 'desc').get();
     if (snapshot.empty) {
       console.log('reservation not found');
       return;

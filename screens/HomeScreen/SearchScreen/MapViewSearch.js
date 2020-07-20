@@ -80,9 +80,7 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
       <SmallCardSlider
         hotels={hotels}
         style={[styles.catalogueHorizontalMap, bottomListStyle]}
-        onItemPress={(hotelInfo) =>
-          navigation.navigate("HotelScreen", { hotelInfo })
-        }
+        onItemPress={hotelInfo => navigation.navigate("HotelScreen", {hotelInfo})}
       />
     </View>
   );

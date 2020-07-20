@@ -50,7 +50,10 @@ export const CustomInput = ({
     <View
       style={[
         styles.input,
-        { width: long ? "90%" : "60%", height: 54.5, marginTop: 10 },
+        { width: long ? "90%" : "60%",
+        height: 54.5,
+        marginTop: 10,
+        backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark},
         style,
       ]}
     >
@@ -102,7 +105,7 @@ const styles = StyleSheet.create({
     paddingRight: 14,
     flexDirection: "row",
     alignItems: "center",
-    elevation: 2,
+    elevation: 5,
   },
   search: {
     width: 16,
