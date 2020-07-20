@@ -37,7 +37,7 @@ import {
   setLastSearchFieldValues,
 } from "../../store/hotels";
 import { updateFavoriteList, selectFavorites } from "../../store/favorites";
-import { selectUserId, getUserInfo, selectPushToken } from "../../store/auth";
+import { selectUserId, getUserInfo, selectPushToken, setUserId } from "../../store/auth";
 import {
   getUserDataFB,
   getUserData,
@@ -59,6 +59,7 @@ const mapStateToProps = (state) => ({
   errorMsg: getErrorMsg(state),
   pushToken: selectPushToken(state),
   reservations: selectPayments(state),
+  userId :selectUserId(state),
 });
 
 export const HomePage = connect(mapStateToProps, {
@@ -71,6 +72,7 @@ export const HomePage = connect(mapStateToProps, {
   fetchUserRequest,
   checkIfRoomReserved,
   getPaymentsFromFirebase,
+  setUserId,
 })((props) => {
   const {
     navigation,
@@ -90,6 +92,8 @@ export const HomePage = connect(mapStateToProps, {
     pushToken,
     reservations,
     getPaymentsFromFirebase,
+    userId,
+    setUserId
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
@@ -122,15 +126,18 @@ export const HomePage = connect(mapStateToProps, {
       }
     }
   };
-  getPaymentsFromFirebase(fb.auth.currentUser?.uid);
   useEffect(() => {
-    checkReservations();
+    getPaymentsFromFirebase(userId);
+    setTimeout(() => {
+      checkReservations();
+    }, 5000)
   }, []);
 
   useEffect(() => {
     fb.auth.onAuthStateChanged((user) => {
       if (user) {
         getUserDataFB(user.uid);
+        setUserId(user.uid);
       } else {
         fetchUserRequest();
       }
