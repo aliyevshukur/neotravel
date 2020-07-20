@@ -90,7 +90,7 @@ export const sign = (email, password, isSignIn, userName = "John") => async (
       const signIn = await fb.auth.signInWithEmailAndPassword(email, password);
       if (signIn) {
         const currentUser = fb.auth.currentUser;
-        getPaymentsFromFirebase(currentUser.uid);
+        // getPaymentsFromFirebase(currentUser.uid);
         const token = await registerForPushNotificationsAsync(currentUser);
         dispatch(setPushToken(token));
         dispatch(setStatus(true));
