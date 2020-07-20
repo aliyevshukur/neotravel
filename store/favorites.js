@@ -54,7 +54,6 @@ export const updateFavoriteList = (uid, isWrite = false) => async (
   getState
 ) => {
   try {
-    console.log(getState().favorite.favorites);
     if (isWrite) {
       await fb.db
         .collection("users")
@@ -71,10 +70,8 @@ export const updateFavoriteList = (uid, isWrite = false) => async (
           .get()
           .then((doc) => dispatch(pasteFavorites(doc.data().favorites)));
       } else {
-        console.log("there is not id");
       }
     }
-    console.log(getState().favorite.favorites);
   } catch (error) {
     console.log(error.message + " Nurmehemmed ");
   }

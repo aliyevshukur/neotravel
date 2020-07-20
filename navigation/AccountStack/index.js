@@ -6,10 +6,10 @@ import {
   StyleSheet,
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { useSelector } from "react-redux";
 
 import {
   Favorites,
-  SecondScreen,
   HelpScreen,
   UserScreen,
   SettingsPage,
@@ -17,7 +17,7 @@ import {
 } from "../../screens";
 import { CustomSvg } from "../../components";
 import COLORS from "../../styles/colors";
-import { useSelector } from "react-redux";
+import { shadow } from "../../styles/commonStyles";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -33,10 +33,6 @@ const navScreens = [
   {
     name: "help",
     component: HelpScreen,
-  },
-  {
-    name: "promotions",
-    component: SecondScreen,
   },
   {
     name: "settings",
@@ -60,9 +56,12 @@ export const AccountStack = ({ route, navigation }) => {
         headerTitleAlign: "left",
         headerTitleStyle: {
           ...styles.titleText,
-          color: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+          color: theme == "light" ? COLORS.bgcDark : COLORS.bgcLight,
         },
-        headerStyle: styles.header,
+        headerStyle: {
+          elevation: 0,
+          backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+        },
         headerLeft: () => (
           <TouchableNativeFeedback onPress={() => navigation.navigate("user")}>
             <View style={styles.backBtn}>
@@ -70,7 +69,7 @@ export const AccountStack = ({ route, navigation }) => {
                 name={"chevronLeft"}
                 style={{
                   ...styles.chevronLeft,
-                  color: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+                  color: theme == "light" ? COLORS.bgcDark : COLORS.bgcLight,
                 }}
               />
             </View>
@@ -94,33 +93,7 @@ export const AccountStack = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    width: "100%",
-    paddingTop: 50,
-  },
-  gradientHeader: {
-    // position: "absolute",
-    // top: -880,
-    // left: -(1000 - screenWidth) / 2,
-    // width: 1000,
-    // borderBottomLeftRadius: 1000,
-    // borderBottomRightRadius: 1000,
-    // elevation: 5,
-    // zIndex: -1,
-    // width: screenWidth,
-    // height: 100,
-    // borderRadius: 50,
-    // backgroundColor: COLORS.pink,
-    // transform: [{ scaleX: 2 }],
-  },
-  header: {
-    backgroundColor: COLORS.gradientPink,
-    elevation: 0,
-    shadowOffset: {
-      height: 0,
-    },
-    shadowRadius: 0,
-  },
+  header: {},
   titleHolder: {
     flexDirection: "row",
     alignItems: "center",

@@ -10,9 +10,7 @@ import {
 import fb from '../../firebaseConfig';
 import { connect, useSelector } from "react-redux";
 
-import { CustomText, CustomSvg } from "../../components";
 import COLORS from "../../styles/colors";
-import { LinearGradient } from "expo-linear-gradient";
 import { PaymentItem } from "./PaymentItem";
 
 const screenWidth = Dimensions.get("window").width;
@@ -81,7 +79,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: "100%",
-    paddingTop: 50,
+    paddingTop: 10,
   },
   gradientHeader: {
     position: "absolute",
@@ -125,6 +123,6 @@ const styles = StyleSheet.create({
     // paddingBottom: 90,
   },
   paymentList: {
-    paddingTop: 40,
+    paddingTop: 10,
   },
 });
