@@ -83,7 +83,8 @@ export const setPushToken = (payload) => ({
 });
 
 export const sign = (email, password, isSignIn, userName = "John") => async (
-  dispatch
+  dispatch,
+  getState
 ) => {
   try {
     if (!isSignIn) {
@@ -91,8 +92,12 @@ export const sign = (email, password, isSignIn, userName = "John") => async (
       if (signIn) {
         const currentUser = fb.auth.currentUser;
         // getPaymentsFromFirebase(currentUser.uid);
-        const token = await registerForPushNotificationsAsync(currentUser);
-        dispatch(setPushToken(token));
+        const token = await registerForPushNotificationsAsync(currentUser).then(
+          (token) => {
+            dispatch(setPushToken(token));
+          }
+        );
+        console.log("hello");
         dispatch(setStatus(true));
       }
     } else {

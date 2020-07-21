@@ -1,4 +1,4 @@
-export const sendPushNotification = (token, hotelInfo) => {
+export const sendPushNotification = (token, userName) => {
   let response = fetch("https://exp.host/--/api/v2/push/send", {
     method: "POST",
     headers: {
@@ -8,8 +8,8 @@ export const sendPushNotification = (token, hotelInfo) => {
     body: JSON.stringify({
       to: `${token}`,
       sound: "default",
-      title: "Dear User",
-      body: `You have reservation for ${hotelInfo} hotel tomorrow.`,
+      title: `Dear ${userName.split(" ")[0]}`,
+      body: `You have reservation for tomorrow.`,
     }),
   }).catch((error) => console.log(error));
 };
