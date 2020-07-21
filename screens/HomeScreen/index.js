@@ -37,7 +37,12 @@ import {
   setLastSearchFieldValues,
 } from "../../store/hotels";
 import { updateFavoriteList, selectFavorites } from "../../store/favorites";
-import { selectUserId, getUserInfo, selectPushToken, setUserId } from "../../store/auth";
+import {
+  selectUserId,
+  getUserInfo,
+  selectPushToken,
+  setUserId,
+} from "../../store/auth";
 import {
   getUserDataFB,
   getUserData,
@@ -59,7 +64,7 @@ const mapStateToProps = (state) => ({
   errorMsg: getErrorMsg(state),
   pushToken: selectPushToken(state),
   reservations: selectPayments(state),
-  userId :selectUserId(state),
+  userId: selectUserId(state),
 });
 
 export const HomePage = connect(mapStateToProps, {
@@ -93,7 +98,7 @@ export const HomePage = connect(mapStateToProps, {
     reservations,
     getPaymentsFromFirebase,
     userId,
-    setUserId
+    setUserId,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
@@ -130,7 +135,7 @@ export const HomePage = connect(mapStateToProps, {
     getPaymentsFromFirebase(userId);
     setTimeout(() => {
       checkReservations();
-    }, 5000)
+    }, 5000);
   }, []);
 
   useEffect(() => {
@@ -207,7 +212,11 @@ export const HomePage = connect(mapStateToProps, {
     navigation.navigate("HotelScreen", { hotelInfo: item });
   };
 
-  if (loading && recommendedHotels.loading) {
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (recommendedHotels.loading) {
     return <LoadingScreen />;
   }
 

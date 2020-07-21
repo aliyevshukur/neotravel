@@ -45,7 +45,6 @@ export const SearchInitial = connect(mapStateToProps, {
     const [searchValue, setSearchValue] = useState("");
     const [isOnSearch, setIsOnSearch] = useState(false);
     const [listType, setListType] = useState("list");
-    console.log("search value", searchResult);
     useEffect(() => {
       getHotelsOnDealsFB();
     }, []);

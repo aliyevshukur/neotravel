@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     color: COLORS.grayDark,
   },
   date: {
-    fontSize: 8,
+    fontSize: 14,
     color: COLORS.gray,
   },
   priceHolder: {
