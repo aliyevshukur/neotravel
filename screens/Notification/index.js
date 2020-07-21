@@ -7,7 +7,7 @@ import {
   Dimensions,
   Alert,
 } from "react-native";
-import {connect, useSelector} from 'react-redux'
+import { connect, useSelector } from "react-redux";
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
@@ -18,8 +18,12 @@ import { FlatList } from "react-native-gesture-handler";
 import * as Permissions from "expo-permissions";
 import * as Notifications from "expo-notifications";
 import fb from "../../firebaseConfig";
-import { getNotifications, getNotificationsFB, getNotificationsLoading, } from "../../store/notification";
-import {LoadingScreen} from '../../commons/LoadingScreen';
+import {
+  getNotifications,
+  getNotificationsFB,
+  getNotificationsLoading,
+} from "../../store/notification";
+import { LoadingScreen } from "../../commons/LoadingScreen";
 
 const mapStateToProps = (state) => ({
   notifications: getNotifications(state),
@@ -27,27 +31,18 @@ const mapStateToProps = (state) => ({
 });
 
 export const NotificationScreen = connect(mapStateToProps, {
-  getNotificationsFB
-})(({
-  navigation,
-  notifications,
   getNotificationsFB,
-  loading
-}) => {
-  
+})(({ navigation, notifications, getNotificationsFB, loading }) => {
   const currentUserId = fb.auth.currentUser.uid;
   const theme = useSelector((state) => state.themeReducer).theme;
   const searchRoomHandler = () => {
     navigation.navigate("SearchStack");
   };
 
-useEffect(() => {
-  getNotificationsFB(currentUserId);
-}, []);
-
-// if(loading){
-//   return <LoadinScreen/>
-// }
+  useEffect(() => {
+    getNotificationsFB(currentUserId);
+  }, []);
+  console.log("notfs", notifications);
   return (
     <View
       style={{
@@ -64,26 +59,31 @@ useEffect(() => {
             <CustomText weight="bold" style={styles.dateText}>
               Nov 12 - 24{" "}
             </CustomText>
-            <CustomButton onPress={searchRoomHandler} title={"Search a hotel"} style={styles.searchBtn}/>
+            <CustomButton
+              onPress={searchRoomHandler}
+              title={"Search a hotel"}
+              style={styles.searchBtn}
+            />
           </View>
         </ImageBackground>
       </View>
-      {!loading ? <FlatList
-        contentContainerStyle={styles.notfList}
-        ItemSeparatorComponent={({ highlighted }) => (
-          <View style={[styles.separator, highlighted && { marginLeft: 0 }]} />
-        )}
-        data={notifications}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item, index }) => {
-          return (
-            <NotfCard
-              content={item.content}
-              key={index}
+      {!loading ? (
+        <FlatList
+          contentContainerStyle={styles.notfList}
+          ItemSeparatorComponent={({ highlighted }) => (
+            <View
+              style={[styles.separator, highlighted && { marginLeft: 0 }]}
             />
-          );
-        }}
-      /> : <LoadingScreen/>}
+          )}
+          data={notifications}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => {
+            return <NotfCard content={item.content} key={index} />;
+          }}
+        />
+      ) : (
+        <LoadingScreen />
+      )}
     </View>
   );
 });

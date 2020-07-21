@@ -7,15 +7,18 @@ const FETCH_NOTIFICATIONS_ERROR = "FETCH_NOTIFICATIONS_ERROR";
 const FETCH_NOTIFICATIONS_SUCCESS = "FETCH_NOTIFICATIONS_SUCCESS";
 
 export const MODULE_NAME = "notificationReducer";
-export const getNotifications = (state) => state[MODULE_NAME].notifications.data;
-export const getNotificationsLoading = (state) => state[MODULE_NAME].notifications.loading;
-export const getNotificationsError = (state) => state[MODULE_NAME].notifications.error;
+export const getNotifications = (state) =>
+  state[MODULE_NAME].notifications.data;
+export const getNotificationsLoading = (state) =>
+  state[MODULE_NAME].notifications.loading;
+export const getNotificationsError = (state) =>
+  state[MODULE_NAME].notifications.error;
 
 const initalState = {
   notifications: {
     data: [],
     loading: false,
-    error: ""
+    error: "",
   },
 };
 
@@ -35,6 +38,7 @@ export function reducer(state = initalState, { type, payload }) {
         ...state,
         notifications: {
           ...state.notifications,
+          loading: false,
           errorMsg: payload,
         },
       };
@@ -83,19 +87,19 @@ export const sendNotificationFB = (payload) => (dispatch) => {
   } catch (error) {
     console.log("ERROR", error);
   }
-}
+};
 
 export const getNotificationsFB = (userID) => async (dispatch) => {
   try {
+    console.log("userID", userID);
     dispatch(fetchNotificationsRequest());
     const notificationsRef = fb.db
       .collection("notifications")
       .where("userID", "==", userID);
     const notificationsSnap = await notificationsRef.get();
 
+    const notificationsArr = [];
     if (notificationsSnap) {
-      const notificationsArr = [];
-
       notificationsSnap.forEach((doc) => {
         notificationsArr.push({
           id: doc.id,
@@ -110,4 +114,4 @@ export const getNotificationsFB = (userID) => async (dispatch) => {
   } catch (error) {
     dispatch(fetchNotificationsError(error));
   }
-}
+};

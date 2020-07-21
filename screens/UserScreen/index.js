@@ -63,14 +63,6 @@ export const UserScreen = connect(mapStateToProps, {
     });
   }, []);
 
-  // if (
-  //   profilePhoto &&
-  //   (fb?.auth?.currentUser?.photoURL !== profilePhoto ||
-  //     fb?.auth?.currentUser?.displayName !== userName)
-  // ) {
-  //   return <LoadingScreen />;
-  // }
-
   return (
     <AppLayout
       style={{
