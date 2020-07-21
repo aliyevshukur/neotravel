@@ -1,4 +1,5 @@
 import fb from "../firebaseConfig";
+import { sendPushNotification } from "../utils/pushNotification";
 
 const SET_PAYMENTS = "SET_PAYMENTS";
 const SET_INITIAL = "SET_INITIAL";
@@ -37,8 +38,12 @@ export const setInitial = (payload) => ({
 });
 
 // MIDDLEWARES
-export const getPaymentsFromFirebase = (userId) => async (dispatch) => {
+export const getPaymentsFromFirebase = (userId, token = null) => async (
+  dispatch,
+  getState
+) => {
   dispatch(setInitial());
+  console.log(userId);
   const arrayReserv = [];
   try {
     const snapshot = await fb.db
@@ -56,6 +61,13 @@ export const getPaymentsFromFirebase = (userId) => async (dispatch) => {
           reserveDate: doc.data().reserveDate,
           startDate: doc.data().startDate,
         });
+        console.log("token" + getState().auth.pushToken);
+        if (doc.data().startDate - Date.now() < 86400000) {
+          sendPushNotification(
+            getState().auth.pushToken,
+            getState().auth.userName
+          );
+        }
       });
     }
     arrayReserv.forEach((item) => {

@@ -121,21 +121,9 @@ export const HomePage = connect(mapStateToProps, {
   const dispatch = useDispatch();
   dispatch(setTabVisibility(true));
   const id = useSelector(selectUserId);
-  //Check if there is any reservation that startDate remain 1 day
-  const checkReservations = () => {
-    if (reservations.length) {
-      for (let i = 0; i < reservations.length; i++) {
-        if (reservations[i].startDate - Date.now() < 86400000) {
-          sendPushNotification(pushToken, reservations[i].hotelName);
-        }
-      }
-    }
-  };
+
   useEffect(() => {
     getPaymentsFromFirebase(userId);
-    setTimeout(() => {
-      checkReservations();
-    }, 5000);
   }, []);
 
   useEffect(() => {
