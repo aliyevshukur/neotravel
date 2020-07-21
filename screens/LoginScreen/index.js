@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { connect } from "react-redux";
+import { connect, useSelector} from "react-redux";
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
@@ -16,6 +16,8 @@ export const LoginScreen = connect(myStateToProps, { sign })(
       email: "",
       password: "",
     });
+
+    const theme = useSelector(state => state.themeReducer).theme;
 
     useEffect(() => {
       if (status) navigation.navigate("BottomTabNav");
@@ -47,7 +49,7 @@ export const LoginScreen = connect(myStateToProps, { sign })(
     };
 
     return (
-      <View style={styles.container}>
+      <View style={{...styles.container, backgroundColor: theme=="light" ? COLORS.bgcLight : COLORS.bgcDark}}>
         <View style={styles.wrapper}>
           <CustomText style={styles.header}>Login</CustomText>
 

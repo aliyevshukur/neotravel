@@ -376,6 +376,7 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
 ) => {
   dispatch(startSearchRequest());
 
+  let finalSearchResult = [];
   const hotelData = [];
   const hotelIDs = [];
   // Filter by city and set searched hotelData and hotelIDs
@@ -388,45 +389,48 @@ export const searchHotelsFB = (place, guests = 0, dateRange = {}) => async (
 
   // Return empty array if result is empty
   if (hotelIDs.length !== 0) {
-    // Filter rooms of filtered hotels by guest size
-    const roomsRef = fb.db
-      .collection("rooms")
-      .where("hotelID", "in", hotelIDs)
-      .where("maxGuests", ">=", guests);
-    const roomsByGuestsSnap = await roomsRef.get();
-    const roomsByGuests = roomsByGuestsSnap.docs.map((doc) => {
-      return {
-        id: doc.id,
-        ...doc.data(),
-      };
-    });
-
-    const roomIDs = [];
-    // Get rooms of searched city's hotels
-    const roomsByHotels = roomsByGuests.filter((room) => {
-      if (hotelIDs.includes(room.hotelID)) {
-        roomIDs.push(room.id);
-        return true;
-      } else {
-        return false;
-      }
-    });
-    let avialableHotelIDs = [];
-    // Check if dateRange entered
     if (Object.keys(dateRange).length != 0) {
+      // Filter rooms of filtered hotels by guest size
+      const roomsRef = fb.db
+        .collection("rooms")
+        .where("hotelID", "in", hotelIDs)
+        .where("maxGuests", ">=", guests);
+      const roomsByGuestsSnap = await roomsRef.get();
+      const roomsByGuests = roomsByGuestsSnap.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+
+      const roomIDs = [];
+      // Get rooms of searched city's hotels
+      const roomsByHotels = roomsByGuests.filter((room) => {
+        if (hotelIDs.includes(room.hotelID)) {
+          roomIDs.push(room.id);
+          return true;
+        } else {
+          return false;
+        }
+      });
+      let avialableHotelIDs = [];
+      // Check if dateRange entered
+
       // Get available hotels by entered date
       avialableHotelIDs = await getAvailableHotels(
         roomsByHotels,
         dateRange,
         roomIDs
       );
+
+      hotelData.forEach((hotel) => {
+        if (avialableHotelIDs.includes(hotel.id)) {
+          finalSearchResult.push(hotel);
+        }
+      });
+    } else {
+      finalSearchResult = [...hotelData];
     }
-    const finalSearchResult = [];
-    hotelData.forEach((hotel) => {
-      if (avialableHotelIDs.includes(hotel.id)) {
-        finalSearchResult.push(hotel);
-      }
-    });
 
     if (finalSearchResult.length !== 0) {
       dispatch(setSearchHotelResults(finalSearchResult));

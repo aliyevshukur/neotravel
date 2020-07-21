@@ -1,15 +1,8 @@
 import React from "react";
-import {
-  StyleSheet,
-  Image,
-  View,
-  Dimensions,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, Image, View, Dimensions } from "react-native";
 
 import { CustomText } from "../../components";
 import COLORS from "../../styles/colors";
-import fb from "../../firebaseConfig";
 import { useSelector } from "react-redux";
 import profileDefaultNormal from "../../assets/images/UserScreen/profilePhotoNormal.png";
 import profileDefaultDark from "../../assets/images/UserScreen/profilePhotoDark.png";
@@ -24,6 +17,7 @@ export const UserScreenHeader = ({ profilePicture, fullName }) => {
         backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
       }}
     >
+      {/* Profile photo */}
       <View style={styles.imageWrapper}>
         <Image
           style={styles.profilePicture}
@@ -36,6 +30,7 @@ export const UserScreenHeader = ({ profilePicture, fullName }) => {
           }
         />
       </View>
+      {/* Full name */}
       <CustomText
         style={[
           styles.userName,
@@ -48,13 +43,6 @@ export const UserScreenHeader = ({ profilePicture, fullName }) => {
       </CustomText>
     </View>
   );
-  // : (
-  //   <ActivityIndicator
-  //     color={COLORS.gradientPink}
-  //     size="small"
-  //     style={{ alignItems: "center", justifyContent: "center" }}
-  //   />
-  // );
 };
 
 const width = Dimensions.get("window").width;

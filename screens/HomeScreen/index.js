@@ -200,7 +200,11 @@ export const HomePage = connect(mapStateToProps, {
     navigation.navigate("HotelScreen", { hotelInfo: item });
   };
 
-  if (loading && recommendedHotels.loading) {
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (recommendedHotels.loading) {
     return <LoadingScreen />;
   }
 
