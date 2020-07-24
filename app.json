@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "react-native-final-project",
+    "name": "NeoTravel",
     "slug": "react-native-final-project",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/hotel.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,6 +17,10 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.neotravel.neotravel",
+      "versionCode": 1
     }
   }
 }

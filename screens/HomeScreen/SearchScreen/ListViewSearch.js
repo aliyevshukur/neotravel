@@ -12,8 +12,8 @@ import { SmallCardSlider, LargeHotelSlider } from "../../../components";
 export const ListViewSearch = ({ hotels, navigation }) => {
   const theme = useSelector((state) => state.themeReducer).theme;
 
+  //navigate the screen on press
   const onItemPress = (item) => {
-    
     navigation.navigate("HotelScreen", { hotelInfo: item });
   };
 

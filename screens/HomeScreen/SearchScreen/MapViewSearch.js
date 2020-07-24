@@ -17,13 +17,6 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
 
   const theme = useSelector((state) => state.themeReducer).theme;
 
-  const initialRegion = {
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  };
-
   return (
     <View>
       <MapView
@@ -46,8 +39,6 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
               coordinate={marker.marker}
               latitudeDelta={0.04}
               longitudeDelta={0.05}
-              //   title={marker.title}
-              //   description={marker.description}
             >
               <CustomButton
                 style={[
@@ -80,7 +71,9 @@ export const MapViewSearch = ({ hotels, navigation, bottomListStyle }) => {
       <SmallCardSlider
         hotels={hotels}
         style={[styles.catalogueHorizontalMap, bottomListStyle]}
-        onItemPress={hotelInfo => navigation.navigate("HotelScreen", {hotelInfo})}
+        onItemPress={(hotelInfo) =>
+          navigation.navigate("HotelScreen", { hotelInfo })
+        }
       />
     </View>
   );
@@ -92,20 +85,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 50,
   },
-  markerCallView: {
-    // flex: 1,
-    // justifyContent: "center",
-    // alignItems: "center",
-  },
   map: {
-    // flex: 1,
     width: Dimensions.get("window").width,
     height: "100%",
-    // alignItems: "flex-end",
   },
   markerBtn: {
-    // width: 120,
-    // height: 40,
     fontSize: 3,
     borderRadius: 40,
   },
