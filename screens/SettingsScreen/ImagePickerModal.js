@@ -1,16 +1,9 @@
 import React from "react";
+import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
 
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  Image,
-} from "react-native";
-import { CustomText } from "../../components";
-import COLORS from "../../styles/colors";
 import gallery from "../../assets/images/Settings/gallery.png";
 import camera from "../../assets/images/Settings/camera.png";
+import { CustomText } from "../../components";
 
 export const ImagePickerModal = ({ setIsShown, uploadImg }) => {
   return (

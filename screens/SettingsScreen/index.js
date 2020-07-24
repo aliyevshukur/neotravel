@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
   Image,
-  Dimensions,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
@@ -17,16 +16,13 @@ import {
   updateUserName,
 } from "../../store/auth";
 import fb from "../../firebaseConfig";
-
-import { CustomText } from "../../components";
 import profileDefaultNormal from "../../assets/images/UserScreen/profilePhotoNormal.png";
 import profileDefaultDark from "../../assets/images/UserScreen/profilePhotoDark.png";
 import { uploadImg } from "../../utils/imageUpload";
 import { getCameraPermissions } from "../../utils/getCameraPermission";
 import { ImagePickerModal } from "./ImagePickerModal";
-import COLORS from "../../styles/colors";
 import { UserInfo } from "./UserInfo";
-import { shadow } from "../../styles/commonStyles";
+import COLORS from "../../styles/colors";
 
 const mapStateToProps = (state) => ({
   profilePhoto: selectUserPhotoUrl(state),
