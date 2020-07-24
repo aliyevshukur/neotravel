@@ -4,14 +4,10 @@ import { connect, useSelector } from "react-redux";
 
 import { CustomButton, CustomInput, CustomText } from "../../components";
 import COLORS from "../../styles/colors";
-import { sign, logOut, selectAuthStatus } from "../../store/auth";
-
-const mapStateToProps = (state) => ({
-  status: selectAuthStatus(state),
-});
+import { sign } from "../../store/auth";
 
 export const RegisterScreen = connect(null, { sign })(
-  ({ navigation, sign, status }) => {
+  ({ navigation, sign }) => {
     const [formValues, setFormValues] = useState({
       name: "",
       surname: "",
@@ -19,6 +15,7 @@ export const RegisterScreen = connect(null, { sign })(
       password: "",
     });
 
+    // Data for looping input fields
     const fromFields = ["name", "surname", "email", "password"];
     
     const theme = useSelector(state => state.themeReducer).theme;
@@ -29,6 +26,8 @@ export const RegisterScreen = connect(null, { sign })(
         [name]: value,
       });
     };
+
+    // Check if inputs are valid and create new account
     const handleFormSubmit = () => {
       for (let field in formValues) {
         if (formValues[field].trim() === "") {

@@ -45,10 +45,13 @@ export const SearchInitial = connect(mapStateToProps, {
     const [searchValue, setSearchValue] = useState("");
     const [isOnSearch, setIsOnSearch] = useState(false);
     const [listType, setListType] = useState("list");
+
+    // Fetch hotels on deals from Firebase
     useEffect(() => {
       getHotelsOnDealsFB();
     }, []);
 
+    // Format input and search with keyword
     const submitSearchHandler = () => {
       if (searchValue.trim() !== "") {
         const formattedPlace =
@@ -60,6 +63,7 @@ export const SearchInitial = connect(mapStateToProps, {
         setIsOnSearch(false);
       }
     };
+
     if (hotelsOnDeals.loading) {
       return <LoadingScreen />;
     }
@@ -81,6 +85,7 @@ export const SearchInitial = connect(mapStateToProps, {
           placeHolder="Search for a city, area, or a hotel"
         />
         {!isOnSearch ? (
+          // If user is not searching show hotels on deals and recommended hotels
           <ScrollView>
             <CardSlider
               title="recommended"
@@ -105,9 +110,11 @@ export const SearchInitial = connect(mapStateToProps, {
             />
           </ScrollView>
         ) : loading ? (
+          // If user is searching and data is not loaded yet show loading
           <LoadingScreen />
         ) : (
-          <View style={{width: '100%'}}>
+          // If user is searching and data loaded show content
+          <View style={{ width: "100%" }}>
             <FilterRow
               backScreen="initial"
               navigation={navigation}
@@ -120,6 +127,7 @@ export const SearchInitial = connect(mapStateToProps, {
               }
             />
             {searchResult.length != 0 ? (
+              // If there is result show it, else show NoResult component
               <View style={styles.listContainer}>
                 {listType === "list" ? (
                   isOnSearch ? (
