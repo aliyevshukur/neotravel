@@ -1,8 +1,8 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { setTheme } from "../../store/theme";
 
+import { setTheme } from "../../store/theme";
 import {
   CustomText,
   CustomInput,
@@ -21,6 +21,7 @@ export const UserInfo = ({
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.themeReducer).theme;
 
+  //toggle the theme
   const darkHandler = (value) => {
     value ? dispatch(setTheme("dark")) : dispatch(setTheme("light"));
   };
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     justifyContent: "center",
     alignItems: "flex-start",
-    width: '100%',
+    width: "100%",
   },
   label: {
     fontSize: 22,
