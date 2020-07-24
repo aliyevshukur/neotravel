@@ -11,10 +11,9 @@ import {
   BackHandler,
 } from "react-native";
 import { useNavigationState } from "@react-navigation/native";
-
 import { connect, useSelector, useDispatch } from "react-redux";
-import { setTabVisibility } from "../../store/navReducer";
 
+import { setTabVisibility } from "../../store/navReducer";
 import fb from "../../firebaseConfig";
 import bgcImage from "../../assets/images/homeScreen/homepage-background.png";
 import COLORS from "../../styles/colors";
@@ -53,7 +52,6 @@ import {
 import { shadow } from "../../styles/commonStyles";
 import { checkIfRoomReserved } from "../../store/reservation";
 import { selectPayments, getPaymentsFromFirebase } from "../../store/payments";
-import { sendPushNotification } from "../../utils/pushNotification";
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
@@ -146,6 +144,7 @@ export const HomePage = connect(mapStateToProps, {
     }
   }, [userData]);
 
+  //set field values on text change
   const onFieldChange = (name, value) => {
     setFieldValues({
       ...fieldValues,
@@ -153,6 +152,7 @@ export const HomePage = connect(mapStateToProps, {
     });
   };
 
+  //check the fields properties on submit
   const onFormSubmit = async () => {
     for (const key in fieldValues) {
       if (key === "dateRange") {
@@ -196,6 +196,7 @@ export const HomePage = connect(mapStateToProps, {
     setIsSearchLoading(false);
   };
 
+  //navigate the screen on press
   const cardPressed = (item) => {
     navigation.navigate("HotelScreen", { hotelInfo: item });
   };
