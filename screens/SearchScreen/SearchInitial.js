@@ -11,19 +11,23 @@ import { MapViewSearch } from "../HomeScreen/SearchScreen/MapViewSearch";
 import { ListViewSearch } from "../HomeScreen/SearchScreen/ListViewSearch";
 import { LoadingScreen } from "../../commons/LoadingScreen";
 import {
-  getRecommendedHotels,
   getHotelsOnDealsFB,
-  getHotelsOnDeals,
+  getHotelsOnDealsData,
+  getHotelsOnDealsLoading,
+} from "../../store/hotels/hotelsOnDeals";
+import {
   searchHotelsFB,
   getSearchResult,
   getSearchLoading,
-} from "../../store/hotels";
+} from "../../store/hotels/searchAndFilter";
+import { getRecommendedHotelsData } from "../../store/hotels/recommendedHotels";
 import { NoResult } from "../../commons/NoResult";
 
 const mapStateToProps = (state) => ({
-  recommendedHotels: getRecommendedHotels(state),
-  hotelsOnDeals: getHotelsOnDeals(state),
+  recommendedHotels: getRecommendedHotelsData(state),
+  hotelsOnDeals: getHotelsOnDealsData(state),
   searchResult: getSearchResult(state),
+  hotelsOnDealsLoading: getHotelsOnDealsLoading(state),
   loading: getSearchLoading(state),
 });
 
@@ -36,6 +40,7 @@ export const SearchInitial = connect(mapStateToProps, {
     recommendedHotels,
     getHotelsOnDealsFB,
     hotelsOnDeals,
+    hotelsOnDealsLoading,
     searchHotelsFB,
     searchResult,
     loading,
@@ -64,7 +69,7 @@ export const SearchInitial = connect(mapStateToProps, {
       }
     };
 
-    if (hotelsOnDeals.loading) {
+    if (hotelsOnDealsLoading) {
       return <LoadingScreen />;
     }
 
@@ -91,7 +96,7 @@ export const SearchInitial = connect(mapStateToProps, {
               title="recommended"
               titleStyle={styles.recommendedTitleStyle}
               containerStyle={styles.recommendedContainerStyle}
-              hotelsList={recommendedHotels.data}
+              hotelsList={recommendedHotels}
               onPressItem={(hotelInfo) =>
                 navigation.navigate("HotelScreen", { hotelInfo: hotelInfo })
               }
@@ -103,7 +108,7 @@ export const SearchInitial = connect(mapStateToProps, {
                 color: theme == "light" ? COLORS.blackText : COLORS.white,
               }}
               containerStyle={styles.dealsContainerStyle}
-              hotelsList={hotelsOnDeals.data}
+              hotelsList={hotelsOnDeals}
               onPressItem={(hotelInfo) =>
                 navigation.navigate("HotelScreen", { hotelInfo })
               }

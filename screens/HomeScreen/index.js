@@ -27,14 +27,16 @@ import {
   CustomPicker,
   CustomRangeDatepicker,
 } from "../../components";
+import { getHotelListFB } from "../../store/hotels/hotelList";
 import {
-  getHotelListFB,
   searchHotelsFB,
   getSearchResult,
-  getRecommendedHotelsFB,
-  getRecommendedHotels,
   setLastSearchFieldValues,
-} from "../../store/hotels";
+} from "../../store/hotels/searchAndFilter";
+import {
+  getRecommendedHotelsFB,
+  getRecommendedHotelsData,
+} from "../../store/hotels/recommendedHotels";
 import { updateFavoriteList, selectFavorites } from "../../store/favorites";
 import {
   selectUserId,
@@ -55,7 +57,7 @@ import { selectPayments, getPaymentsFromFirebase } from "../../store/payments";
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
-  recommendedHotels: getRecommendedHotels(state),
+  recommendedHotels: getRecommendedHotelsData(state),
   favorites: selectFavorites(state),
   userData: getUserData(state),
   loading: getLoading(state),
@@ -288,7 +290,7 @@ export const HomePage = connect(mapStateToProps, {
               {texts.catalogueName}
             </CustomText>
             <FlatList
-              data={recommendedHotels.data}
+              data={recommendedHotels}
               horizontal={true}
               renderItem={({ item }) => {
                 const isLiked = favorites.includes(item.id);

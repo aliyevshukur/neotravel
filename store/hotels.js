@@ -26,10 +26,13 @@ const FETCH_HOTELS_ON_DEALS_SUCCESS = "FETCH_HOTELS_ON_DEALS_SUCCESS";
 
 export const MODULE_NAME = "hotels";
 export const getHotelList = (state) => state[MODULE_NAME].hotelList;
+export const getRoomList = (state) => state[MODULE_NAME].roomList;
+
 export const getRecommendedHotels = (state) =>
   state[MODULE_NAME].recommendedHotels;
+
 export const getHotelsOnDeals = (state) => state[MODULE_NAME].hotelsOnDeals;
-export const getRoomList = (state) => state[MODULE_NAME].roomList;
+
 export const getSearchResult = (state) =>
   state[MODULE_NAME].search.searchResult;
 export const getSearchLoading = (state) => state[MODULE_NAME].search.loading;
@@ -187,12 +190,14 @@ export const setHotelList = (payload) => ({
   type: SET_HOTEL_LIST,
   payload,
 });
-export const setHotelsOnDeals = (payload) => ({
-  type: SET_HOTELS_ON_DEALS,
-  payload,
-});
+
 export const setRoomList = (payload) => ({
   type: SET_ROOM_LIST,
+  payload,
+});
+
+export const setHotelsOnDeals = (payload) => ({
+  type: SET_HOTELS_ON_DEALS,
   payload,
 });
 
