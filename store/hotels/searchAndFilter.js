@@ -1,6 +1,5 @@
 import fb from "../../firebaseConfig";
 import { getAvailableHotels } from "../../utils/firestoreRequests";
-import { MODULE_NAME as hotelsModuleName } from "../hotels/index";
 
 // ACTIONS
 const FETCH_SEARCH_REQUEST = "FETCH_SEARCH_REQUEST";
@@ -17,16 +16,16 @@ const SET_LAST_USER_CHOICES = "SET_LAST_USER_CHOICES";
 
 export const MODULE_NAME = "searchAndFilter";
 export const getSearchResult = (state) =>
-  state[hotelsModuleName][MODULE_NAME].searchResult;
+  state.hotels[MODULE_NAME].searchResult;
 export const getSearchLoading = (state) =>
-  state[hotelsModuleName][MODULE_NAME].loading;
+  state.hotels[MODULE_NAME].loading;
 export const getSearchError = (state) =>
-  state[hotelsModuleName][MODULE_NAME].error;
+  state.hotels[MODULE_NAME].error;
 
 export const getPureSearchResult = (state) =>
-  state[hotelsModuleName][MODULE_NAME].pureSearchResult;
+  state.hotels[MODULE_NAME].pureSearchResult;
 export const getLastUserChoices = (state) =>
-  state[hotelsModuleName][MODULE_NAME].lastUserChoices;
+  state.hotels[MODULE_NAME].lastUserChoices;
 
 const initialState = {
   pureSearchResult: [],

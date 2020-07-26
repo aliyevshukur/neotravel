@@ -4,7 +4,7 @@ import fb from "../../firebaseConfig";
 const SET_ROOM_LIST = "SET_ROOM_LIST";
 
 export const MODULE_NAME = "hotelList";
-export const getRoomList = (state) => state[MODULE_NAME].roomList;
+export const getRoomList = (state) => state.hotels[MODULE_NAME].roomList;
 
 const initialState = {
   roomList: [],

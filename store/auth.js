@@ -139,7 +139,7 @@ export const sign = (email, password, isSignIn, userName = "John") => async (
   }
 };
 
-export const getUserInfo = () => async (dispatch) => {
+export const getUserInfo = () => (dispatch) => {
   try {
     const userName = fb.auth.currentUser.displayName;
     const userId = fb.auth.currentUser.uid;

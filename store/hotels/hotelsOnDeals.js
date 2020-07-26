@@ -1,5 +1,4 @@
-import fb  from "../../firebaseConfig";
-import { MODULE_NAME as hotelsModuleName } from "../hotels/index";
+import fb from "../../firebaseConfig";
 
 // HOTELS ON DEALS ACTIONS
 const FETCH_HOTELS_ON_DEALS_REQUEST = "FETCH_HOTELS_ON_DEALS_REQUEST";
@@ -9,11 +8,9 @@ const FETCH_HOTELS_ON_DEALS_SUCCESS = "FETCH_HOTELS_ON_DEALS_SUCCESS";
 export const MODULE_NAME = "hotelsOnDeals";
 
 export const getHotelsOnDealsLoading = (state) =>
-  state[hotelsModuleName][MODULE_NAME].loading;
-export const getHotelsOnDealsError = (state) =>
-  state[hotelsModuleName][MODULE_NAME].error;
-export const getHotelsOnDealsData = (state) =>
-  state[hotelsModuleName][MODULE_NAME].data;
+  state.hotels[MODULE_NAME].loading;
+export const getHotelsOnDealsError = (state) => state.hotels[MODULE_NAME].error;
+export const getHotelsOnDealsData = (state) => state.hotels[MODULE_NAME].data;
 
 const initialState = {
   loading: false,

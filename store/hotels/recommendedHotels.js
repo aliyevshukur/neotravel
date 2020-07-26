@@ -1,5 +1,4 @@
 import fb from "../../firebaseConfig";
-import { MODULE_NAME as hotelsModuleName } from "../hotels/index";
 
 // RECOMMENDED HOTELS ACTIONS
 const FETCH_RECOMMENDED_HOTELS_REQUEST = "FETCH_RECOMMENDED_HOTELS_REQUEST";
@@ -9,16 +8,16 @@ const FETCH_RECOMMENDED_HOTELS_SUCCESS = "FETCH_RECOMMENDED_HOTELS_SUCCESS";
 export const MODULE_NAME = "recommendedHotels";
 
 export const getRecommendedHotelsLoading = (state) =>
-  state[hotelsModuleName][MODULE_NAME].loading;
+  state.hotels[MODULE_NAME].loading;
 export const getRecommendedHotelsError = (state) =>
-  state[hotelsModuleName][MODULE_NAME].error;
+  state.hotels[MODULE_NAME].error;
 export const getRecommendedHotelsData = (state) =>
-  state[hotelsModuleName][MODULE_NAME].data;
+  state.hotels[MODULE_NAME].data;
 
 const initialState = {
   loading: false,
   errorMsg: "",
-  data: [],
+  data: null,
 };
 
 // REDUCER
@@ -93,6 +92,7 @@ export const getRecommendedHotelsFB = (hotelIDs) => async (dispatch) => {
       dispatch(fetchRecommendedHotelsSuccess([]));
     }
   } catch (error) {
+    console.log("ERROR", error);
     dispatch(fetchRecommendedHotelsError(error));
   }
 };

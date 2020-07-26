@@ -1,12 +1,11 @@
 import fb from "../../firebaseConfig";
-import { MODULE_NAME as hotelsModuleName } from "../hotels/index";
+// import { MODULE_NAME as hotelsModuleName } from "../hotels/index";
 
 // ACTIONS
 const SET_HOTEL_LIST = "SET_HOTEL_LIST";
 
 export const MODULE_NAME = "hotelList";
-export const getHotelList = (state) =>
-  state[hotelsModuleName][MODULE_NAME].hotelList;
+export const getHotelList = (state) => state.hotels[MODULE_NAME].hotelList;
 
 const initialState = {
   hotelList: [],

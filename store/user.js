@@ -67,6 +67,7 @@ export const getUserDataFB = (userID) => async (dispatch) => {
       dispatch(fetchUserError("NO DATA FOUND"));
     }
   } catch (error) {
+    console.log("ERROR", error);
     fetchUserFailure(error);
   }
 };

@@ -19,6 +19,7 @@ import {
 
 export const MODULE_NAME = "hotels";
 
+// Gather all hotel related reducers to one hotels reducer
 export const hotelsReducer = combineReducers({
   [searchAndFilterModuleName]: searchAndFilterReducer,
   [recommendedHotelsModuleName]: recommendedHotelsReducer,
