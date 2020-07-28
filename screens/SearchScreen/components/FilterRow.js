@@ -1,28 +1,17 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  TouchableOpacity,
-  Image,
-} from "react-native";
-import {useSelector} from 'react-redux';
+import React from "react";
+import { StyleSheet, View, Dimensions, TouchableOpacity } from "react-native";
+import { useSelector } from "react-redux";
 
 import { CustomText, CustomSvg } from "../../../components";
-
-import filterPng from "../../../assets/images/homeScreen/Filter.png";
 import COLORS from "../../../styles/colors";
 
 export const FilterRow = ({
   backScreen,
-  onDirectToFilter,
   listType,
   onViewTypeChange,
   navigation,
 }) => {
-
-  const theme = useSelector(state => state.themeReducer).theme;
-
+  const theme = useSelector((state) => state.themeReducer).theme;
 
   const texts = {
     navRight: "Filter",
@@ -31,12 +20,15 @@ export const FilterRow = ({
       list: "List",
     },
   };
+
   return (
-    <View style={{
-      ...styles.headNav,
-      borderBottomColor: theme=="light" ? COLORS.white : COLORS.grayDark,
-      borderTopColor: theme=="light" ? COLORS.white : COLORS.grayDark
-    }}>
+    <View
+      style={{
+        ...styles.headNav,
+        borderBottomColor: theme == "light" ? COLORS.white : COLORS.grayDark,
+        borderTopColor: theme == "light" ? COLORS.white : COLORS.grayDark,
+      }}
+    >
       <View style={styles.headNavFilter}>
         <TouchableOpacity
           onPress={() =>
@@ -44,12 +36,30 @@ export const FilterRow = ({
           }
           style={{ flexDirection: "row", alignItems: "center" }}
         >
-          <CustomSvg name={'filter'} style={{...styles.filterSvg, color: theme=="light" ? COLORS.gray : COLORS.offWhite}}/>
-          <CustomText style={{...styles.filterTxt, color: theme=="light" ? COLORS.grayDark : COLORS.gray}}>{texts.navRight}</CustomText>
+          <CustomSvg
+            name={"filter"}
+            style={{
+              ...styles.filterSvg,
+              color: theme == "light" ? COLORS.gray : COLORS.offWhite,
+            }}
+          />
+          <CustomText
+            style={{
+              ...styles.filterTxt,
+              color: theme == "light" ? COLORS.grayDark : COLORS.gray,
+            }}
+          >
+            {texts.navRight}
+          </CustomText>
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={onViewTypeChange}>
-        <CustomText style={{...styles.listTypeName, color: theme=="light" ? COLORS.grayDark : COLORS.gray}}>
+        <CustomText
+          style={{
+            ...styles.listTypeName,
+            color: theme == "light" ? COLORS.grayDark : COLORS.gray,
+          }}
+        >
           {listType === "map" ? texts.navLeft.list : texts.navLeft.map}
         </CustomText>
       </TouchableOpacity>

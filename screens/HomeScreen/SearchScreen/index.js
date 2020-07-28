@@ -8,86 +8,78 @@ import { ListViewSearch } from "./ListViewSearch";
 import { MapViewSearch } from "./MapViewSearch";
 import { FilterRow } from "../../SearchScreen/components";
 import { CustomText } from "../../../components";
-import { getSearchResult, setSearchHotelResults } from "../../../store/hotels";
+import { getSearchResult } from "../../../store/hotels/searchAndFilter";
 import { NoResult } from "../../../commons/NoResult";
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
 });
 
-export const HomeSearchScreen = connect(mapStateToProps, {
-  setSearchHotelResults,
-})(({ route, navigation, searchResult }) => {
-  const theme = useSelector((state) => state.themeReducer).theme;
-  const [listType, setListType] = useState("map");
-  const { place, guests, startDate, endDate } = route?.params;
+export const HomeSearchScreen = connect(mapStateToProps)(
+  ({ route, navigation, searchResult }) => {
+    const theme = useSelector((state) => state.themeReducer).theme;
+    const [listType, setListType] = useState("map");
+    const { place, guests, startDate, endDate } = route?.params;
 
-  const texts = {
-    navRight: "Filter",
-    navLeft: {
-      map: "Map",
-      list: "List",
-    },
-  };
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
 
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  return (
-    <View
-      style={{
-        ...styles.container,
-        backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
-      }}
-    >
-      {/* <PrimarySearch /> */}
-      <View style={styles.searchLabel}>
-        <CustomText>
-          {`${place} ${guests} guests ${
-            monthNames[new Date(startDate).getMonth()]
-          } ${new Date(startDate).getDate()} - ${
-            monthNames[new Date(endDate).getMonth()]
-          } ${new Date(endDate).getDate()}`}
-        </CustomText>
-      </View>
-      <FilterRow
-        onDirectToFilter={() =>
-          navigation.navigate("Filter", { backScreen: "HomeSearchScreen" })
-        }
-        navigation={navigation}
-        backScreen="HomeSearchScreen"
-        listType={listType}
-        onViewTypeChange={() =>
-          setListType((v) => (v === "map" ? (v = "list") : (v = "map")))
-        }
-      />
-
-      {searchResult.length !== 0 ? (
-        <View style={styles.listContainer}>
-          {listType === "list" ? (
-            <ListViewSearch navigation={navigation} hotels={searchResult} />
-          ) : (
-            <MapViewSearch navigation={navigation} hotels={searchResult} />
-          )}
+    return (
+      <View
+        style={{
+          ...styles.container,
+          backgroundColor: theme == "light" ? COLORS.bgcLight : COLORS.bgcDark,
+        }}
+      >
+        {/* <PrimarySearch /> */}
+        <View style={styles.searchLabel}>
+          <CustomText>
+            {`${place} ${guests} guests ${
+              monthNames[new Date(startDate).getMonth()]
+            } ${new Date(startDate).getDate()} - ${
+              monthNames[new Date(endDate).getMonth()]
+            } ${new Date(endDate).getDate()}`}
+          </CustomText>
         </View>
-      ) : (
-        <NoResult />
-      )}
-    </View>
-  );
-});
+        <FilterRow
+          onDirectToFilter={() =>
+            navigation.navigate("Filter", { backScreen: "HomeSearchScreen" })
+          }
+          navigation={navigation}
+          backScreen="HomeSearchScreen"
+          listType={listType}
+          onViewTypeChange={() =>
+            setListType((v) => (v === "map" ? (v = "list") : (v = "map")))
+          }
+        />
+
+        {searchResult.length !== 0 ? (
+          <View style={styles.listContainer}>
+            {listType === "list" ? (
+              <ListViewSearch navigation={navigation} hotels={searchResult} />
+            ) : (
+              <MapViewSearch navigation={navigation} hotels={searchResult} />
+            )}
+          </View>
+        ) : (
+          <NoResult />
+        )}
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {

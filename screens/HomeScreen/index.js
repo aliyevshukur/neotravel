@@ -27,14 +27,18 @@ import {
   CustomPicker,
   CustomRangeDatepicker,
 } from "../../components";
+import { getHotelListFB } from "../../store/hotels/hotelList";
 import {
-  getHotelListFB,
   searchHotelsFB,
   getSearchResult,
-  getRecommendedHotelsFB,
-  getRecommendedHotels,
   setLastSearchFieldValues,
-} from "../../store/hotels";
+} from "../../store/hotels/searchAndFilter";
+import {
+  getRecommendedHotelsFB,
+  getRecommendedHotelsData,
+  getRecommendedHotelsLoading,
+  getRecommendedHotelsError,
+} from "../../store/hotels/recommendedHotels";
 import { updateFavoriteList, selectFavorites } from "../../store/favorites";
 import {
   selectUserId,
@@ -55,7 +59,9 @@ import { selectPayments, getPaymentsFromFirebase } from "../../store/payments";
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
-  recommendedHotels: getRecommendedHotels(state),
+  recommendedHotels: getRecommendedHotelsData(state),
+  recommendedHotelsError: getRecommendedHotelsError(state),
+  recommendedHotelsLoading: getRecommendedHotelsLoading(state),
   favorites: selectFavorites(state),
   userData: getUserData(state),
   loading: getLoading(state),
@@ -76,6 +82,7 @@ export const HomePage = connect(mapStateToProps, {
   checkIfRoomReserved,
   getPaymentsFromFirebase,
   setUserId,
+  getUserInfo,
 })((props) => {
   const {
     navigation,
@@ -83,20 +90,18 @@ export const HomePage = connect(mapStateToProps, {
     searchHotelsFB,
     updateFavoriteList,
     setLastSearchFieldValues,
+    getRecommendedHotelsFB,
     recommendedHotels,
+    recommendedHotelsError,
+    recommendedHotelsLoading,
     favorites,
     getUserDataFB,
     userData,
     errorMsg,
     loading,
-    getRecommendedHotelsFB,
-    fetchUserRequest,
-    checkIfRoomReserved,
-    pushToken,
-    reservations,
     getPaymentsFromFirebase,
     userId,
-    setUserId,
+    getUserInfo,
   } = props;
   const texts = {
     description: "Find place that gives you ultimate calm",
@@ -117,29 +122,35 @@ export const HomePage = connect(mapStateToProps, {
 
   const theme = useSelector((state) => state.themeReducer).theme;
   const dispatch = useDispatch();
-  dispatch(setTabVisibility(true));
-  const id = useSelector(selectUserId);
+  // const uid = useSelector(selectUserId);
 
   useEffect(() => {
     getPaymentsFromFirebase(userId);
   }, []);
 
   useEffect(() => {
+    dispatch(setTabVisibility(true));
+
     fb.auth.onAuthStateChanged((user) => {
       if (user) {
-        getUserDataFB(user.uid);
-        setUserId(user.uid);
-      } else {
-        fetchUserRequest();
+        // If there is user info on auth then load it to state
+        getUserInfo();
       }
     });
     getHotelListFB();
-    getUserInfo();
-    updateFavoriteList(id, false);
+    updateFavoriteList(userId, false);
   }, []);
 
+  // Get data from user collection when current user changes
   useEffect(() => {
-    if (!loading) {
+    if (userId) {
+      getUserDataFB(userId);
+    }
+  }, [userId]);
+
+  // Get recommended hotels if userData changes
+  useEffect(() => {
+    if (!loading && Object.keys(userData).length != 0) {
       getRecommendedHotelsFB(userData.recommendeds);
     }
   }, [userData]);
@@ -201,15 +212,12 @@ export const HomePage = connect(mapStateToProps, {
     navigation.navigate("HotelScreen", { hotelInfo: item });
   };
 
-  if (loading) {
+  // Show loader if user data or recommended data is not loaded yet
+  if (loading || recommendedHotelsLoading || recommendedHotels == null) {
     return <LoadingScreen />;
   }
 
-  if (recommendedHotels.loading) {
-    return <LoadingScreen />;
-  }
-
-  if (errorMsg && recommendedHotels.errorMsg) {
+  if (errorMsg && recommendedHotelsError) {
     Alert.alert("Something went wrong", errorMsg);
     return <></>;
   }
@@ -288,7 +296,7 @@ export const HomePage = connect(mapStateToProps, {
               {texts.catalogueName}
             </CustomText>
             <FlatList
-              data={recommendedHotels.data}
+              data={recommendedHotels}
               horizontal={true}
               renderItem={({ item }) => {
                 const isLiked = favorites.includes(item.id);

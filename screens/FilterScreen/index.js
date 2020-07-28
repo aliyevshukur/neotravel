@@ -17,20 +17,22 @@ import COLORS from "../../styles/colors";
 import { ToggleButton } from "../../components/ToggleButton";
 import { SelectAlert } from "./SelectAlert";
 import {
+  getHotelsOnDealsFB,
+  getHotelsOnDealsData,
+} from "../../store/hotels/hotelsOnDeals";
+import {
+  searchHotelsFB,
   getSearchResult,
   getPureSearchResult,
   setSearchHotelResults,
   setLastUserChoices,
-  searchHotelsFB,
-  getHotelsOnDealsFB,
-  getHotelsOnDeals,
   getLastUserChoices,
-} from "../../store/hotels";
+} from "../../store/hotels/searchAndFilter";
 
 const mapStateToProps = (state) => ({
   searchResult: getSearchResult(state),
   pureSearchResult: getPureSearchResult(state),
-  hotelsOnDeals: getHotelsOnDeals(state),
+  hotelsOnDeals: getHotelsOnDealsData(state),
   lastUserChoices: getLastUserChoices(state),
 });
 
@@ -103,7 +105,7 @@ export const FilterScreen = connect(mapStateToProps, {
     const [selectProcess, setSelectProcess] = useState("");
 
     const fetchHotelsOnDeals = () => {
-      if (hotelsOnDeals.data.length === 0) {
+      if (hotelsOnDeals.length === 0) {
         getHotelsOnDealsFB();
       }
     };

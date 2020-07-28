@@ -4,7 +4,7 @@ import { connect, useSelector } from "react-redux";
 
 import { CustomText, LargeHotelSlider, CustomSvg } from "../components";
 import COLORS from "../styles/colors";
-import { getRoomList, getHotelList } from "../store/hotels";
+import {  getHotelList } from "../store/hotels/hotelList";
 import { addHotel, deleteHotel, selectFavorites } from "../store/favorites";
 
 const mapStateToProps = (state) => ({
